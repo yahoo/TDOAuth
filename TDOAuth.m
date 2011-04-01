@@ -59,8 +59,10 @@ int TDOAuthUTCTimeOffset = 0;
 
 @implementation NSMutableString (TweetDeck)
 - (id)add:(NSString *)s {
-    if (s)
+    if ([s isKindOfClass:[NSString class]])
         [self appendString:s];
+    if ([s isKindOfClass:[NSNumber class]])
+        [self appendString:[(NSNumber *)s stringValue]];
     return self;
 }
 - (id)chomp {
