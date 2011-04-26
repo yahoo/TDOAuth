@@ -57,6 +57,20 @@
                         tokenSecret:(NSString *)tokenSecret;
 
 /**
+  Sometimes the service in question insists on HTTPS for everything. They
+  shouldn't, since the whole point of OAuth1 is that you *don't* need HTTPS.
+  But whatever I guess.
+*/
++ (NSURLRequest *)URLRequestForPath:(NSString *)unencodedPath_WITHOUT_Query
+                      GETParameters:(NSDictionary *)unencodedParameters
+                             scheme:(NSString *)scheme
+                               host:(NSString *)host
+                        consumerKey:(NSString *)consumerKey
+                     consumerSecret:(NSString *)consumerSecret
+                        accessToken:(NSString *)accessToken
+                        tokenSecret:(NSString *)tokenSecret;
+
+/**
   We always POST with HTTPS. This is because at least half the time the user's
   data is at least somewhat private, but also because apparently some carriers
   mangle POST requests and break them. We saw this in France for example.

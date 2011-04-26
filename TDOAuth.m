@@ -213,6 +213,25 @@ static NSString* timestamp() {
                         accessToken:(NSString *)accessToken
                         tokenSecret:(NSString *)tokenSecret
 {
+    return [self URLRequestForPath:unencodedPathWithoutQuery
+                     GETParameters:unencodedParameters
+                            scheme:@"http"
+                              host:host
+                       consumerKey:consumerKey
+                    consumerSecret:consumerSecret
+                       accessToken:accessToken
+                       tokenSecret:tokenSecret];
+}
+
++ (NSURLRequest *)URLRequestForPath:(NSString *)unencodedPathWithoutQuery
+                      GETParameters:(NSDictionary *)unencodedParameters
+                             scheme:(NSString *)scheme
+                               host:(NSString *)host
+                        consumerKey:(NSString *)consumerKey
+                     consumerSecret:(NSString *)consumerSecret
+                        accessToken:(NSString *)accessToken
+                        tokenSecret:(NSString *)tokenSecret;
+{
     if (!host || !unencodedPathWithoutQuery)
         return nil;
 
@@ -236,7 +255,7 @@ static NSString* timestamp() {
     }
 
     oauth->method = @"GET";
-    oauth->url = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"http://%@%@", host, path]];
+    oauth->url = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"%@://%@%@", scheme, host, path]];
 
     NSURLRequest *rq = [oauth request];
     [oauth->url release];
