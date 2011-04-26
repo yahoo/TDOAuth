@@ -43,11 +43,12 @@
 }
 
 /**
-  @p unencodeParameters may be nil. Objects in the dictionary must be
-  strings. You are contracted to consume the NSURLRequest *immediately*
-  Don't put the queryParameters in the path as a query string!
+  @p unencodeParameters may be nil. Objects in the dictionary must be strings.
+  You are contracted to consume the NSURLRequest *immediately*. Don't put the
+  queryParameters in the path as a query string! Path MUST start with a slash!
+  Don't percent encode anything!
 */
-+ (NSURLRequest *)URLRequestForPath:(NSString *)path_without_query
++ (NSURLRequest *)URLRequestForPath:(NSString *)unencodedPath_WITHOUT_Query
                       GETParameters:(NSDictionary *)unencodedParameters
                                host:(NSString *)host
                         consumerKey:(NSString *)consumerKey
@@ -59,8 +60,9 @@
   We always POST with HTTPS. This is because at least half the time the user's
   data is at least somewhat private, but also because apparently some carriers
   mangle POST requests and break them. We saw this in France for example.
+  READ THE DOCUMENTATION FOR GET AS IT APPLIES HERE TOO!
 */
-+ (NSURLRequest *)URLRequestForPath:(NSString *)path
++ (NSURLRequest *)URLRequestForPath:(NSString *)unencodedPath
                      POSTParameters:(NSDictionary *)unencodedParameters
                                host:(NSString *)host
                         consumerKey:(NSString *)consumerKey
