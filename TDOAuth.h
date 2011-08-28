@@ -31,37 +31,24 @@
 
 #import <Foundation/Foundation.h>
 
-/*
- 
- OAuth requires the UTC timestamp we send to be accurate. The user's device
- may not be, and often isn't. To work around this you should set this to the
- UTC timestamp that you get back in HTTP header from OAuth servers.
- 
- */
-extern int TDOAuthUTCTimeOffset;
-
-/*
- 
+/**
  This OAuth implementation doesn't cover the whole spec (eg. it’s HMAC only).
  But you'll find it works with almost all the OAuth implementations you need
  to interact with in the wild. How ace is that?!
- 
-*/
+ */
 @interface TDOAuth : NSObject {
 @private
     NSString *signatureSecret;
     NSDictionary *OAuthParameters;
 }
 
-/*
- 
- UnencodeParameters may be nil. Objects in the dictionary must be strings.
+/**
+ @p unencodeParameters may be nil. Objects in the dictionary must be strings.
  You are contracted to consume the NSURLRequest *immediately*. Don't put the
  queryParameters in the path as a query string! Path MUST start with a slash!
  Don't percent encode anything!
- 
-*/
-+ (NSURLRequest *)URLRequestForPath:(NSString *)path
+ */
++ (NSURLRequest *)URLRequestForPath:(NSString *)unencodedPath_WITHOUT_Query
                       GETParameters:(NSDictionary *)unencodedParameters
                                host:(NSString *)host
                         consumerKey:(NSString *)consumerKey
@@ -69,15 +56,13 @@ extern int TDOAuthUTCTimeOffset;
                         accessToken:(NSString *)accessToken
                         tokenSecret:(NSString *)tokenSecret;
 
-/*
- 
+/**
  Sometimes the service in question insists on HTTPS for everything. They
  shouldn't, since the whole point of OAuth1 is that you *don't* need HTTPS.
  But whatever I guess.
- 
-*/
-+ (NSURLRequest *)URLRequestForPath:(NSString *)path
-                      GETParameters:(NSDictionary *)parameters
+ */
++ (NSURLRequest *)URLRequestForPath:(NSString *)unencodedPath_WITHOUT_Query
+                      GETParameters:(NSDictionary *)unencodedParameters
                              scheme:(NSString *)scheme
                                host:(NSString *)host
                         consumerKey:(NSString *)consumerKey
@@ -85,22 +70,27 @@ extern int TDOAuthUTCTimeOffset;
                         accessToken:(NSString *)accessToken
                         tokenSecret:(NSString *)tokenSecret;
 
-/*
- 
+/**
  We always POST with HTTPS. This is because at least half the time the user's
  data is at least somewhat private, but also because apparently some carriers
  mangle POST requests and break them. We saw this in France for example.
  READ THE DOCUMENTATION FOR GET AS IT APPLIES HERE TOO!
- 
-*/
+ */
 + (NSURLRequest *)URLRequestForPath:(NSString *)path
-                     POSTParameters:(NSDictionary *)parameters
+                     POSTParameters:(NSDictionary *)unencodedParameters
                                host:(NSString *)host
                         consumerKey:(NSString *)consumerKey
                      consumerSecret:(NSString *)consumerSecret
                         accessToken:(NSString *)accessToken
                         tokenSecret:(NSString *)tokenSecret;
 @end
+
+/**
+ OAuth requires the UTC timestamp we send to be accurate. The user's device
+ may not be, and often isn't. To work around this you should set this to the
+ UTC timestamp that you get back in HTTP header from OAuth servers.
+ */
+extern int TDOAuthUTCTimeOffset;
 
 /*
  
