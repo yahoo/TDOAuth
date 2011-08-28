@@ -42,28 +42,26 @@ extern int TDOAuthUTCTimeOffset;
 
 /*
  
-  This OAuth implementation doesn't cover the whole spec (eg. it’s HMAC only).
-  But you'll find it works with almost all the OAuth implementations you need
-  to interact with in the wild. How ace is that?!
+ This OAuth implementation doesn't cover the whole spec (eg. it’s HMAC only).
+ But you'll find it works with almost all the OAuth implementations you need
+ to interact with in the wild. How ace is that?!
  
 */
 @interface TDOAuth : NSObject {
 @private
-    NSURL *URL;
     NSString *signatureSecret;
-    NSDictionary *unencodedParameters;
-    NSString *HTTPMethod;
+    NSDictionary *OAuthParameters;
 }
 
 /*
  
-  UnencodeParameters may be nil. Objects in the dictionary must be strings.
-  You are contracted to consume the NSURLRequest *immediately*. Don't put the
-  queryParameters in the path as a query string! Path MUST start with a slash!
-  Don't percent encode anything!
+ UnencodeParameters may be nil. Objects in the dictionary must be strings.
+ You are contracted to consume the NSURLRequest *immediately*. Don't put the
+ queryParameters in the path as a query string! Path MUST start with a slash!
+ Don't percent encode anything!
  
 */
-+ (NSURLRequest *)URLRequestForPath:(NSString *)unencodedPath_WITHOUT_Query
++ (NSURLRequest *)URLRequestForPath:(NSString *)path
                       GETParameters:(NSDictionary *)unencodedParameters
                                host:(NSString *)host
                         consumerKey:(NSString *)consumerKey
@@ -73,13 +71,13 @@ extern int TDOAuthUTCTimeOffset;
 
 /*
  
-  Sometimes the service in question insists on HTTPS for everything. They
-  shouldn't, since the whole point of OAuth1 is that you *don't* need HTTPS.
-  But whatever I guess.
+ Sometimes the service in question insists on HTTPS for everything. They
+ shouldn't, since the whole point of OAuth1 is that you *don't* need HTTPS.
+ But whatever I guess.
  
 */
-+ (NSURLRequest *)URLRequestForPath:(NSString *)unencodedPath_WITHOUT_Query
-                      GETParameters:(NSDictionary *)unencodedParameters
++ (NSURLRequest *)URLRequestForPath:(NSString *)path
+                      GETParameters:(NSDictionary *)parameters
                              scheme:(NSString *)scheme
                                host:(NSString *)host
                         consumerKey:(NSString *)consumerKey
@@ -89,14 +87,14 @@ extern int TDOAuthUTCTimeOffset;
 
 /*
  
-  We always POST with HTTPS. This is because at least half the time the user's
-  data is at least somewhat private, but also because apparently some carriers
-  mangle POST requests and break them. We saw this in France for example.
-  READ THE DOCUMENTATION FOR GET AS IT APPLIES HERE TOO!
+ We always POST with HTTPS. This is because at least half the time the user's
+ data is at least somewhat private, but also because apparently some carriers
+ mangle POST requests and break them. We saw this in France for example.
+ READ THE DOCUMENTATION FOR GET AS IT APPLIES HERE TOO!
  
 */
-+ (NSURLRequest *)URLRequestForPath:(NSString *)unencodedPath
-                     POSTParameters:(NSDictionary *)unencodedParameters
++ (NSURLRequest *)URLRequestForPath:(NSString *)path
+                     POSTParameters:(NSDictionary *)parameters
                                host:(NSString *)host
                         consumerKey:(NSString *)consumerKey
                      consumerSecret:(NSString *)consumerSecret
@@ -106,7 +104,7 @@ extern int TDOAuthUTCTimeOffset;
 
 /*
  
-  XAuth example (because you may otherwise be scratching your head):
+ XAuth example (because you may otherwise be scratching your head):
 
     NSURLRequest *xauth = [TDOAuth URLRequestForPath:@"/oauth/access_token"
                                       POSTParameters:[NSDictionary dictionaryWithObjectsAndKeys:
@@ -120,8 +118,8 @@ extern int TDOAuthUTCTimeOffset;
                                          accessToken:nil
                                          tokenSecret:nil];
 
-  OAuth Echo example (we have found that some consumers require HTTPS for the
-  echo, so to be safe we always do it):
+ OAuth Echo example (we have found that some consumers require HTTPS for the
+ echo, so to be safe we always do it):
 
     NSURLRequest *echo = [TDOAuth URLRequestForPath:@"/1/account/verify_credentials.json"
                                       GETParameters:nil

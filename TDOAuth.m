@@ -32,7 +32,10 @@
  */
 
 #import "TDOAuth.h"
+
 #import <CommonCrypto/CommonHMAC.h>
+
+#import "NSData+Base64.h"
 
 #ifndef TDOAuthURLRequestTimeout
 #define TDOAuthURLRequestTimeout 30.0
@@ -84,29 +87,6 @@ int TDOAuthUTCTimeOffset = 0;
 - (NSString *)pcen;
 
 @end
-
-// If your input string isn't 20 characters this won't work.
-static NSString* base64(const uint8_t* input) {
-    static const char map[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-    
-    NSMutableData* data = [NSMutableData dataWithLength:28];
-    uint8_t* out = (uint8_t*) data.mutableBytes;
-    
-    for (int i = 0; i < 20;) {
-        int v  = 0;
-        for (const int N = i + 3; i < N; i++) {
-            v <<= 8;
-            v |= 0xFF & input[i];
-        }
-        *out++ = map[v >> 18 & 0x3F];
-        *out++ = map[v >> 12 & 0x3F];
-        *out++ = map[v >> 6 & 0x3F];
-        *out++ = map[v >> 0 & 0x3F];
-    }
-    out[-2] = map[(input[19] & 0x0F) << 2];
-    out[-1] = '=';
-    return [[[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding] autorelease];
-}
 
 @implementation TDOAuth
 
@@ -277,14 +257,22 @@ static NSString* base64(const uint8_t* input) {
     return [@"OAuth " stringByAppendingString:[entries componentsJoinedByString:@","]];
 }
 - (NSString *)signature {
+    
+    // get signature components
     NSData *base = [[self signatureBase] dataUsingEncoding:NSUTF8StringEncoding];
     NSData *secret = [signatureSecret dataUsingEncoding:NSUTF8StringEncoding];
-    uint8_t digest[20] = {0};
+    
+    // hmac
+    uint8_t digest[CC_SHA1_DIGEST_LENGTH];
     CCHmacContext cx;
-    CCHmacInit(&cx, kCCHmacAlgSHA1, secret.bytes, secret.length);
+    CCHmacInit(&cx, kCCHmacAlgSHA1, [secret bytes], [secret length]);
     CCHmacUpdate(&cx, [base bytes], [base length]);
     CCHmacFinal(&cx, digest);
-    return base64(digest);
+    
+    // base 64
+    NSData *data = [NSData dataWithBytes:digest length:CC_SHA1_DIGEST_LENGTH];
+    return [data base64EncodedString];
+    
 }
 - (NSString *)signatureBase {
     
