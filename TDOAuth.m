@@ -47,11 +47,11 @@
 int TDOAuthUTCTimeOffset = 0;
 
 @interface TDOAuth ()
+
+// properties
 @property (nonatomic, copy) NSDictionary *requestParameters;
 @property (nonatomic, copy) NSString *HTTPMethod;
 @property (nonatomic, copy) NSURL *URL;
-@end
-@interface TDOAuth (private)
 
 // get a nonce string
 + (NSString *)nonce;
@@ -94,129 +94,7 @@ int TDOAuthUTCTimeOffset = 0;
 @synthesize HTTPMethod = __method;
 @synthesize URL = __url;
 
-- (void)dealloc {
-    self.URL = nil;
-    self.HTTPMethod = nil;
-    self.requestParameters = nil;
-    [OAuthParameters release];
-    OAuthParameters = nil;
-    [signatureSecret release];
-    signatureSecret = nil;
-    [super dealloc];
-}
-+ (NSURLRequest *)URLRequestForPath:(NSString *)path
-                      GETParameters:(NSDictionary *)parameters
-                               host:(NSString *)host
-                        consumerKey:(NSString *)consumerKey
-                     consumerSecret:(NSString *)consumerSecret
-                        accessToken:(NSString *)accessToken
-                        tokenSecret:(NSString *)tokenSecret {
-    return [self URLRequestForPath:path
-                     GETParameters:parameters
-                            scheme:@"http"
-                              host:host
-                       consumerKey:consumerKey
-                    consumerSecret:consumerSecret
-                       accessToken:accessToken
-                       tokenSecret:tokenSecret];
-}
-+ (NSURLRequest *)URLRequestForPath:(NSString *)path
-                      GETParameters:(NSDictionary *)parameters
-                             scheme:(NSString *)scheme
-                               host:(NSString *)host
-                        consumerKey:(NSString *)consumerKey
-                     consumerSecret:(NSString *)consumerSecret
-                        accessToken:(NSString *)accessToken
-                        tokenSecret:(NSString *)tokenSecret {
-    
-    // check parameters
-    if (host == nil || path == nil) { return nil; }
-    
-    // create object
-    TDOAuth *oauth = [[TDOAuth alloc] initWithConsumerKey:consumerKey
-                                           consumerSecret:consumerSecret
-                                              accessToken:accessToken
-                                              tokenSecret:tokenSecret];
-    oauth.HTTPMethod = @"GET";
-    oauth.requestParameters = parameters;
-    
-    // create url
-    NSString *encodedPath = [path stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    NSString *URLString = [NSString stringWithFormat:@"%@://%@%@", scheme, host, encodedPath];
-    if ([oauth.requestParameters count]) {
-        NSString *query = [TDOAuth queryStringFromParameters:oauth.requestParameters];
-        URLString = [NSString stringWithFormat:@"%@?%@", URLString, query];
-    }
-    oauth.URL = [NSURL URLWithString:URLString];
-    
-    // return
-    NSURLRequest *request = [oauth request];
-    [oauth release];
-    return request;
-    
-}
-+ (NSURLRequest *)URLRequestForPath:(NSString *)path
-                     POSTParameters:(NSDictionary *)parameters
-                               host:(NSString *)host
-                        consumerKey:(NSString *)consumerKey
-                     consumerSecret:(NSString *)consumerSecret
-                        accessToken:(NSString *)accessToken
-                        tokenSecret:(NSString *)tokenSecret {
-    
-    // check parameters
-    if (host == nil || path == nil) { return nil; }
-    
-    // create object
-    TDOAuth *oauth = [[TDOAuth alloc] initWithConsumerKey:consumerKey
-                                           consumerSecret:consumerSecret
-                                              accessToken:accessToken
-                                              tokenSecret:tokenSecret];
-    oauth.HTTPMethod = @"POST";
-    oauth.requestParameters = parameters;
-    NSURL *URL = [[NSURL alloc] initWithScheme:@"https" host:host path:path];
-    oauth.URL = URL;
-    [URL release];
-    
-    // create request
-    NSMutableURLRequest *request = [oauth request];
-    if ([oauth.requestParameters count]) {
-        NSString *query = [TDOAuth queryStringFromParameters:oauth.requestParameters];
-        NSData *data = [query dataUsingEncoding:NSUTF8StringEncoding];
-        NSString *length = [NSString stringWithFormat:@"%lu", (unsigned long)[data length]];
-        [request setHTTPBody:data];
-        [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-        [request setValue:length forHTTPHeaderField:@"Content-Length"];
-    }
-    
-    // return
-    [oauth release];
-    return request;
-    
-}
-
-@end
-@implementation TDOAuth (private)
-+ (NSString *)nonce {
-    CFUUIDRef uuid = CFUUIDCreate(NULL);
-    CFStringRef string = CFUUIDCreateString(NULL, uuid);
-    CFRelease(uuid);
-    return [(NSString *)string autorelease];
-}
-+ (NSString *)timeStamp {
-    time_t t;
-    time(&t);
-    mktime(gmtime(&t));
-    return [NSString stringWithFormat:@"%u", (t + TDOAuthUTCTimeOffset)];
-}
-+ (NSString *)queryStringFromParameters:(NSDictionary *)parameters {
-    NSMutableArray *entries = [NSMutableArray array];
-    for (NSString *key in [parameters allKeys]) {
-        NSString *obj = [parameters objectForKey:key];
-        NSString *entry = [NSString stringWithFormat:@"%@=%@", [key pcen], [obj pcen]];
-        [entries addObject:entry];
-    }
-    return [entries componentsJoinedByString:@"&"];
-}
+#pragma mark - object methods
 - (id)initWithConsumerKey:(NSString *)consumerKey
            consumerSecret:(NSString *)consumerSecret
               accessToken:(NSString *)accessToken
@@ -309,6 +187,129 @@ int TDOAuthUTCTimeOffset = 0;
     return [components componentsJoinedByString:@"&"];
     
 }
+- (void)dealloc {
+    self.URL = nil;
+    self.HTTPMethod = nil;
+    self.requestParameters = nil;
+    [OAuthParameters release];
+    OAuthParameters = nil;
+    [signatureSecret release];
+    signatureSecret = nil;
+    [super dealloc];
+}
+
+#pragma mark - class methods
++ (NSString *)nonce {
+    CFUUIDRef uuid = CFUUIDCreate(NULL);
+    CFStringRef string = CFUUIDCreateString(NULL, uuid);
+    CFRelease(uuid);
+    return [(NSString *)string autorelease];
+}
++ (NSString *)timeStamp {
+    time_t t;
+    time(&t);
+    mktime(gmtime(&t));
+    return [NSString stringWithFormat:@"%u", (t + TDOAuthUTCTimeOffset)];
+}
++ (NSString *)queryStringFromParameters:(NSDictionary *)parameters {
+    NSMutableArray *entries = [NSMutableArray array];
+    for (NSString *key in [parameters allKeys]) {
+        NSString *obj = [parameters objectForKey:key];
+        NSString *entry = [NSString stringWithFormat:@"%@=%@", [key pcen], [obj pcen]];
+        [entries addObject:entry];
+    }
+    return [entries componentsJoinedByString:@"&"];
+}
++ (NSURLRequest *)URLRequestForPath:(NSString *)path
+                      GETParameters:(NSDictionary *)parameters
+                               host:(NSString *)host
+                        consumerKey:(NSString *)consumerKey
+                     consumerSecret:(NSString *)consumerSecret
+                        accessToken:(NSString *)accessToken
+                        tokenSecret:(NSString *)tokenSecret {
+    return [self URLRequestForPath:path
+                     GETParameters:parameters
+                            scheme:@"http"
+                              host:host
+                       consumerKey:consumerKey
+                    consumerSecret:consumerSecret
+                       accessToken:accessToken
+                       tokenSecret:tokenSecret];
+}
++ (NSURLRequest *)URLRequestForPath:(NSString *)path
+                      GETParameters:(NSDictionary *)parameters
+                             scheme:(NSString *)scheme
+                               host:(NSString *)host
+                        consumerKey:(NSString *)consumerKey
+                     consumerSecret:(NSString *)consumerSecret
+                        accessToken:(NSString *)accessToken
+                        tokenSecret:(NSString *)tokenSecret {
+    
+    // check parameters
+    if (host == nil || path == nil) { return nil; }
+    
+    // create object
+    TDOAuth *oauth = [[TDOAuth alloc] initWithConsumerKey:consumerKey
+                                           consumerSecret:consumerSecret
+                                              accessToken:accessToken
+                                              tokenSecret:tokenSecret];
+    oauth.HTTPMethod = @"GET";
+    oauth.requestParameters = parameters;
+    
+    // create url
+    NSString *encodedPath = [path stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSString *URLString = [NSString stringWithFormat:@"%@://%@%@", scheme, host, encodedPath];
+    if ([oauth.requestParameters count]) {
+        NSString *query = [TDOAuth queryStringFromParameters:oauth.requestParameters];
+        URLString = [NSString stringWithFormat:@"%@?%@", URLString, query];
+    }
+    oauth.URL = [NSURL URLWithString:URLString];
+    
+    // return
+    NSURLRequest *request = [oauth request];
+    [oauth release];
+    return request;
+    
+}
++ (NSURLRequest *)URLRequestForPath:(NSString *)path
+                     POSTParameters:(NSDictionary *)parameters
+                               host:(NSString *)host
+                        consumerKey:(NSString *)consumerKey
+                     consumerSecret:(NSString *)consumerSecret
+                        accessToken:(NSString *)accessToken
+                        tokenSecret:(NSString *)tokenSecret {
+    
+    // check parameters
+    if (host == nil || path == nil) { return nil; }
+    
+    // create object
+    TDOAuth *oauth = [[TDOAuth alloc] initWithConsumerKey:consumerKey
+                                           consumerSecret:consumerSecret
+                                              accessToken:accessToken
+                                              tokenSecret:tokenSecret];
+    oauth.HTTPMethod = @"POST";
+    oauth.requestParameters = parameters;
+    NSURL *URL = [[NSURL alloc] initWithScheme:@"https" host:host path:path];
+    oauth.URL = URL;
+    [URL release];
+    
+    // create request
+    NSMutableURLRequest *request = [oauth request];
+    if ([oauth.requestParameters count]) {
+        NSString *query = [TDOAuth queryStringFromParameters:oauth.requestParameters];
+        NSData *data = [query dataUsingEncoding:NSUTF8StringEncoding];
+        NSString *length = [NSString stringWithFormat:@"%lu", (unsigned long)[data length]];
+        [request setHTTPBody:data];
+        [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+        [request setValue:length forHTTPHeaderField:@"Content-Length"];
+    }
+    
+    // return
+    [oauth release];
+    return request;
+    
+}
+
 @end
 @implementation NSString (TDOAuthAdditions)
 - (NSString *)pcen {
