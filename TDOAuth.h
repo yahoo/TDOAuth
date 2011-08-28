@@ -1,4 +1,5 @@
 /*
+ 
  Copyright 2011 TweetDeck Inc. All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -25,28 +26,42 @@
  The views and conclusions contained in the software and documentation are
  those of the authors and should not be interpreted as representing official
  policies, either expressed or implied, of TweetDeck Inc.
+ 
 */
 
 #import <Foundation/Foundation.h>
 
-/**
+/*
+ 
+ OAuth requires the UTC timestamp we send to be accurate. The user's device
+ may not be, and often isn't. To work around this you should set this to the
+ UTC timestamp that you get back in HTTP header from OAuth servers.
+ 
+ */
+extern int TDOAuthUTCTimeOffset;
+
+/*
+ 
   This OAuth implementation doesn't cover the whole spec (eg. it’s HMAC only).
   But you'll find it works with almost all the OAuth implementations you need
   to interact with in the wild. How ace is that?!
+ 
 */
-
 @interface TDOAuth : NSObject {
-    NSURL *url;
-    NSString *signature_secret;
-    NSDictionary *params; // these are pre-percent encoded
-    NSString *method;
+@private
+    NSURL *URL;
+    NSString *signatureSecret;
+    NSDictionary *unencodedParameters;
+    NSString *HTTPMethod;
 }
 
-/**
-  @p unencodeParameters may be nil. Objects in the dictionary must be strings.
+/*
+ 
+  UnencodeParameters may be nil. Objects in the dictionary must be strings.
   You are contracted to consume the NSURLRequest *immediately*. Don't put the
   queryParameters in the path as a query string! Path MUST start with a slash!
   Don't percent encode anything!
+ 
 */
 + (NSURLRequest *)URLRequestForPath:(NSString *)unencodedPath_WITHOUT_Query
                       GETParameters:(NSDictionary *)unencodedParameters
@@ -56,10 +71,12 @@
                         accessToken:(NSString *)accessToken
                         tokenSecret:(NSString *)tokenSecret;
 
-/**
+/*
+ 
   Sometimes the service in question insists on HTTPS for everything. They
   shouldn't, since the whole point of OAuth1 is that you *don't* need HTTPS.
   But whatever I guess.
+ 
 */
 + (NSURLRequest *)URLRequestForPath:(NSString *)unencodedPath_WITHOUT_Query
                       GETParameters:(NSDictionary *)unencodedParameters
@@ -70,11 +87,13 @@
                         accessToken:(NSString *)accessToken
                         tokenSecret:(NSString *)tokenSecret;
 
-/**
+/*
+ 
   We always POST with HTTPS. This is because at least half the time the user's
   data is at least somewhat private, but also because apparently some carriers
   mangle POST requests and break them. We saw this in France for example.
   READ THE DOCUMENTATION FOR GET AS IT APPLIES HERE TOO!
+ 
 */
 + (NSURLRequest *)URLRequestForPath:(NSString *)unencodedPath
                      POSTParameters:(NSDictionary *)unencodedParameters
@@ -85,8 +104,8 @@
                         tokenSecret:(NSString *)tokenSecret;
 @end
 
-
-/**
+/*
+ 
   XAuth example (because you may otherwise be scratching your head):
 
     NSURLRequest *xauth = [TDOAuth URLRequestForPath:@"/oauth/access_token"
@@ -117,36 +136,16 @@
     [rq setValue:[echo valueForHTTPHeaderField:@"Authorization"] forHTTPHeaderField:@"X-Verify-Credentials-Authorization"];
     // Now consume rq with an NSURLConnection
     [rq release];
+ 
+ 
+ Suggested usage would be to make some categories for this class that
+ automatically adds both secrets, both tokens and host information. This
+ makes usage less cumbersome. Eg:
+ 
+    [TwitterOAuth GET:@"/1/statuses/home_timeline.json"];
+    [TwitterOAuth GET:@"/1/statuses/home_timeline.json" queryParameters:dictionary];
+ 
+ At TweetDeck we have TDAccount classes that represent separate user logins
+ for different services when instantiated.
+ 
 */
-
-
-/**
-  Suggested usage would be to make some categories for this class that
-  automatically adds both secrets, both tokens and host information. This
-  makes usage less cumbersome. Eg:
-
-      [TwitterOAuth GET:@"/1/statuses/home_timeline.json"];
-      [TwitterOAuth GET:@"/1/statuses/home_timeline.json" queryParameters:dictionary];
-
-  At TweetDeck we have TDAccount classes that represent separate user logins
-  for different services when instantiated.
-*/
-
-
-/**
-  OAuth requires the UTC timestamp we send to be accurate. The user's device
-  may not be, and often isn't. To work around this you should set this to the
-  UTC timestamp that you get back in HTTP header from OAuth servers.
-*/
-extern int TDOAuthUTCTimeOffset;
-
-
-
-@interface NSString (TweetDeck)
-- (NSString*)pcen;
-@end
-
-@interface NSMutableString (TweetDeck)
-- (NSMutableString *)add:(NSString *)s;
-- (NSMutableString *)chomp;
-@end
