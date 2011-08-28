@@ -210,10 +210,11 @@ int TDOAuthUTCTimeOffset = 0;
 }
 + (NSString *)queryStringFromParameters:(NSDictionary *)parameters {
     NSMutableArray *entries = [NSMutableArray array];
-    [parameters enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+    for (NSString *key in [parameters allKeys]) {
+        NSString *obj = [parameters objectForKey:key];
         NSString *entry = [NSString stringWithFormat:@"%@=%@", [key pcen], [obj pcen]];
         [entries addObject:entry];
-    }];
+    }
     return [entries componentsJoinedByString:@"&"];
 }
 - (id)initWithConsumerKey:(NSString *)consumerKey
@@ -249,10 +250,11 @@ int TDOAuthUTCTimeOffset = 0;
 }
 - (NSString *)authorizationHeader {
     NSMutableArray *entries = [NSMutableArray array];
-    [OAuthParameters enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+    for (NSString *key in [OAuthParameters allKeys]) {
+        NSString *obj = [OAuthParameters objectForKey:key];
         NSString *entry = [NSString stringWithFormat:@"%@=\"%@\"", [key pcen], [obj pcen]];
         [entries addObject:entry];
-    }];
+    }
     [entries addObject:[NSString stringWithFormat:@"oauth_signature=\"%@\"", [[self signature] pcen]]];
     return [@"OAuth " stringByAppendingString:[entries componentsJoinedByString:@","]];
 }
