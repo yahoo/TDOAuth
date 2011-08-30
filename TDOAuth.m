@@ -109,7 +109,7 @@ int TDOAuthUTCTimeOffset = 0;
                            @"HMAC-SHA1", @"oauth_signature_method",
                            [accessToken copy], @"oauth_token", // leave accessToken last or you'll break XAuth attempts
                            nil];
-        signatureSecret = [[NSString stringWithFormat:@"%@&%@", consumerSecret, tokenSecret ?: @""] retain];
+        signatureSecret = [[NSString stringWithFormat:@"%@&%@", [consumerSecret pcen], [tokenSecret ?: @"" pcen]] retain];
     }
     return self;
 }
