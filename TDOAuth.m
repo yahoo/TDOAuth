@@ -121,7 +121,7 @@ static NSString* timestamp() {
               accessToken:(NSString *)accessToken
               tokenSecret:(NSString *)tokenSecret
 {
-    params = [NSDictionary dictionaryWithObjectsAndKeys:
+    oauthParams = [NSDictionary dictionaryWithObjectsAndKeys:
               consumerKey,  @"oauth_consumer_key",
               nonce(),      @"oauth_nonce",
               timestamp(),  @"oauth_timestamp",
@@ -130,11 +130,14 @@ static NSString* timestamp() {
               accessToken,  @"oauth_token",
               // LEAVE accessToken last or you'll break XAuth attempts
               nil];
+    params = [NSMutableDictionary dictionary];
     signature_secret = [NSString stringWithFormat:@"%@&%@", consumerSecret, tokenSecret ?: @""];
     return self;
 }
 
 - (NSString *)signature_base {
+    [params addEntriesFromDictionary:oauthParams];
+
     NSMutableString *p3 = [NSMutableString stringWithCapacity:256];
     NSArray *keys = [[params allKeys] sortedArrayUsingSelector:@selector(compare:)];
     for (NSString *key in keys)
@@ -165,8 +168,8 @@ static NSString* timestamp() {
 - (NSString *)authorizationHeader {
     NSMutableString *header = [NSMutableString stringWithCapacity:512];
     [header add:@"OAuth "];
-    for (NSString *key in params.allKeys)
-        [[[[header add:key] add:@"=\""] add:[params objectForKey:key]] add:@"\", "];
+    for (NSString *key in oauthParams.allKeys)
+        [[[[header add:key] add:@"=\""] add:[oauthParams objectForKey:key]] add:@"\", "];
     [[[header add:@"oauth_signature=\""] add:self.signature.pcen] add:@"\""];
     return header;
 }
@@ -191,16 +194,13 @@ static NSString* timestamp() {
         return nil;
 
     NSMutableString *queryString = [NSMutableString string];
-    NSMutableDictionary *encodedParameters = [NSMutableDictionary dictionaryWithDictionary:params];
     for (NSString *key in unencodedParameters.allKeys) {
         NSString *enkey = key.pcen;
         NSString *envalue = [[unencodedParameters objectForKey:key] pcen];
-        [encodedParameters setObject:envalue forKey:enkey];
+        [params setObject:envalue forKey:enkey];
         [[[[queryString add:enkey] add:@"="] add:envalue] add:@"&"];
     }
     [queryString chomp];
-
-    params = encodedParameters;
 
     return queryString;
 }

@@ -38,7 +38,8 @@
 @interface TDOAuth : NSObject {
     NSURL *url;
     NSString *signature_secret;
-    NSDictionary *params; // these are pre-percent encoded
+    NSDictionary *oauthParams; // these are pre-percent encoded. Represents the oauth_* params.
+    NSMutableDictionary *params; // these are pre-percent encoded. Represents the request params.
     NSString *method;
 }
 
