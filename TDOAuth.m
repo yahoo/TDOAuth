@@ -94,6 +94,7 @@ static NSString* timestamp() {
     NSString *signature_secret;
     NSDictionary *params; // these are pre-percent encoded
     NSString *method;
+    NSString *unencodedHostAndPathWithoutQuery; // we keep this because NSURL drops trailing slashes and the port number
 }
 
 - (id)initWithConsumerKey:(NSString *)consumerKey
@@ -126,11 +127,10 @@ static NSString* timestamp() {
     }
     TDChomp(p3);
 
-    return [NSString stringWithFormat:@"%@&%@%%3A%%2F%%2F%@%@&%@",
+    return [NSString stringWithFormat:@"%@&%@%%3A%%2F%%2F%@&%@",
             method,
             url.scheme.lowercaseString,
-            TDPCEN(url.host.lowercaseString),
-            TDPCEN(url.path),
+            TDPCEN(unencodedHostAndPathWithoutQuery),
             TDPCEN(p3)];
 }
 
@@ -248,6 +248,7 @@ static NSString* timestamp() {
     }
 
     oauth->method = @"GET";
+    oauth->unencodedHostAndPathWithoutQuery = [host.lowercaseString stringByAppendingString:unencodedPathWithoutQuery];
     oauth->url = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"%@://%@%@", scheme, host, path]];
 
     NSURLRequest *rq = [oauth request];
@@ -269,6 +270,8 @@ static NSString* timestamp() {
                                            consumerSecret:consumerSecret
                                               accessToken:accessToken
                                               tokenSecret:tokenSecret];
+
+    oauth->unencodedHostAndPathWithoutQuery = [host.lowercaseString stringByAppendingString:unencodedPath];
     oauth->url = [[NSURL alloc] initWithScheme:@"https" host:host path:unencodedPath];
     oauth->method = @"POST";
 
