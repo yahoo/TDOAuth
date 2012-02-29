@@ -144,11 +144,10 @@ static NSString* timestamp() {
         [[[[p3 add:[key pcen]] add:@"="] add:[params objectForKey:key]] add:@"&"];
     [p3 chomp];
 
-    return [NSString stringWithFormat:@"%@&%@%%3A%%2F%%2F%@%@&%@",
+    return [NSString stringWithFormat:@"%@&%@%%3A%%2F%%2F%@&%@",
             method,
             url.scheme.lowercaseString,
-            url.host.lowercaseString.pcen,
-            url.path.pcen,
+            unencodedHostAndPathWithoutQuery.pcen,
             p3.pcen];
 }
 
@@ -255,6 +254,7 @@ static NSString* timestamp() {
     }
 
     oauth->method = @"GET";
+    oauth->unencodedHostAndPathWithoutQuery = [host.lowercaseString stringByAppendingString:unencodedPathWithoutQuery];
     oauth->url = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"%@://%@%@", scheme, host, path]];
 
     NSURLRequest *rq = [oauth request];
@@ -278,6 +278,8 @@ static NSString* timestamp() {
                                            consumerSecret:consumerSecret
                                               accessToken:accessToken
                                               tokenSecret:tokenSecret];
+
+    oauth->unencodedHostAndPathWithoutQuery = [host.lowercaseString stringByAppendingString:unencodedPathWithoutQuery];
     oauth->url = [[NSURL alloc] initWithScheme:@"https" host:host path:unencodedPath];
     oauth->method = @"POST";
 
