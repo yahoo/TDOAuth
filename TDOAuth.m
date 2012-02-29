@@ -233,10 +233,9 @@ static NSString* timestamp() {
                                               accessToken:accessToken
                                               tokenSecret:tokenSecret];
 
-    // We don't use pcen as we don't want to percent encode eg. /, this
-    // is perhaps not the most all encompassing solution, but in practice
-    // it works everywhere and means that programmer error is *much* less
-    // likely.
+    // We don't use pcen as we don't want to percent encode eg. /, this is perhaps
+	// not the most all encompassing solution, but in practice it seems to work
+	// everywhere and means that programmer error is *much* less likely.
     NSString *encodedPathWithoutQuery = [unencodedPathWithoutQuery stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 
     id path = [oauth addParameters:unencodedParameters];

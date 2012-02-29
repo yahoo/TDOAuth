@@ -40,7 +40,8 @@
   @p unencodeParameters may be nil. Objects in the dictionary must be strings.
   You are contracted to consume the NSURLRequest *immediately*. Don't put the
   queryParameters in the path as a query string! Path MUST start with a slash!
-  Don't percent encode anything!
+  Don't percent encode anything! This will submit via HTTP. If you need HTTPS refer
+  to the next selector.
 */
 + (NSURLRequest *)URLRequestForPath:(NSString *)unencodedPath_WITHOUT_Query
                       GETParameters:(NSDictionary *)unencodedParameters
@@ -51,9 +52,8 @@
                         tokenSecret:(NSString *)tokenSecret;
 
 /**
-  Sometimes the service in question insists on HTTPS for everything. They
-  shouldn't, since the whole point of OAuth1 is that you *don't* need HTTPS.
-  But whatever I guess.
+  Some services insist on HTTPS. Or maybe you don't want the data to be sniffed.
+  You can pass @"https" via the scheme parameter.
 */
 + (NSURLRequest *)URLRequestForPath:(NSString *)unencodedPath_WITHOUT_Query
                       GETParameters:(NSDictionary *)unencodedParameters
