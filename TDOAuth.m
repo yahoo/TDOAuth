@@ -44,14 +44,13 @@ int TDOAuthUTCTimeOffset = 0;
 
 
 @implementation NSString (TweetDeck)
-- (id)pcen {
-    NSString* rv = (NSString *) CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef) self, NULL, (CFStringRef) @"!*'();:@&=+$,/?%#[]", kCFStringEncodingUTF8);
-    return [rv autorelease];
+- (NSString *)pcen {
+    return (__bridge_transfer NSString *)CFURLCreateStringByAddingPercentEscapes(NULL, (__bridge CFStringRef) self, NULL, CFSTR("!*'();:@&=+$,/?%#[]"), kCFStringEncodingUTF8);
 }
 @end
 
 @implementation NSNumber (TweetDeck)
-- (id)pcen {
+- (NSString *)pcen {
     // We permit NSNumbers as parameters, so we need to handle this function call
     return [self stringValue];
 }
@@ -95,14 +94,14 @@ static NSString* base64(const uint8_t* input) {
     }
     out[-2] = map[(input[19] & 0x0F) << 2];
     out[-1] = '=';
-    return [[[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding] autorelease];
+    return [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
 }
 
 static NSString* nonce() {
     CFUUIDRef uuid = CFUUIDCreate(NULL);
     CFStringRef s = CFUUIDCreateString(NULL, uuid);
     CFRelease(uuid);
-    return [(id)s autorelease];
+    return (__bridge_transfer NSString *)s;
 }
 
 static NSString* timestamp() {
@@ -258,8 +257,6 @@ static NSString* timestamp() {
     oauth->url = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"%@://%@%@", scheme, host, path]];
 
     NSURLRequest *rq = [oauth request];
-    [oauth->url release];
-    [oauth release];
     return rq;
 }
 
@@ -289,9 +286,6 @@ static NSString* timestamp() {
         [rq setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
         [rq setValue:[NSString stringWithFormat:@"%lu", (unsigned long)rq.HTTPBody.length] forHTTPHeaderField:@"Content-Length"];
     }
-
-    [oauth->url release];
-    [oauth release];
 
     return rq;
 }
