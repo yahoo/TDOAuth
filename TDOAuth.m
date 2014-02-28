@@ -139,12 +139,15 @@ static NSString* timestamp() {
               accessToken:(NSString *)accessToken
               tokenSecret:(NSString *)tokenSecret
 {
-    params = @{@"oauth_consumer_key": consumerKey,
-              @"oauth_nonce": nonce(),
-              @"oauth_timestamp": timestamp(),
-              @"oauth_version": @"1.0",
-              @"oauth_signature_method": @"HMAC-SHA1",
-              @"oauth_token": accessToken};
+    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
+    parameters[@"oauth_consumer_key"] = consumerKey;
+    parameters[@"oauth_nonce"] = nonce();
+    parameters[@"oauth_timestamp"] = timestamp();
+    parameters[@"oauth_version"] = @"1.0";
+    parameters[@"oauth_signature_method"] = @"HMAC-SHA1";
+    if (accessToken)
+        parameters[@"oauth_token"] = accessToken;
+    params = [parameters copy];
     signature_secret = [NSString stringWithFormat:@"%@&%@", consumerSecret, tokenSecret ?: @""];
     return self;
 }
