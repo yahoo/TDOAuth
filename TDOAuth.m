@@ -120,15 +120,12 @@ static NSString* timestamp() {
               accessToken:(NSString *)accessToken
               tokenSecret:(NSString *)tokenSecret
 {
-    params = [NSDictionary dictionaryWithObjectsAndKeys:
-              consumerKey,  @"oauth_consumer_key",
-              nonce(),      @"oauth_nonce",
-              timestamp(),  @"oauth_timestamp",
-              @"1.0",       @"oauth_version",
-              @"HMAC-SHA1", @"oauth_signature_method",
-              accessToken,  @"oauth_token",
-              // LEAVE accessToken last or you'll break XAuth attempts
-              nil];
+    params = @{@"oauth_consumer_key": consumerKey,
+              @"oauth_nonce": nonce(),
+              @"oauth_timestamp": timestamp(),
+              @"oauth_version": @"1.0",
+              @"oauth_signature_method": @"HMAC-SHA1",
+              @"oauth_token": accessToken};
     signature_secret = [NSString stringWithFormat:@"%@&%@", consumerSecret, tokenSecret ?: @""];
     return self;
 }
@@ -137,7 +134,7 @@ static NSString* timestamp() {
     NSMutableString *p3 = [NSMutableString stringWithCapacity:256];
     NSArray *keys = [[params allKeys] sortedArrayUsingSelector:@selector(compare:)];
     for (NSString *key in keys)
-        [[[[p3 add:[key pcen]] add:@"="] add:[params objectForKey:key]] add:@"&"];
+        [[[[p3 add:[key pcen]] add:@"="] add:params[key]] add:@"&"];
     [p3 chomp];
 
     return [NSString stringWithFormat:@"%@&%@%%3A%%2F%%2F%@%@&%@",
@@ -165,7 +162,7 @@ static NSString* timestamp() {
     NSMutableString *header = [NSMutableString stringWithCapacity:512];
     [header add:@"OAuth "];
     for (NSString *key in params.allKeys)
-        [[[[header add:key] add:@"=\""] add:[params objectForKey:key]] add:@"\", "];
+        [[[[header add:key] add:@"=\""] add:params[key]] add:@"\", "];
     [[[header add:@"oauth_signature=\""] add:self.signature.pcen] add:@"\""];
     return header;
 }
@@ -193,8 +190,8 @@ static NSString* timestamp() {
     NSMutableDictionary *encodedParameters = [NSMutableDictionary dictionaryWithDictionary:params];
     for (NSString *key in unencodedParameters.allKeys) {
         NSString *enkey = key.pcen;
-        NSString *envalue = [[unencodedParameters objectForKey:key] pcen];
-        [encodedParameters setObject:envalue forKey:enkey];
+        NSString *envalue = [unencodedParameters[key] pcen];
+        encodedParameters[enkey] = envalue;
         [[[[queryString add:enkey] add:@"="] add:envalue] add:@"&"];
     }
     [queryString chomp];
