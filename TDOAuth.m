@@ -66,9 +66,9 @@ int TDOAuthUTCTimeOffset = 0;
     return self;
 }
 - (id)chomp {
-    const int N = [self length] - 1;
-    if (N >= 0)
-        [self deleteCharactersInRange:NSMakeRange(N, 1)];
+    const NSUInteger length = [self length];
+    if (length > 0)
+        [self deleteCharactersInRange:NSMakeRange(length - 1, 1)];
     return self;
 }
 @end
@@ -109,7 +109,7 @@ static NSString* timestamp() {
     time_t t;
     time(&t);
     mktime(gmtime(&t));
-    return [NSString stringWithFormat:@"%u", t + TDOAuthUTCTimeOffset];
+    return [NSString stringWithFormat:@"%ld", t + TDOAuthUTCTimeOffset];
 }
 
 
@@ -287,7 +287,7 @@ static NSString* timestamp() {
     if (postbody.length) {
         [rq setHTTPBody:[postbody dataUsingEncoding:NSUTF8StringEncoding]];
         [rq setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-        [rq setValue:[NSString stringWithFormat:@"%u", rq.HTTPBody.length] forHTTPHeaderField:@"Content-Length"];
+        [rq setValue:[NSString stringWithFormat:@"%lu", (unsigned long)rq.HTTPBody.length] forHTTPHeaderField:@"Content-Length"];
     }
 
     [oauth->url release];
