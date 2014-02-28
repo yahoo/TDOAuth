@@ -147,8 +147,12 @@ static NSString* timestamp() {
     parameters[@"oauth_signature_method"] = @"HMAC-SHA1";
     if (accessToken)
         parameters[@"oauth_token"] = accessToken;
-    params = [parameters copy];
-    signature_secret = [NSString stringWithFormat:@"%@&%@", consumerSecret, tokenSecret ?: @""];
+    self = [super init];
+    if (self)
+    {
+        params = [parameters copy];
+        signature_secret = [NSString stringWithFormat:@"%@&%@", consumerSecret, tokenSecret ?: @""];
+    }
     return self;
 }
 
