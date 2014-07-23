@@ -35,13 +35,7 @@
   to interact with in the wild. How ace is that?!
 */
 
-@interface TDOAuth : NSObject {
-    NSURL *url;
-    NSString *signature_secret;
-    NSDictionary *params; // these are pre-percent encoded
-    NSString *method;
-}
-
+@interface TDOAuth : NSObject
 /**
   @p unencodeParameters may be nil. Objects in the dictionary must be strings.
   You are contracted to consume the NSURLRequest *immediately*. Don't put the
@@ -83,6 +77,15 @@
                      consumerSecret:(NSString *)consumerSecret
                         accessToken:(NSString *)accessToken
                         tokenSecret:(NSString *)tokenSecret;
+
+/**
+ OAuth requires the UTC timestamp we send to be accurate. The user's device
+ may not be, and often isn't. To work around this you should set this to the
+ UTC timestamp that you get back in HTTP header from OAuth servers.
+ */
++(int)utcTimeOffset;
++(void)setUtcTimeOffset:(int)offset;
+
 @end
 
 
@@ -131,22 +134,3 @@
   At TweetDeck we have TDAccount classes that represent separate user logins
   for different services when instantiated.
 */
-
-
-/**
-  OAuth requires the UTC timestamp we send to be accurate. The user's device
-  may not be, and often isn't. To work around this you should set this to the
-  UTC timestamp that you get back in HTTP header from OAuth servers.
-*/
-extern int TDOAuthUTCTimeOffset;
-
-
-
-@interface NSString (TweetDeck)
-- (NSString*)pcen;
-@end
-
-@interface NSMutableString (TweetDeck)
-- (NSMutableString *)add:(NSString *)s;
-- (NSMutableString *)chomp;
-@end
