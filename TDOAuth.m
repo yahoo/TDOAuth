@@ -101,20 +101,16 @@ static NSString* timestamp() {
               accessToken:(NSString *)accessToken
               tokenSecret:(NSString *)tokenSecret
 {
-    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
-    parameters[@"oauth_consumer_key"] = consumerKey;
-    parameters[@"oauth_nonce"] = nonce();
-    parameters[@"oauth_timestamp"] = timestamp();
-    parameters[@"oauth_version"] = @"1.0";
-    parameters[@"oauth_signature_method"] = @"HMAC-SHA1";
-    if (accessToken)
-        parameters[@"oauth_token"] = accessToken;
-    self = [super init];
-    if (self)
-    {
-        params = [parameters copy];
-        signature_secret = [NSString stringWithFormat:@"%@&%@", consumerSecret, tokenSecret ?: @""];
-    }
+    params = [NSDictionary dictionaryWithObjectsAndKeys:
+                  consumerKey,  @"oauth_consumer_key",
+                  nonce(),      @"oauth_nonce",
+                  timestamp(),  @"oauth_timestamp",
+                  @"1.0",       @"oauth_version",
+                  @"HMAC-SHA1", @"oauth_signature_method",
+                  accessToken,  @"oauth_token",
+                  // LEAVE accessToken last or you'll break XAuth attempts
+                  nil];
+    signature_secret = [NSString stringWithFormat:@"%@&%@", consumerSecret, tokenSecret ?: @""];
     return self;
 }
 
