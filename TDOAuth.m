@@ -92,7 +92,8 @@ static NSString* timestamp() {
 {
     NSURL *url;
     NSString *signature_secret;
-    NSDictionary *params; // these are pre-percent encoded
+    NSDictionary *oauthParams; // these are pre-percent encoded
+    NSDictionary *params;     // these are pre-percent encoded
     NSString *method;
     NSString *unencodedHostAndPathWithoutQuery; // we keep this because NSURL drops trailing slashes and the port number
 }
@@ -102,7 +103,7 @@ static NSString* timestamp() {
               accessToken:(NSString *)accessToken
               tokenSecret:(NSString *)tokenSecret
 {
-    params = [NSDictionary dictionaryWithObjectsAndKeys:
+    oauthParams = [NSDictionary dictionaryWithObjectsAndKeys:
                   consumerKey,  @"oauth_consumer_key",
                   nonce(),      @"oauth_nonce",
                   timestamp(),  @"oauth_timestamp",
@@ -116,13 +117,16 @@ static NSString* timestamp() {
 }
 
 - (NSString *)signature_base {
+    NSMutableDictionary *sigParams = [params mutableCopy];
+    [sigParams addEntriesFromDictionary:oauthParams];
+
     NSMutableString *p3 = [NSMutableString stringWithCapacity:256];
-    NSArray *keys = [[params allKeys] sortedArrayUsingSelector:@selector(compare:)];
+    NSArray *keys = [[sigParams allKeys] sortedArrayUsingSelector:@selector(compare:)];
     for (NSString *key in keys)
     {
         [p3 appendString:TDPCEN(key)];
         [p3 appendString:@"="];
-        [p3 appendString:[params[key] description]];
+        [p3 appendString:[sigParams[key] description]];
         [p3 appendString:@"&"];
     }
     TDChomp(p3);
@@ -150,11 +154,11 @@ static NSString* timestamp() {
 - (NSString *)authorizationHeader {
     NSMutableString *header = [NSMutableString stringWithCapacity:512];
     [header appendString:@"OAuth "];
-    for (NSString *key in params.allKeys)
+    for (NSString *key in oauthParams.allKeys)
     {
         [header appendString:[key description]];
         [header appendString:@"=\""];
-        [header appendString:[params[key] description]];
+        [header appendString:[oauthParams[key] description]];
         [header appendString:@"\", "];
     }
     [header appendString:@"oauth_signature=\""];
@@ -174,13 +178,13 @@ static NSString* timestamp() {
     return rq;
 }
 
-// unencodedParameters are encoded and added to self->params, returns encoded queryString
-- (id)addParameters:(NSDictionary *)unencodedParameters {
+// unencodedParameters are encoded and assigned to self->params, returns encoded queryString
+- (id)setParameters:(NSDictionary *)unencodedParameters {
     if (!unencodedParameters.count)
         return nil;
 
     NSMutableString *queryString = [NSMutableString string];
-    NSMutableDictionary *encodedParameters = [NSMutableDictionary dictionaryWithDictionary:params];
+    NSMutableDictionary *encodedParameters = [NSMutableDictionary new];
     for (NSString *key in unencodedParameters.allKeys)
     {
         NSString *enkey = TDPCEN(key);
@@ -192,9 +196,7 @@ static NSString* timestamp() {
         [queryString appendString:@"&"];
     }
     TDChomp(queryString);
-
-    params = encodedParameters;
-
+    params = [encodedParameters copy];
     return queryString;
 }
 
@@ -238,7 +240,7 @@ static NSString* timestamp() {
 	// everywhere and means that programmer error is *much* less likely.
     NSString *encodedPathWithoutQuery = [unencodedPathWithoutQuery stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 
-    id path = [oauth addParameters:unencodedParameters];
+    id path = [oauth setParameters:unencodedParameters];
     if (path) {
         [path insertString:@"?" atIndex:0];
         [path insertString:encodedPathWithoutQuery atIndex:0];
@@ -274,7 +276,7 @@ static NSString* timestamp() {
     oauth->url = [[NSURL alloc] initWithScheme:@"https" host:host path:unencodedPath];
     oauth->method = @"POST";
 
-    NSMutableString *postbody = [oauth addParameters:unencodedParameters];
+    NSMutableString *postbody = [oauth setParameters:unencodedParameters];
     NSMutableURLRequest *rq = [oauth request];
 
     if (postbody.length) {
