@@ -31,60 +31,22 @@
 
 #import "TDOAuth.h"
 #import <CommonCrypto/CommonHMAC.h>
+#import <OMGHTTPURLRQ/OMGUserAgent.h>
 
-@interface NSString (TweetDeck)
-- (NSString*)TDOAuthPercentEncoding;
-@end
+#define TDPCEN(s) \
+    ((__bridge_transfer NSString *)CFURLCreateStringByAddingPercentEscapes(NULL, (__bridge CFStringRef)[s description], NULL, CFSTR("!*'();:@&=+$,/?%#[]"), kCFStringEncodingUTF8))
 
-@interface NSMutableString (TweetDeck)
-- (void)TDOAuthAppendObject:(NSString *)s;
-- (void)TDOAuthChomp;
-@end
+#define TDChomp(s) { \
+    const NSUInteger length = [s length]; \
+    if (length > 0) \
+        [s deleteCharactersInRange:NSMakeRange(length - 1, 1)]; \
+}
 
 #ifndef TDOAuthURLRequestTimeout
 #define TDOAuthURLRequestTimeout 30.0
 #endif
-#ifndef TDUserAgent
-#warning Don't be a n00b! #define TDUserAgent!
-#endif
 
 static int TDOAuthUTCTimeOffset = 0;
-
-@implementation NSString (TweetDeck)
-- (NSString *)TDOAuthPercentEncoding
-{
-    return (__bridge_transfer NSString *)CFURLCreateStringByAddingPercentEscapes(NULL, (__bridge CFStringRef) self, NULL, CFSTR("!*'();:@&=+$,/?%#[]"), kCFStringEncodingUTF8);
-}
-@end
-
-@implementation NSNumber (TweetDeck)
-- (NSString *)TDOAuthPercentEncoding
-{
-    // We permit NSNumbers as parameters, so we need to handle this function call
-    return [self stringValue];
-}
-@end
-
-@implementation NSMutableString (TweetDeck)
-- (void)TDOAuthAppendObject:(id)s
-{
-    if ([s isKindOfClass:[NSString class]])
-        [self appendString:s];
-    else if ([s isKindOfClass:[NSNumber class]])
-        [self appendString:[(NSNumber *)s stringValue]];
-    else
-        @throw [NSException exceptionWithName:NSInvalidArgumentException
-                                       reason:@"Cannot append requested object to a string; must be NSString or NSNumber"
-                                     userInfo:@{@"object": s}];
-}
-- (void)TDOAuthChomp
-{
-    const NSUInteger length = [self length];
-    if (length > 0)
-        [self deleteCharactersInRange:NSMakeRange(length - 1, 1)];
-}
-@end
-
 
 
 // If your input string isn't 20 characters this won't work.
@@ -161,19 +123,19 @@ static NSString* timestamp() {
     NSArray *keys = [[params allKeys] sortedArrayUsingSelector:@selector(compare:)];
     for (NSString *key in keys)
     {
-        [p3 TDOAuthAppendObject:[key TDOAuthPercentEncoding]];
-        [p3 TDOAuthAppendObject:@"="];
-        [p3 TDOAuthAppendObject:params[key]];
-        [p3 TDOAuthAppendObject:@"&"];
+        [p3 appendString:TDPCEN(key)];
+        [p3 appendString:@"="];
+        [p3 appendString:[params[key] description]];
+        [p3 appendString:@"&"];
     }
-    [p3 TDOAuthChomp];
+    TDChomp(p3);
 
     return [NSString stringWithFormat:@"%@&%@%%3A%%2F%%2F%@%@&%@",
             method,
             url.scheme.lowercaseString,
-            url.host.lowercaseString.TDOAuthPercentEncoding,
-            url.path.TDOAuthPercentEncoding,
-            p3.TDOAuthPercentEncoding];
+            TDPCEN(url.host.lowercaseString),
+            TDPCEN(url.path),
+            TDPCEN(p3)];
 }
 
 - (NSString *)signature {
@@ -191,28 +153,25 @@ static NSString* timestamp() {
 
 - (NSString *)authorizationHeader {
     NSMutableString *header = [NSMutableString stringWithCapacity:512];
-    [header TDOAuthAppendObject:@"OAuth "];
+    [header appendString:@"OAuth "];
     for (NSString *key in params.allKeys)
     {
-        [header TDOAuthAppendObject:key];
-        [header TDOAuthAppendObject:@"=\""];
-        [header TDOAuthAppendObject:params[key]];
-        [header TDOAuthAppendObject:@"\", "];
+        [header appendString:[key description]];
+        [header appendString:@"=\""];
+        [header appendString:[params[key] description]];
+        [header appendString:@"\", "];
     }
-    [header TDOAuthAppendObject:@"oauth_signature=\""];
-    [header TDOAuthAppendObject:self.signature.TDOAuthPercentEncoding];
-    [header TDOAuthAppendObject:@"\""];
+    [header appendString:@"oauth_signature=\""];
+    [header appendString:TDPCEN(self.signature)];
+    [header appendString:@"\""];
     return header;
 }
 
 - (NSMutableURLRequest *)request {
-    //TODO timeout interval depends on connectivity status
     NSMutableURLRequest *rq = [NSMutableURLRequest requestWithURL:url
                                                       cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
                                                   timeoutInterval:TDOAuthURLRequestTimeout];
-#ifdef TDUserAgent
-    [rq setValue:TDUserAgent forHTTPHeaderField:@"User-Agent"];
-#endif
+    [rq setValue:OMGUserAgent() forHTTPHeaderField:@"User-Agent"];
     [rq setValue:[self authorizationHeader] forHTTPHeaderField:@"Authorization"];
     [rq setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
     [rq setHTTPMethod:method];
@@ -228,15 +187,15 @@ static NSString* timestamp() {
     NSMutableDictionary *encodedParameters = [NSMutableDictionary dictionaryWithDictionary:params];
     for (NSString *key in unencodedParameters.allKeys)
     {
-        NSString *enkey = key.TDOAuthPercentEncoding;
-        NSString *envalue = [unencodedParameters[key] TDOAuthPercentEncoding];
+        NSString *enkey = TDPCEN(key);
+        NSString *envalue = TDPCEN(unencodedParameters[key]);
         encodedParameters[enkey] = envalue;
-        [queryString TDOAuthAppendObject:enkey];
-        [queryString TDOAuthAppendObject:@"="];
-        [queryString TDOAuthAppendObject:envalue];
-        [queryString TDOAuthAppendObject:@"&"];
+        [queryString appendString:enkey];
+        [queryString appendString:@"="];
+        [queryString appendString:envalue];
+        [queryString appendString:@"&"];
     }
-    [queryString TDOAuthChomp];
+    TDChomp(queryString);
 
     params = encodedParameters;
 
