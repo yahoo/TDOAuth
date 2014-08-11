@@ -31,7 +31,7 @@
 
 #import "TDOAuth.h"
 #import <CommonCrypto/CommonHMAC.h>
-#import <OMGHTTPURLRQ/OMGUserAgent.h>
+#import "OMGUserAgent.h"
 
 #define TDPCEN(s) \
     ((__bridge_transfer NSString *)CFURLCreateStringByAddingPercentEscapes(NULL, (__bridge CFStringRef)[s description], NULL, CFSTR("!*'();:@&=+$,/?%#[]"), kCFStringEncodingUTF8))
@@ -47,30 +47,6 @@
 #endif
 
 static int TDOAuthUTCTimeOffset = 0;
-
-
-// If your input string isn't 20 characters this won't work.
-static NSString* base64(const uint8_t* input) {
-    static const char map[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-
-    NSMutableData* data = [NSMutableData dataWithLength:28];
-    uint8_t* out = (uint8_t*) data.mutableBytes;
-
-    for (int i = 0; i < 20;) {
-        int v  = 0;
-        for (const int N = i + 3; i < N; i++) {
-            v <<= 8;
-            v |= 0xFF & input[i];
-        }
-        *out++ = map[v >> 18 & 0x3F];
-        *out++ = map[v >> 12 & 0x3F];
-        *out++ = map[v >> 6 & 0x3F];
-        *out++ = map[v >> 0 & 0x3F];
-    }
-    out[-2] = map[(input[19] & 0x0F) << 2];
-    out[-1] = '=';
-    return [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
-}
 
 static NSString* nonce() {
     CFUUIDRef uuid = CFUUIDCreate(NULL);
@@ -141,15 +117,13 @@ static NSString* timestamp() {
 - (NSString *)signature {
     NSData *sigbase = [[self signature_base] dataUsingEncoding:NSUTF8StringEncoding];
     NSData *secret = [signature_secret dataUsingEncoding:NSUTF8StringEncoding];
-
-    uint8_t digest[20] = {0};
-    CCHmacContext cx;
-    CCHmacInit(&cx, kCCHmacAlgSHA1, secret.bytes, secret.length);
-    CCHmacUpdate(&cx, sigbase.bytes, sigbase.length);
-    CCHmacFinal(&cx, digest);
-
-    return base64(digest);
+    
+    NSMutableData *digest = [NSMutableData dataWithLength:CC_SHA1_DIGEST_LENGTH];
+    CCHmac(kCCHmacAlgSHA1, secret.bytes, secret.length, sigbase.bytes, sigbase.length, digest.mutableBytes);
+    NSString *result = [digest base64EncodedStringWithOptions:NSDataBase64Encoding76CharacterLineLength];
+    return result;
 }
+
 
 - (NSString *)authorizationHeader {
     NSMutableString *header = [NSMutableString stringWithCapacity:512];
