@@ -93,7 +93,7 @@ static NSString* timestamp() {
 }
 
 - (NSString *)signature_base {
-    NSMutableDictionary *sigParams = [params mutableCopy];
+    NSMutableDictionary *sigParams = params!=nil?[params mutableCopy]:[NSMutableDictionary dictionary];
     [sigParams addEntriesFromDictionary:oauthParams];
 
     NSMutableString *p3 = [NSMutableString stringWithCapacity:256];
