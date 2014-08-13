@@ -79,6 +79,27 @@
                         tokenSecret:(NSString *)tokenSecret;
 
 /**
+ PUT with HTTPS.
+ */
++ (NSURLRequest *)URLRequestForPath:(NSString *)unencodedPath
+                     PUTParameters:(NSDictionary *)unencodedParameters
+                               host:(NSString *)host
+                        consumerKey:(NSString *)consumerKey
+                     consumerSecret:(NSString *)consumerSecret
+                        accessToken:(NSString *)accessToken
+                        tokenSecret:(NSString *)tokenSecret;
+/**
+ DELETE with HTTPS.
+ */
++ (NSURLRequest *)URLRequestForPath:(NSString *)unencodedPath_WITHOUT_Query
+                      DELETEParameters:(NSDictionary *)unencodedParameters
+                               host:(NSString *)host
+                        consumerKey:(NSString *)consumerKey
+                     consumerSecret:(NSString *)consumerSecret
+                        accessToken:(NSString *)accessToken
+                        tokenSecret:(NSString *)tokenSecret;
+
+/**
  OAuth requires the UTC timestamp we send to be accurate. The user's device
  may not be, and often isn't. To work around this you should set this to the
  UTC timestamp that you get back in HTTP header from OAuth servers.
