@@ -276,20 +276,27 @@ static NSString* timestamp() {
                                               accessToken:accessToken
                                               tokenSecret:tokenSecret];
     
-    oauth->unencodedHostAndPathWithoutQuery = [host.lowercaseString stringByAppendingString:unencodedPath];
-    oauth->url = [[NSURL alloc] initWithScheme:@"https" host:host path:unencodedPath];
-    oauth->method = @"PUT";
+    // We don't use pcen as we don't want to percent encode eg. /, this is perhaps
+	// not the most all encompassing solution, but in practice it seems to work
+	// everywhere and means that programmer error is *much* less likely.
+    NSString *encodedPathWithoutQuery = [unencodedPath stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
-    NSMutableString *postbody = [oauth setParameters:unencodedParameters];
-    NSMutableURLRequest *rq = [oauth request];
-    
-    if (postbody.length) {
-        [rq setHTTPBody:[postbody dataUsingEncoding:NSUTF8StringEncoding]];
-        [rq setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-        [rq setValue:[NSString stringWithFormat:@"%lu", (unsigned long)rq.HTTPBody.length] forHTTPHeaderField:@"Content-Length"];
+    id path = [oauth setParameters:unencodedParameters];
+    if (path) {
+        [path insertString:@"?" atIndex:0];
+        [path insertString:encodedPathWithoutQuery atIndex:0];
+    } else {
+        path = encodedPathWithoutQuery;
     }
     
+    oauth->method = @"PUT";
+    oauth->unencodedHostAndPathWithoutQuery = [host.lowercaseString stringByAppendingString:unencodedPath];
+    oauth->url = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"https://%@%@", host, path]];
+    
+    NSURLRequest *rq = [oauth request];
     return rq;
+    
+
 }
 + (NSURLRequest *)URLRequestForPath:(NSString *)unencodedPathWithoutQuery
                    DELETEParameters:(NSDictionary *)unencodedParameters
