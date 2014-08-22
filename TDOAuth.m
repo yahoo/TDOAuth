@@ -180,9 +180,6 @@ static NSString* timestamp() {
 
 // unencodedParameters are encoded and assigned to self->params, returns encoded queryString
 - (id)setParameters:(NSDictionary *)unencodedParameters {
-    if (!unencodedParameters.count)
-        return nil;
-
     NSMutableString *queryString = [NSMutableString string];
     NSMutableDictionary *encodedParameters = [NSMutableDictionary new];
     for (NSString *key in unencodedParameters.allKeys)
