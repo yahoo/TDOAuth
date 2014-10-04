@@ -81,7 +81,7 @@
 /**
  OAuth requires the UTC timestamp we send to be accurate. The user's device
  may not be, and often isn't. To work around this you should set this to the
- UTC timestamp that you get back in HTTP header from OAuth servers.
+ UTC timestamp that you get back in HTTP headers from OAuth servers.
  */
 +(int)utcTimeOffset;
 +(void)setUtcTimeOffset:(int)offset;
