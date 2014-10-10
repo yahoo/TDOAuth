@@ -84,7 +84,7 @@ static NSString* timestamp() {
                   nonce(),      @"oauth_nonce",
                   timestamp(),  @"oauth_timestamp",
                   @"1.0",       @"oauth_version",
-                  @"HMAC-SHA1", @"oauth_signature_method",
+                  @"HMAC-SHA256", @"oauth_signature_method",
                   accessToken,  @"oauth_token",
                   // LEAVE accessToken last or you'll break XAuth attempts
                   nil];
@@ -93,14 +93,15 @@ static NSString* timestamp() {
 }
 
 - (NSString *)signature_base {
-    NSMutableDictionary *sigParams = [params mutableCopy];
+    NSMutableDictionary *sigParams = params!=nil?[params mutableCopy]:[NSMutableDictionary dictionary];
     [sigParams addEntriesFromDictionary:oauthParams];
 
     NSMutableString *p3 = [NSMutableString stringWithCapacity:256];
     NSArray *keys = [[sigParams allKeys] sortedArrayUsingSelector:@selector(compare:)];
     for (NSString *key in keys)
     {
-        [p3 appendString:TDPCEN(key)];
+        //[p3 appendString:TDPCEN(key)];
+        [p3 appendString:key];
         [p3 appendString:@"="];
         [p3 appendString:[sigParams[key] description]];
         [p3 appendString:@"&"];
@@ -118,8 +119,8 @@ static NSString* timestamp() {
     NSData *sigbase = [[self signature_base] dataUsingEncoding:NSUTF8StringEncoding];
     NSData *secret = [signature_secret dataUsingEncoding:NSUTF8StringEncoding];
     
-    NSMutableData *digest = [NSMutableData dataWithLength:CC_SHA1_DIGEST_LENGTH];
-    CCHmac(kCCHmacAlgSHA1, secret.bytes, secret.length, sigbase.bytes, sigbase.length, digest.mutableBytes);
+    NSMutableData *digest = [NSMutableData dataWithLength:CC_SHA256_DIGEST_LENGTH];
+    CCHmac(kCCHmacAlgSHA256, secret.bytes, secret.length, sigbase.bytes, sigbase.length, digest.mutableBytes);
     NSString *result = [digest base64EncodedStringWithOptions:NSDataBase64Encoding76CharacterLineLength];
     return result;
 }
@@ -257,6 +258,79 @@ static NSString* timestamp() {
     }
 
     return rq;
+}
++ (NSURLRequest *)URLRequestForPath:(NSString *)unencodedPath
+                      PUTParameters:(NSDictionary *)unencodedParameters
+                               host:(NSString *)host
+                        consumerKey:(NSString *)consumerKey
+                     consumerSecret:(NSString *)consumerSecret
+                        accessToken:(NSString *)accessToken
+                        tokenSecret:(NSString *)tokenSecret{
+    if (!host || !unencodedPath)
+        return nil;
+    
+    TDOAuth *oauth = [[TDOAuth alloc] initWithConsumerKey:consumerKey
+                                           consumerSecret:consumerSecret
+                                              accessToken:accessToken
+                                              tokenSecret:tokenSecret];
+    
+    // We don't use pcen as we don't want to percent encode eg. /, this is perhaps
+	// not the most all encompassing solution, but in practice it seems to work
+	// everywhere and means that programmer error is *much* less likely.
+    NSString *encodedPathWithoutQuery = [unencodedPath stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
+    id path = [oauth setParameters:unencodedParameters];
+    if (path) {
+        [path insertString:@"?" atIndex:0];
+        [path insertString:encodedPathWithoutQuery atIndex:0];
+    } else {
+        path = encodedPathWithoutQuery;
+    }
+    
+    oauth->method = @"PUT";
+    oauth->unencodedHostAndPathWithoutQuery = [host.lowercaseString stringByAppendingString:unencodedPath];
+    oauth->url = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"https://%@%@", host, path]];
+    
+    NSURLRequest *rq = [oauth request];
+    return rq;
+    
+
+}
++ (NSURLRequest *)URLRequestForPath:(NSString *)unencodedPathWithoutQuery
+                   DELETEParameters:(NSDictionary *)unencodedParameters
+                               host:(NSString *)host
+                        consumerKey:(NSString *)consumerKey
+                     consumerSecret:(NSString *)consumerSecret
+                        accessToken:(NSString *)accessToken
+                        tokenSecret:(NSString *)tokenSecret{
+    if (!host || !unencodedPathWithoutQuery)
+        return nil;
+    
+    TDOAuth *oauth = [[TDOAuth alloc] initWithConsumerKey:consumerKey
+                                           consumerSecret:consumerSecret
+                                              accessToken:accessToken
+                                              tokenSecret:tokenSecret];
+    
+    // We don't use pcen as we don't want to percent encode eg. /, this is perhaps
+	// not the most all encompassing solution, but in practice it seems to work
+	// everywhere and means that programmer error is *much* less likely.
+    NSString *encodedPathWithoutQuery = [unencodedPathWithoutQuery stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
+    id path = [oauth setParameters:unencodedParameters];
+    if (path) {
+        [path insertString:@"?" atIndex:0];
+        [path insertString:encodedPathWithoutQuery atIndex:0];
+    } else {
+        path = encodedPathWithoutQuery;
+    }
+    NSString *scheme = @"https";//use https
+    oauth->method = @"DELETE";
+    oauth->unencodedHostAndPathWithoutQuery = [host.lowercaseString stringByAppendingString:unencodedPathWithoutQuery];
+    oauth->url = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"%@://%@%@", scheme, host, path]];
+    
+    NSURLRequest *rq = [oauth request];
+    return rq;
+
 }
 
 +(int)utcTimeOffset
