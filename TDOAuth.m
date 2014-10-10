@@ -124,7 +124,8 @@ static NSString* timestamp() {
     NSArray *keys = [[sigParams allKeys] sortedArrayUsingSelector:@selector(compare:)];
     for (NSString *key in keys)
     {
-        [p3 appendString:TDPCEN(key)];
+        //[p3 appendString:TDPCEN(key)];
+        [p3 appendString:key];
         [p3 appendString:@"="];
         [p3 appendString:[sigParams[key] description]];
         [p3 appendString:@"&"];
