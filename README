@@ -4,6 +4,10 @@ Use CocoaPods:
 
     pod 'TDOAuth'
 
+If you don’t use CocoaPods, just drag and drop the two sources in and grab
+[OMGHTTPURLRQ/OMGUserAgent](https://github.com/mxcl/OMGHTTPURLRQ). CocoaPods
+is easier, manages updates and manages dependencies, but is less flexible.
+
 Usage is fully documented in the header.
 
 Tested against Foursquare and Twitter. If you test it against something else,
