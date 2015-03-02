@@ -77,6 +77,27 @@
                      consumerSecret:(NSString *)consumerSecret
                         accessToken:(NSString *)accessToken
                         tokenSecret:(NSString *)tokenSecret;
+/**
+ PUT with HTTPS.
+ */
++ (NSURLRequest *)URLRequestForPath:(NSString *)unencodedPath
+                      PUTParameters:(NSDictionary *)unencodedParameters
+                               host:(NSString *)host
+                        consumerKey:(NSString *)consumerKey
+                     consumerSecret:(NSString *)consumerSecret
+                        accessToken:(NSString *)accessToken
+                        tokenSecret:(NSString *)tokenSecret;
+/**
+ DELETE with HTTPS.
+ */
++ (NSURLRequest *)URLRequestForPath:(NSString *)unencodedPath_WITHOUT_Query
+                   DELETEParameters:(NSDictionary *)unencodedParameters
+                               host:(NSString *)host
+                        consumerKey:(NSString *)consumerKey
+                     consumerSecret:(NSString *)consumerSecret
+                        accessToken:(NSString *)accessToken
+                        tokenSecret:(NSString *)tokenSecret;
+
 
 /**
  OAuth requires the UTC timestamp we send to be accurate. The user's device
