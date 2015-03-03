@@ -84,7 +84,7 @@ static NSString* timestamp() {
                   nonce(),      @"oauth_nonce",
                   timestamp(),  @"oauth_timestamp",
                   @"1.0",       @"oauth_version",
-                  @"HMAC-SHA1", @"oauth_signature_method",
+                  @"HMAC-SHA256", @"oauth_signature_method",
                   accessToken,  @"oauth_token",
                   // LEAVE accessToken last or you'll break XAuth attempts
                   nil];
@@ -119,11 +119,12 @@ static NSString* timestamp() {
     NSData *sigbase = [[self signature_base] dataUsingEncoding:NSUTF8StringEncoding];
     NSData *secret = [signature_secret dataUsingEncoding:NSUTF8StringEncoding];
     
-    NSMutableData *digest = [NSMutableData dataWithLength:CC_SHA1_DIGEST_LENGTH];
-    CCHmac(kCCHmacAlgSHA1, secret.bytes, secret.length, sigbase.bytes, sigbase.length, digest.mutableBytes);
+    NSMutableData *digest = [NSMutableData dataWithLength:CC_SHA256_DIGEST_LENGTH];
+    CCHmac(kCCHmacAlgSHA256, secret.bytes, secret.length, sigbase.bytes, sigbase.length, digest.mutableBytes);
     NSString *result = [digest base64EncodedStringWithOptions:NSDataBase64Encoding76CharacterLineLength];
     return result;
 }
+
 
 
 - (NSString *)authorizationHeader {
