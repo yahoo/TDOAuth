@@ -180,14 +180,73 @@ static NSString* timestamp() {
                         accessToken:(NSString *)accessToken
                         tokenSecret:(NSString *)tokenSecret
 {
-    return [self URLRequestForPath:unencodedPathWithoutQuery
-                     GETParameters:unencodedParameters
-                            scheme:@"http"
-                              host:host
-                       consumerKey:consumerKey
-                    consumerSecret:consumerSecret
-                       accessToken:accessToken
-                       tokenSecret:tokenSecret];
+    return [TDOAuth URLRequestForPath:unencodedPathWithoutQuery
+                           parameters:unencodedParameters
+                                 host:host
+                          consumerKey:consumerKey
+                       consumerSecret:consumerSecret
+                          accessToken:accessToken
+                          tokenSecret:tokenSecret
+                               scheme:@"http"
+                               method:@"GET"];
+}
+
++ (NSURLRequest *)URLRequestForPath:(NSString *)unencodedPathWithoutQuery
+                         parameters:(NSDictionary *)unencodedParameters
+                               host:(NSString *)host
+                        consumerKey:(NSString *)consumerKey
+                     consumerSecret:(NSString *)consumerSecret
+                        accessToken:(NSString *)accessToken
+                        tokenSecret:(NSString *)tokenSecret
+                             scheme:(NSString *)scheme
+                             method:(NSString *)method;
+{
+    if (!host || !unencodedPathWithoutQuery || !method)
+        return nil;
+
+    TDOAuth *oauth = [[TDOAuth alloc] initWithConsumerKey:consumerKey
+                                           consumerSecret:consumerSecret
+                                              accessToken:accessToken
+                                              tokenSecret:tokenSecret];
+
+    // We don't use pcen as we don't want to percent encode eg. /, this is perhaps
+    // not the most all encompassing solution, but in practice it seems to work
+    // everywhere and means that programmer error is *much* less likely.
+    NSString *encodedPathWithoutQuery = [unencodedPathWithoutQuery stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+
+    id path = [oauth setParameters:unencodedParameters];
+    if (path) {
+        [path insertString:@"?" atIndex:0];
+        [path insertString:encodedPathWithoutQuery atIndex:0];
+    } else {
+        path = encodedPathWithoutQuery;
+    }
+
+    oauth->method = method;
+    oauth->unencodedHostAndPathWithoutQuery = [host.lowercaseString stringByAppendingString:unencodedPathWithoutQuery];
+
+    NSMutableURLRequest *rq;
+    if ([method isEqualToString:@"GET"])
+    {
+        oauth->url = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"%@://%@%@",
+                                                    scheme, host, path]];
+        rq = [oauth request];
+    }
+    else
+    {
+        oauth->url = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"%@://%@%@",
+                                                    scheme, host, unencodedPathWithoutQuery]];
+        NSMutableString *postbody = [oauth setParameters:unencodedParameters];
+        rq = [oauth request];
+
+        if (postbody.length) {
+            [rq setHTTPBody:[postbody dataUsingEncoding:NSUTF8StringEncoding]];
+            [rq setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+            [rq setValue:[NSString stringWithFormat:@"%lu", (unsigned long)rq.HTTPBody.length] forHTTPHeaderField:@"Content-Length"];
+        }
+    }
+
+    return rq;
 }
 
 + (NSURLRequest *)URLRequestForPath:(NSString *)unencodedPathWithoutQuery
@@ -199,33 +258,15 @@ static NSString* timestamp() {
                         accessToken:(NSString *)accessToken
                         tokenSecret:(NSString *)tokenSecret;
 {
-    if (!host || !unencodedPathWithoutQuery)
-        return nil;
-
-    TDOAuth *oauth = [[TDOAuth alloc] initWithConsumerKey:consumerKey
-                                           consumerSecret:consumerSecret
-                                              accessToken:accessToken
-                                              tokenSecret:tokenSecret];
-
-    // We don't use pcen as we don't want to percent encode eg. /, this is perhaps
-	// not the most all encompassing solution, but in practice it seems to work
-	// everywhere and means that programmer error is *much* less likely.
-    NSString *encodedPathWithoutQuery = [unencodedPathWithoutQuery stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-
-    id path = [oauth setParameters:unencodedParameters];
-    if (path) {
-        [path insertString:@"?" atIndex:0];
-        [path insertString:encodedPathWithoutQuery atIndex:0];
-    } else {
-        path = encodedPathWithoutQuery;
-    }
-
-    oauth->method = @"GET";
-    oauth->unencodedHostAndPathWithoutQuery = [host.lowercaseString stringByAppendingString:unencodedPathWithoutQuery];
-    oauth->url = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"%@://%@%@", scheme, host, path]];
-
-    NSURLRequest *rq = [oauth request];
-    return rq;
+    return [TDOAuth URLRequestForPath:unencodedPathWithoutQuery
+                           parameters:unencodedParameters
+                                 host:host
+                          consumerKey:consumerKey
+                       consumerSecret:consumerSecret
+                          accessToken:accessToken
+                          tokenSecret:tokenSecret
+                               scheme:scheme
+                               method:@"GET"];
 }
 
 + (NSURLRequest *)URLRequestForPath:(NSString *)unencodedPath
@@ -236,28 +277,16 @@ static NSString* timestamp() {
                         accessToken:(NSString *)accessToken
                         tokenSecret:(NSString *)tokenSecret
 {
-    if (!host || !unencodedPath)
-        return nil;
-
-    TDOAuth *oauth = [[TDOAuth alloc] initWithConsumerKey:consumerKey
-                                           consumerSecret:consumerSecret
-                                              accessToken:accessToken
-                                              tokenSecret:tokenSecret];
-
-    oauth->unencodedHostAndPathWithoutQuery = [host.lowercaseString stringByAppendingString:unencodedPath];
-    oauth->url = [[NSURL alloc] initWithScheme:@"https" host:host path:unencodedPath];
-    oauth->method = @"POST";
-
-    NSMutableString *postbody = [oauth setParameters:unencodedParameters];
-    NSMutableURLRequest *rq = [oauth request];
-
-    if (postbody.length) {
-        [rq setHTTPBody:[postbody dataUsingEncoding:NSUTF8StringEncoding]];
-        [rq setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-        [rq setValue:[NSString stringWithFormat:@"%lu", (unsigned long)rq.HTTPBody.length] forHTTPHeaderField:@"Content-Length"];
-    }
-
-    return rq;
+    return [TDOAuth URLRequestForPath:unencodedPath
+                           parameters:unencodedParameters
+                                 host:host
+                          consumerKey:consumerKey
+                       consumerSecret:consumerSecret
+                          accessToken:accessToken
+                          tokenSecret:tokenSecret
+                               scheme:@"https"
+                               method:@"POST"];
+    
 }
 
 +(int)utcTimeOffset

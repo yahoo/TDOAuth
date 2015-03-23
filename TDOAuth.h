@@ -79,6 +79,26 @@
                         tokenSecret:(NSString *)tokenSecret;
 
 /**
+  This method allows the caller to specify particular values for many different parameters such
+  as scheme, method, header values and alternate signature hash algorithms.
+
+  @p scheme may be nil, but would generally be either "http" or "https".
+  @p method may be any string value. There is no validation, so remember that all
+  currently-defined HTTP methods are uppercase and the RFC specifies that the method
+  is case-sensitive.
+*/
+
++ (NSURLRequest *)URLRequestForPath:(NSString *)unencodedPathWithoutQuery
+                         parameters:(NSDictionary *)unencodedParameters
+                               host:(NSString *)host
+                        consumerKey:(NSString *)consumerKey
+                     consumerSecret:(NSString *)consumerSecret
+                        accessToken:(NSString *)accessToken
+                        tokenSecret:(NSString *)tokenSecret
+                             scheme:(NSString *)scheme
+                             method:(NSString *)method;
+
+/**
  OAuth requires the UTC timestamp we send to be accurate. The user's device
  may not be, and often isn't. To work around this you should set this to the
  UTC timestamp that you get back in HTTP headers from OAuth servers.
