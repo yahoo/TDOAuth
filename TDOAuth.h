@@ -113,7 +113,7 @@ typedef NS_ENUM(NSInteger, TDOAuthSignatureMethod) {
                         accessToken:(NSString *)accessToken
                         tokenSecret:(NSString *)tokenSecret
                              scheme:(NSString *)scheme
-                             method:(NSString *)method
+                      requestMethod:(NSString *)method
                        headerValues:(NSDictionary *)headerValues
                     signatureMethod:(TDOAuthSignatureMethod)signatureMethod;
 

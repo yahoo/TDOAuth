@@ -227,7 +227,7 @@ static NSString* timestamp() {
                           accessToken:accessToken
                           tokenSecret:tokenSecret
                                scheme:@"http"
-                               method:@"GET"
+                        requestMethod:@"GET"
                          headerValues:nil
                       signatureMethod:TDOAuthSignatureMethodHmacSha1];
 }
@@ -240,7 +240,7 @@ static NSString* timestamp() {
                         accessToken:(NSString *)accessToken
                         tokenSecret:(NSString *)tokenSecret
                              scheme:(NSString *)scheme
-                             method:(NSString *)method
+                      requestMethod:(NSString *)method
                        headerValues:(NSDictionary *)headerValues
                     signatureMethod:(TDOAuthSignatureMethod)signatureMethod;
 {
@@ -312,7 +312,7 @@ static NSString* timestamp() {
                           accessToken:accessToken
                           tokenSecret:tokenSecret
                                scheme:scheme
-                               method:@"GET"
+                        requestMethod:@"GET"
                          headerValues:nil
                       signatureMethod:TDOAuthSignatureMethodHmacSha1];
 }
@@ -333,7 +333,7 @@ static NSString* timestamp() {
                           accessToken:accessToken
                           tokenSecret:tokenSecret
                                scheme:@"https"
-                               method:@"POST"
+                        requestMethod:@"POST"
                          headerValues:nil
                       signatureMethod:TDOAuthSignatureMethodHmacSha1];
     

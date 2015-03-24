@@ -51,7 +51,7 @@
                           accessToken:@"ijkl"
                           tokenSecret:@"mnop"
                                scheme:@"http"
-                               method:@"BEG"
+                        requestMethod:@"BEG"
                          headerValues:nil
                       signatureMethod:TDOAuthSignatureMethodHmacSha1];
 }
@@ -183,7 +183,7 @@
                                                   accessToken:@"ijkl"
                                                   tokenSecret:@"mnop"
                                                        scheme:@"http"
-                                                       method:@"BEG"
+                                                requestMethod:@"BEG"
                                                  headerValues:nil
                                               signatureMethod:TDOAuthSignatureMethodHmacSha1];
     XCTAssertNil(genericRequest,
@@ -200,7 +200,7 @@
                                                   accessToken:@"ijkl"
                                                   tokenSecret:@"mnop"
                                                        scheme:@"http"
-                                                       method:@"BEG"
+                                                requestMethod:@"BEG"
                                                  headerValues:nil
                                               signatureMethod:TDOAuthSignatureMethodHmacSha1];
     XCTAssertNil(genericRequest,
@@ -218,7 +218,7 @@
                                                   accessToken:@"ijkl"
                                                   tokenSecret:@"mnop"
                                                        scheme:nil
-                                                       method:@"BEG"
+                                                requestMethod:@"BEG"
                                                  headerValues:nil
                                               signatureMethod:TDOAuthSignatureMethodHmacSha1];
     XCTAssertNil(genericRequest,
@@ -235,7 +235,7 @@
                                                   accessToken:@"ijkl"
                                                   tokenSecret:@"mnop"
                                                        scheme:@"http"
-                                                       method:nil
+                                                requestMethod:nil
                                                  headerValues:nil
                                               signatureMethod:TDOAuthSignatureMethodHmacSha1];
     XCTAssertNil(genericRequest,
@@ -252,7 +252,7 @@
                                                   accessToken:@"ijkl"
                                                   tokenSecret:@"mnop"
                                                        scheme:@"ftp" // Not really valid, but it lets us test
-                                                       method:@"BEG"
+                                                requestMethod:@"BEG"
                                                  headerValues:@{@"Accept": @"application/json"}
                                               signatureMethod:TDOAuthSignatureMethodHmacSha1];
     NSString *url = [[genericRequest URL] absoluteString];
@@ -293,7 +293,7 @@
                                                   accessToken:@"ijkl"
                                                   tokenSecret:@"mnop"
                                                        scheme:@"ftp" // Not really valid, but it lets us test
-                                                       method:@"BEG"
+                                                requestMethod:@"BEG"
                                                  headerValues:nil
                                               signatureMethod:TDOAuthSignatureMethodHmacSha256];
     NSString *authHeader = [genericRequest valueForHTTPHeaderField:@"Authorization"];
@@ -315,7 +315,7 @@
                                                   accessToken:@"ijkl"
                                                   tokenSecret:@"mnop"
                                                        scheme:@"ftp" // Not really valid, but it lets us test
-                                                       method:@"BEG"
+                                                requestMethod:@"BEG"
                                                  headerValues:nil
                                               signatureMethod:(TDOAuthSignatureMethod)1234];
     XCTAssertNil(genericRequest,
