@@ -186,6 +186,11 @@
 		C445D4A11ABF7B850076B639 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					./OMGHTTPURLRQ/,
+				);
 				INFOPLIST_FILE = "";
 				"INFOPLIST_FILE[sdk=*]" = "";
 			};
@@ -194,6 +199,11 @@
 		C445D4A21ABF7B850076B639 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					./OMGHTTPURLRQ/,
+				);
 				INFOPLIST_FILE = "";
 			};
 			name = Release;
