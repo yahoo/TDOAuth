@@ -82,7 +82,7 @@
   This method allows the caller to specify particular values for many different parameters such
   as scheme, method, header values and alternate signature hash algorithms.
 
-  @p scheme may be nil, but would generally be either "http" or "https".
+  @p scheme may be any string value, generally "http" or "https".
   @p method may be any string value. There is no validation, so remember that all
   currently-defined HTTP methods are uppercase and the RFC specifies that the method
   is case-sensitive.

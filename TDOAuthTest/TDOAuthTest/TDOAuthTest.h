@@ -10,7 +10,7 @@
 #import "TDOAuth.h"
 
 @interface TDOAuthTest : XCTestCase {
-@private
+@public
     NSURLRequest        *getRequest;
     NSURLRequest        *postRequest;
 }

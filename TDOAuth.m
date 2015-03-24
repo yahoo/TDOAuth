@@ -210,7 +210,7 @@ static NSString* timestamp() {
                              scheme:(NSString *)scheme
                              method:(NSString *)method;
 {
-    if (!host || !unencodedPathWithoutQuery || !method)
+    if (!host || !unencodedPathWithoutQuery || !scheme || !method)
         return nil;
 
     TDOAuth *oauth = [[TDOAuth alloc] initWithConsumerKey:consumerKey
