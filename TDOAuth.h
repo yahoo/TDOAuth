@@ -106,6 +106,12 @@
 +(int)utcTimeOffset;
 +(void)setUtcTimeOffset:(int)offset;
 
+/**
+ DO NOT USE THIS METHOD EXCEPT IN AUTOMATED TESTS. It enables static
+ values for the time and nonce, which would break any production code.
+ */
++(void)enableStaticValuesForAutomatedTests;
+
 @end
 
 

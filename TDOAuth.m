@@ -47,17 +47,26 @@
 #endif
 
 static int TDOAuthUTCTimeOffset = 0;
+static BOOL TDOAuthUseStaticValuesForAutomatedTesting = NO;
 
 static NSString* nonce() {
-    CFUUIDRef uuid = CFUUIDCreate(NULL);
-    CFStringRef s = CFUUIDCreateString(NULL, uuid);
-    CFRelease(uuid);
-    return (__bridge_transfer NSString *)s;
+    if (TDOAuthUseStaticValuesForAutomatedTesting) {
+        return @"static-nonce-for-testing";
+    } else {
+        CFUUIDRef uuid = CFUUIDCreate(NULL);
+        CFStringRef s = CFUUIDCreateString(NULL, uuid);
+        CFRelease(uuid);
+        return (__bridge_transfer NSString *)s;
+    }
 }
 
 static NSString* timestamp() {
     time_t t;
-    time(&t);
+    if (TDOAuthUseStaticValuesForAutomatedTesting) {
+        t = 1456789012;
+    } else {
+        time(&t);
+    }
     mktime(gmtime(&t));
     return [NSString stringWithFormat:@"%ld", t + TDOAuthUTCTimeOffset];
 }
@@ -299,4 +308,8 @@ static NSString* timestamp() {
     TDOAuthUTCTimeOffset = offset;
 }
 
++(void)enableStaticValuesForAutomatedTests
+{
+    TDOAuthUseStaticValuesForAutomatedTesting = YES;
+}
 @end
