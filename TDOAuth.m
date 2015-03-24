@@ -100,7 +100,7 @@ static NSString* timestamp() {
         return self;
     }
     signature_method = signatureMethod;
-    
+
     oauthParams = [NSDictionary dictionaryWithObjectsAndKeys:
                   consumerKey,  @"oauth_consumer_key",
                   nonce(),      @"oauth_nonce",
@@ -140,7 +140,7 @@ static NSString* timestamp() {
 - (NSString *)signature {
     NSData *sigbase = [[self signature_base] dataUsingEncoding:NSUTF8StringEncoding];
     NSData *secret = [signature_secret dataUsingEncoding:NSUTF8StringEncoding];
-    
+
     NSMutableData *digest;
     NSString *result;
     if (signature_method == TDOAuthSignatureMethodHmacSha256) {
@@ -268,7 +268,7 @@ static NSString* timestamp() {
         // not the most all encompassing solution, but in practice it seems to work
         // everywhere and means that programmer error is *much* less likely.
         NSString *encodedPathWithoutQuery = [unencodedPathWithoutQuery stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-        
+
         id path = [oauth setParameters:unencodedParameters];
         if (path) {
             [path insertString:@"?" atIndex:0];
@@ -366,7 +366,7 @@ static NSString* timestamp() {
                          dataEncoding:TDOAuthContentTypeUrlEncodedForm
                          headerValues:nil
                       signatureMethod:TDOAuthSignatureMethodHmacSha1];
-    
+
 }
 
 +(int)utcTimeOffset

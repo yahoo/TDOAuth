@@ -101,13 +101,13 @@ typedef NS_ENUM(NSInteger, TDOAuthContentType) {
  @p headerValues accepts a hash of key-value pairs (both must be strings) that specify
  HTTP header values to be included in the resulting URL Request. For example, the argument
  value @{@"Accept": @"application/json"} will include the header to indicate the server
- should respond with JSON. Other values are acceptable, depending on the server, but be 
+ should respond with JSON. Other values are acceptable, depending on the server, but be
  careful. Values you supply will override the defaults which are set for User-Agent
  (set to "app-bundle-name/version" your app resources), Accept-Encoding (set to "gzip")
  and the calculated Authentication header. Attempting to specify the latter will be fatal.
  You should also avoid passing in values for the Content-Type and Content-Length header fields.
  @p signatureMethod accepts an enum and should normally be set to TDOAuthSignatureMethodHmacSha1.
- You have the option of using HMAC-SHA256 by setting this parameter to 
+ You have the option of using HMAC-SHA256 by setting this parameter to
  TDOAuthSignatureMethodHmacSha256; this is not included in the RFC for OAuth 1.0a, so most servers
  will not support it.
 */
@@ -126,7 +126,7 @@ typedef NS_ENUM(NSInteger, TDOAuthContentType) {
                     signatureMethod:(TDOAuthSignatureMethod)signatureMethod;
 
 /**
- 
+
  OAuth requires the UTC timestamp we send to be accurate. The user's device
  may not be, and often isn't. To work around this you should set this to the
  UTC timestamp that you get back in HTTP headers from OAuth servers.

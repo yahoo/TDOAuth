@@ -87,7 +87,7 @@
     NSString *contentLength = [getRequest valueForHTTPHeaderField: @"Content-Length"];
     XCTAssertNil(contentLength,
               @"Content-Length was set when not expected)");
-    
+
 }
 
 - (void)testGetUrlWithHttps
