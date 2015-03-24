@@ -77,6 +77,7 @@ static NSString* timestamp() {
 {
     NSURL *url;
     NSString *signature_secret;
+    NSString *signature_method;
     NSDictionary *oauthParams; // these are pre-percent encoded
     NSDictionary *params;     // these are pre-percent encoded
     NSString *method;
@@ -87,14 +88,16 @@ static NSString* timestamp() {
            consumerSecret:(NSString *)consumerSecret
               accessToken:(NSString *)accessToken
               tokenSecret:(NSString *)tokenSecret
+          signatureMethod:(NSString *)signatureMethod
 {
+    signature_method = signatureMethod; // Validated by the caller
     oauthParams = [NSDictionary dictionaryWithObjectsAndKeys:
-                  consumerKey,  @"oauth_consumer_key",
-                  nonce(),      @"oauth_nonce",
-                  timestamp(),  @"oauth_timestamp",
-                  @"1.0",       @"oauth_version",
-                  @"HMAC-SHA1", @"oauth_signature_method",
-                  accessToken,  @"oauth_token",
+                  consumerKey,      @"oauth_consumer_key",
+                  nonce(),          @"oauth_nonce",
+                  timestamp(),      @"oauth_timestamp",
+                  @"1.0",           @"oauth_version",
+                  signature_method, @"oauth_signature_method",
+                  accessToken,      @"oauth_token",
                   // LEAVE accessToken last or you'll break XAuth attempts
                   nil];
     signature_secret = [NSString stringWithFormat:@"%@&%@", consumerSecret, tokenSecret ?: @""];
@@ -128,9 +131,17 @@ static NSString* timestamp() {
     NSData *sigbase = [[self signature_base] dataUsingEncoding:NSUTF8StringEncoding];
     NSData *secret = [signature_secret dataUsingEncoding:NSUTF8StringEncoding];
     
-    NSMutableData *digest = [NSMutableData dataWithLength:CC_SHA1_DIGEST_LENGTH];
-    CCHmac(kCCHmacAlgSHA1, secret.bytes, secret.length, sigbase.bytes, sigbase.length, digest.mutableBytes);
-    NSString *result = [digest base64EncodedStringWithOptions:NSDataBase64Encoding76CharacterLineLength];
+    NSMutableData *digest;
+    NSString *result;
+    if ([signature_method isEqualToString:@"HMAC-SHA256"]) {
+        digest = [NSMutableData dataWithLength:CC_SHA256_DIGEST_LENGTH];
+        CCHmac(kCCHmacAlgSHA256, secret.bytes, secret.length, sigbase.bytes, sigbase.length, digest.mutableBytes);
+    } else {
+        // SHA1
+        digest = [NSMutableData dataWithLength:CC_SHA1_DIGEST_LENGTH];
+        CCHmac(kCCHmacAlgSHA1, secret.bytes, secret.length, sigbase.bytes, sigbase.length, digest.mutableBytes);
+    }
+    result = [digest base64EncodedStringWithOptions:NSDataBase64Encoding76CharacterLineLength];
     return result;
 }
 
@@ -197,7 +208,9 @@ static NSString* timestamp() {
                           accessToken:accessToken
                           tokenSecret:tokenSecret
                                scheme:@"http"
-                               method:@"GET"];
+                               method:@"GET"
+                         headerValues:nil
+                      signatureMethod:nil];
 }
 
 + (NSURLRequest *)URLRequestForPath:(NSString *)unencodedPathWithoutQuery
@@ -208,15 +221,24 @@ static NSString* timestamp() {
                         accessToken:(NSString *)accessToken
                         tokenSecret:(NSString *)tokenSecret
                              scheme:(NSString *)scheme
-                             method:(NSString *)method;
+                             method:(NSString *)method
+                       headerValues:(NSDictionary *)headerValues
+                    signatureMethod:(NSString *)signatureMethod;
 {
     if (!host || !unencodedPathWithoutQuery || !scheme || !method)
         return nil;
 
+    NSString *sm = signatureMethod;
+    if (!signatureMethod) {
+        sm = @"HMAC-SHA1";
+    } else if ((![sm isEqualTo:@"HMAC-SHA1"]) && (![sm isEqualToString:@"HMAC-SHA256"])) {
+        return nil;
+    }
     TDOAuth *oauth = [[TDOAuth alloc] initWithConsumerKey:consumerKey
                                            consumerSecret:consumerSecret
                                               accessToken:accessToken
-                                              tokenSecret:tokenSecret];
+                                              tokenSecret:tokenSecret
+                                          signatureMethod:sm];
 
     // We don't use pcen as we don't want to percent encode eg. /, this is perhaps
     // not the most all encompassing solution, but in practice it seems to work
@@ -275,7 +297,9 @@ static NSString* timestamp() {
                           accessToken:accessToken
                           tokenSecret:tokenSecret
                                scheme:scheme
-                               method:@"GET"];
+                               method:@"GET"
+                         headerValues:nil
+                      signatureMethod:nil];
 }
 
 + (NSURLRequest *)URLRequestForPath:(NSString *)unencodedPath
@@ -294,7 +318,9 @@ static NSString* timestamp() {
                           accessToken:accessToken
                           tokenSecret:tokenSecret
                                scheme:@"https"
-                               method:@"POST"];
+                               method:@"POST"
+                         headerValues:nil
+                      signatureMethod:nil];
     
 }
 

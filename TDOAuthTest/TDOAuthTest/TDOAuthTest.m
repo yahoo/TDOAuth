@@ -145,7 +145,9 @@
                                                   accessToken:@"ijkl"
                                                   tokenSecret:@"mnop"
                                                        scheme:@"http"
-                                                       method:@"BEG"];
+                                                       method:@"BEG"
+                                                 headerValues:nil
+                                              signatureMethod:nil];
     XCTAssert([[genericRequest HTTPMethod] isEqualToString:@"BEG"],
               "method (verb) expected to be BEG");
 }
@@ -160,7 +162,9 @@
                                                   accessToken:@"ijkl"
                                                   tokenSecret:@"mnop"
                                                        scheme:@"http"
-                                                       method:@"BEG"];
+                                                       method:@"BEG"
+                                                 headerValues:nil
+                                              signatureMethod:nil];
     XCTAssertNil(genericRequest,
                  "should fail when path is missing");
 }
@@ -175,7 +179,9 @@
                                                   accessToken:@"ijkl"
                                                   tokenSecret:@"mnop"
                                                        scheme:@"http"
-                                                       method:@"BEG"];
+                                                       method:@"BEG"
+                                                 headerValues:nil
+                                              signatureMethod:nil];
     XCTAssertNil(genericRequest,
                  "should fail when host is missing");
 }
@@ -191,7 +197,9 @@
                                                   accessToken:@"ijkl"
                                                   tokenSecret:@"mnop"
                                                        scheme:nil
-                                                       method:@"BEG"];
+                                                       method:@"BEG"
+                                                 headerValues:nil
+                                              signatureMethod:nil];
     XCTAssertNil(genericRequest,
               "should fail when scheme is missing");
 }
@@ -206,7 +214,9 @@
                                                   accessToken:@"ijkl"
                                                   tokenSecret:@"mnop"
                                                        scheme:@"http"
-                                                       method:nil];
+                                                       method:nil
+                                                 headerValues:nil
+                                              signatureMethod:nil];
     XCTAssertNil(genericRequest,
                  "should fail when method is missing");
 }
@@ -221,7 +231,9 @@
                                                   accessToken:@"ijkl"
                                                   tokenSecret:@"mnop"
                                                        scheme:@"ftp" // Not really valid, but it lets us test
-                                                       method:@"BEG"];
+                                                       method:@"BEG"
+                                                 headerValues:nil
+                                              signatureMethod:nil];
     NSString *url = [[genericRequest URL] absoluteString];
     XCTAssert([url isEqualToString:@"ftp://api.example.com/service"],
               "url does not match expected value");
@@ -245,7 +257,9 @@
                                                   accessToken:@"ijkl"
                                                   tokenSecret:@"mnop"
                                                        scheme:@"ftp" // Not really valid, but it lets us test
-                                                       method:@"BEG"];
+                                                       method:@"BEG"
+                                                 headerValues:nil
+                                              signatureMethod:nil];
     NSString *authHeader = [genericRequest valueForHTTPHeaderField:@"Authorization"];
     NSString *expectedHeader = @"OAuth oauth_token=\"ijkl\", "\
     "oauth_nonce=\"static-nonce-for-testing\", "\
@@ -254,6 +268,66 @@
     "oauth_signature=\"432kDrQVWpMi1PNf3OSbOe9gcw8%3D\"";
     XCTAssert([authHeader isEqualToString:expectedHeader],
               @"Expected header value does does not match");
+}
+- (void)testGenericHeaderRecognizesSHA256
+{
+    NSURLRequest *genericRequest = [TDOAuth URLRequestForPath:@"/service"
+                                                   parameters:@{@"foo": @"bar", @"baz": @"bonk"}
+                                                         host:@"api.example.com"
+                                                  consumerKey:@"abcd"
+                                               consumerSecret:@"efgh"
+                                                  accessToken:@"ijkl"
+                                                  tokenSecret:@"mnop"
+                                                       scheme:@"ftp" // Not really valid, but it lets us test
+                                                       method:@"BEG"
+                                                 headerValues:nil
+                                              signatureMethod:@"HMAC-SHA256"];
+    NSString *authHeader = [genericRequest valueForHTTPHeaderField:@"Authorization"];
+    NSString *expectedHeader = @"OAuth oauth_token=\"ijkl\", "\
+    "oauth_nonce=\"static-nonce-for-testing\", "\
+    "oauth_signature_method=\"HMAC-SHA256\", oauth_consumer_key=\"abcd\", "\
+    "oauth_timestamp=\"1456789012\", oauth_version=\"1.0\", "\
+    "oauth_signature=\"pRxssqcfFnrUqF7i2L5j%2BpCk57gu33m3c9az5kNGors%3D\"";
+    XCTAssert([authHeader isEqualToString:expectedHeader],
+              @"Expected header value does does not match");
+}
+- (void)testGenericHeaderRecognizesSHA1
+{
+    NSURLRequest *genericRequest = [TDOAuth URLRequestForPath:@"/service"
+                                                   parameters:@{@"foo": @"bar", @"baz": @"bonk"}
+                                                         host:@"api.example.com"
+                                                  consumerKey:@"abcd"
+                                               consumerSecret:@"efgh"
+                                                  accessToken:@"ijkl"
+                                                  tokenSecret:@"mnop"
+                                                       scheme:@"ftp" // Not really valid, but it lets us test
+                                                       method:@"BEG"
+                                                 headerValues:nil
+                                              signatureMethod:@"HMAC-SHA1"];
+    NSString *authHeader = [genericRequest valueForHTTPHeaderField:@"Authorization"];
+    NSString *expectedHeader = @"OAuth oauth_token=\"ijkl\", "\
+    "oauth_nonce=\"static-nonce-for-testing\", "\
+    "oauth_signature_method=\"HMAC-SHA1\", oauth_consumer_key=\"abcd\", "\
+    "oauth_timestamp=\"1456789012\", oauth_version=\"1.0\", "\
+    "oauth_signature=\"432kDrQVWpMi1PNf3OSbOe9gcw8%3D\"";
+    XCTAssert([authHeader isEqualToString:expectedHeader],
+              @"Expected header value does does not match");
+}
+- (void)testGenericHeaderRejectsInvalidSignatureMethod
+{
+    NSURLRequest *genericRequest = [TDOAuth URLRequestForPath:@"/service"
+                                                   parameters:@{@"foo": @"bar", @"baz": @"bonk"}
+                                                         host:@"api.example.com"
+                                                  consumerKey:@"abcd"
+                                               consumerSecret:@"efgh"
+                                                  accessToken:@"ijkl"
+                                                  tokenSecret:@"mnop"
+                                                       scheme:@"ftp" // Not really valid, but it lets us test
+                                                       method:@"BEG"
+                                                 headerValues:nil
+                                              signatureMethod:@"HMAC-SHA333"];
+    XCTAssertNil(genericRequest,
+                 @"Expected request to fail with invalid hash function");
 }
 
 @end

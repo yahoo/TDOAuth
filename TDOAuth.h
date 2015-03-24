@@ -79,13 +79,17 @@
                         tokenSecret:(NSString *)tokenSecret;
 
 /**
-  This method allows the caller to specify particular values for many different parameters such
-  as scheme, method, header values and alternate signature hash algorithms.
+ This method allows the caller to specify particular values for many different parameters such
+ as scheme, method, header values and alternate signature hash algorithms.
 
-  @p scheme may be any string value, generally "http" or "https".
-  @p method may be any string value. There is no validation, so remember that all
-  currently-defined HTTP methods are uppercase and the RFC specifies that the method
-  is case-sensitive.
+ @p scheme may be any string value, generally "http" or "https".
+ @p method may be any string value. There is no validation, so remember that all
+ currently-defined HTTP methods are uppercase and the RFC specifies that the method
+ is case-sensitive.
+ @p signatureMethod may be "HMAC-SHA1", "HMAC-SHA256" or nil. Invalid values will be detected
+ and the method will return a nil value instead of an NSURLRequest object. nil values for the
+ signatureMethod will behave as "HMAC-SHA1". Note that HMAC-256 is not included in the RFC
+ for OAuth 1.0a so many servers will not support it.
 */
 
 + (NSURLRequest *)URLRequestForPath:(NSString *)unencodedPathWithoutQuery
@@ -96,7 +100,9 @@
                         accessToken:(NSString *)accessToken
                         tokenSecret:(NSString *)tokenSecret
                              scheme:(NSString *)scheme
-                             method:(NSString *)method;
+                             method:(NSString *)method
+                       headerValues:(NSDictionary *)headerValues
+                    signatureMethod:(NSString *)signatureMethod;
 
 /**
  OAuth requires the UTC timestamp we send to be accurate. The user's device
