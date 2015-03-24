@@ -33,6 +33,10 @@ typedef NS_ENUM(NSInteger, TDOAuthSignatureMethod) {
     TDOAuthSignatureMethodHmacSha1,
     TDOAuthSignatureMethodHmacSha256,
 };
+typedef NS_ENUM(NSInteger, TDOAuthContentType) {
+    TDOAuthContentTypeUrlEncodedForm,
+    TDOAuthContentTypeJsonObject,
+};
 
 /**
   This OAuth implementation doesn't cover the whole spec (eg. it’s HMAC only).
@@ -88,9 +92,12 @@ typedef NS_ENUM(NSInteger, TDOAuthSignatureMethod) {
  as scheme, method, header values and alternate signature hash algorithms.
 
  @p scheme may be any string value, generally "http" or "https".
- @p method may be any string value. There is no validation, so remember that all
+ @p requestMethod may be any string value. There is no validation, so remember that all
  currently-defined HTTP methods are uppercase and the RFC specifies that the method
  is case-sensitive.
+ @p dataEncoding allows for the transmission of data as either URL-encoded form data or
+ JSON by passing the value TDOAuthContentTypeUrlEncodedForm or TDOAuthContentTypeJsonObject.
+ This parameter is ignored for the requestMethod "GET".
  @p headerValues accepts a hash of key-value pairs (both must be strings) that specify
  HTTP header values to be included in the resulting URL Request. For example, the argument
  value @{@"Accept": @"application/json"} will include the header to indicate the server
@@ -114,10 +121,12 @@ typedef NS_ENUM(NSInteger, TDOAuthSignatureMethod) {
                         tokenSecret:(NSString *)tokenSecret
                              scheme:(NSString *)scheme
                       requestMethod:(NSString *)method
+                       dataEncoding:(TDOAuthContentType)dataEncoding
                        headerValues:(NSDictionary *)headerValues
                     signatureMethod:(TDOAuthSignatureMethod)signatureMethod;
 
 /**
+ 
  OAuth requires the UTC timestamp we send to be accurate. The user's device
  may not be, and often isn't. To work around this you should set this to the
  UTC timestamp that you get back in HTTP headers from OAuth servers.

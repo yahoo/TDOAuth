@@ -228,9 +228,11 @@ static NSString* timestamp() {
                           tokenSecret:tokenSecret
                                scheme:@"http"
                         requestMethod:@"GET"
+                         dataEncoding:TDOAuthContentTypeUrlEncodedForm
                          headerValues:nil
                       signatureMethod:TDOAuthSignatureMethodHmacSha1];
 }
+
 
 + (NSURLRequest *)URLRequestForPath:(NSString *)unencodedPathWithoutQuery
                          parameters:(NSDictionary *)unencodedParameters
@@ -241,6 +243,7 @@ static NSString* timestamp() {
                         tokenSecret:(NSString *)tokenSecret
                              scheme:(NSString *)scheme
                       requestMethod:(NSString *)method
+                       dataEncoding:(TDOAuthContentType)dataEncoding
                        headerValues:(NSDictionary *)headerValues
                     signatureMethod:(TDOAuthSignatureMethod)signatureMethod;
 {
@@ -282,13 +285,38 @@ static NSString* timestamp() {
     {
         oauth->url = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"%@://%@%@",
                                                     scheme, host, unencodedPathWithoutQuery]];
-        NSMutableString *postbody = [oauth setParameters:unencodedParameters];
-        rq = [oauth requestWithHeaderValues:headerValues];
+        if ((dataEncoding == TDOAuthContentTypeUrlEncodedForm) || (unencodedParameters == nil))
+        {
+            NSMutableString *postbody = [oauth setParameters:unencodedParameters];
+            rq = [oauth requestWithHeaderValues:headerValues];
 
-        if (postbody.length) {
-            [rq setHTTPBody:[postbody dataUsingEncoding:NSUTF8StringEncoding]];
-            [rq setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-            [rq setValue:[NSString stringWithFormat:@"%lu", (unsigned long)rq.HTTPBody.length] forHTTPHeaderField:@"Content-Length"];
+            if (postbody.length) {
+                [rq setHTTPBody:[postbody dataUsingEncoding:NSUTF8StringEncoding]];
+                [rq setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+                [rq setValue:[NSString stringWithFormat:@"%lu", (unsigned long)rq.HTTPBody.length] forHTTPHeaderField:@"Content-Length"];
+            }
+        }
+        else if (dataEncoding == TDOAuthContentTypeJsonObject)
+        {
+            NSError *error;
+            NSData *postbody = [NSJSONSerialization dataWithJSONObject:unencodedParameters options:0 error:&error];
+            if (error || !postbody) {
+                NSLog(@"Got an error encoding JSON: %@", error);
+            } else {
+                [oauth setParameters:@{}]; // empty dictionary populates variables without putting data into the signature_base
+                rq = [oauth requestWithHeaderValues:headerValues];
+
+                if (postbody.length) {
+                    [rq setHTTPBody:postbody];
+                    [rq setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+                    [rq setValue:[NSString stringWithFormat:@"%lu", (unsigned long)rq.HTTPBody.length] forHTTPHeaderField:@"Content-Length"];
+                }
+            }
+        }
+        else // invalid type
+        {
+            oauth = nil;
+            rq = nil;
         }
     }
 
@@ -313,6 +341,7 @@ static NSString* timestamp() {
                           tokenSecret:tokenSecret
                                scheme:scheme
                         requestMethod:@"GET"
+                         dataEncoding:TDOAuthContentTypeUrlEncodedForm
                          headerValues:nil
                       signatureMethod:TDOAuthSignatureMethodHmacSha1];
 }
@@ -334,6 +363,7 @@ static NSString* timestamp() {
                           tokenSecret:tokenSecret
                                scheme:@"https"
                         requestMethod:@"POST"
+                         dataEncoding:TDOAuthContentTypeUrlEncodedForm
                          headerValues:nil
                       signatureMethod:TDOAuthSignatureMethodHmacSha1];
     

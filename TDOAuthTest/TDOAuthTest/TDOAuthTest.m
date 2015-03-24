@@ -52,6 +52,7 @@
                           tokenSecret:@"mnop"
                                scheme:@"http"
                         requestMethod:@"BEG"
+                         dataEncoding:TDOAuthContentTypeUrlEncodedForm
                          headerValues:nil
                       signatureMethod:TDOAuthSignatureMethodHmacSha1];
 }
@@ -82,7 +83,7 @@
     NSString *contentType = [getRequest valueForHTTPHeaderField: @"Content-Type"];
     XCTAssertNil(contentType,
               @"Content-Type was present when not expected)");
-    
+
     NSString *contentLength = [getRequest valueForHTTPHeaderField: @"Content-Length"];
     XCTAssertNil(contentLength,
               @"Content-Length was set when not expected)");
@@ -139,7 +140,7 @@
     NSString *url = [[postRequest URL] absoluteString];
     XCTAssert([url isEqualToString:@"https://api.example.com/service"],
               "url does not match expected value");
-    
+
     NSString *contentType = [postRequest valueForHTTPHeaderField: @"Content-Type"];
     XCTAssert([contentType isEqualToString:@"application/x-www-form-urlencoded"],
               @"Content-Type is not expected value)");
@@ -184,6 +185,7 @@
                                                   tokenSecret:@"mnop"
                                                        scheme:@"http"
                                                 requestMethod:@"BEG"
+                                                 dataEncoding:TDOAuthContentTypeUrlEncodedForm
                                                  headerValues:nil
                                               signatureMethod:TDOAuthSignatureMethodHmacSha1];
     XCTAssertNil(genericRequest,
@@ -201,6 +203,7 @@
                                                   tokenSecret:@"mnop"
                                                        scheme:@"http"
                                                 requestMethod:@"BEG"
+                                                 dataEncoding:TDOAuthContentTypeUrlEncodedForm
                                                  headerValues:nil
                                               signatureMethod:TDOAuthSignatureMethodHmacSha1];
     XCTAssertNil(genericRequest,
@@ -219,6 +222,7 @@
                                                   tokenSecret:@"mnop"
                                                        scheme:nil
                                                 requestMethod:@"BEG"
+                                                 dataEncoding:TDOAuthContentTypeUrlEncodedForm
                                                  headerValues:nil
                                               signatureMethod:TDOAuthSignatureMethodHmacSha1];
     XCTAssertNil(genericRequest,
@@ -236,10 +240,82 @@
                                                   tokenSecret:@"mnop"
                                                        scheme:@"http"
                                                 requestMethod:nil
+                                                 dataEncoding:TDOAuthContentTypeUrlEncodedForm
                                                  headerValues:nil
                                               signatureMethod:TDOAuthSignatureMethodHmacSha1];
     XCTAssertNil(genericRequest,
                  "should fail when method is missing");
+}
+- (void)testGenericJson
+{
+    NSURLRequest *genericRequest = [TDOAuth URLRequestForPath:@"/service"
+                                                   parameters:@{@"foo": @"bar", @"baz": @"bonk"}
+                                                         host:@"api.example.com"
+                                                  consumerKey:@"abcd"
+                                               consumerSecret:@"efgh"
+                                                  accessToken:@"ijkl"
+                                                  tokenSecret:@"mnop"
+                                                       scheme:@"http"
+                                                requestMethod:@"BEG"
+                                                 dataEncoding:TDOAuthContentTypeJsonObject
+                                                 headerValues:nil
+                                              signatureMethod:TDOAuthSignatureMethodHmacSha1];
+    NSString *url = [[genericRequest URL] absoluteString];
+    XCTAssert([url isEqualToString:@"http://api.example.com/service"],
+              "url does not match expected value");
+
+    NSString *contentType = [genericRequest valueForHTTPHeaderField: @"Content-Type"];
+    XCTAssert([contentType isEqualToString:@"application/json"],
+              @"Content-Type is not expected value)");
+
+    NSString *contentLength = [genericRequest valueForHTTPHeaderField: @"Content-Length"];
+    XCTAssert([contentLength isEqualToString:@"26"],
+              @"Content-Length is not expected value)");
+
+    NSString *acceptValue = [genericRequest valueForHTTPHeaderField: @"Accept"];
+    XCTAssertNil(acceptValue,
+              @"Accept should not be present");
+
+    NSData *body = [genericRequest HTTPBody];
+    NSString *bodyString = [[NSString alloc] initWithData:body encoding:NSUTF8StringEncoding];
+    XCTAssert([bodyString isEqualToString:@"{\"foo\":\"bar\",\"baz\":\"bonk\"}"],
+              "body expected to be JSON object");
+
+}
+- (void)testGenericJsonWithNoData
+{
+    NSURLRequest *genericRequest = [TDOAuth URLRequestForPath:@"/service"
+                                                   parameters:nil
+                                                         host:@"api.example.com"
+                                                  consumerKey:@"abcd"
+                                               consumerSecret:@"efgh"
+                                                  accessToken:@"ijkl"
+                                                  tokenSecret:@"mnop"
+                                                       scheme:@"http"
+                                                requestMethod:@"BEG"
+                                                 dataEncoding:TDOAuthContentTypeJsonObject
+                                                 headerValues:nil
+                                              signatureMethod:TDOAuthSignatureMethodHmacSha1];
+    NSString *url = [[genericRequest URL] absoluteString];
+    XCTAssert([url isEqualToString:@"http://api.example.com/service"],
+              "url does not match expected value");
+
+    NSString *contentType = [genericRequest valueForHTTPHeaderField: @"Content-Type"];
+    XCTAssertNil(contentType,
+              @"Content-Type should not be present");
+
+    NSString *contentLength = [genericRequest valueForHTTPHeaderField: @"Content-Length"];
+    XCTAssertNil(contentLength,
+                 @"Content-Length should not be present");
+
+    NSString *acceptValue = [genericRequest valueForHTTPHeaderField: @"Accept"];
+    XCTAssertNil(acceptValue,
+                 @"Accept should not be present");
+
+    NSData *body = [genericRequest HTTPBody];
+    XCTAssertNil(body,
+                 @"body should not be present");
+
 }
 
 - (void)testGenericUrl
@@ -253,6 +329,7 @@
                                                   tokenSecret:@"mnop"
                                                        scheme:@"ftp" // Not really valid, but it lets us test
                                                 requestMethod:@"BEG"
+                                                 dataEncoding:TDOAuthContentTypeUrlEncodedForm
                                                  headerValues:@{@"Accept": @"application/json"}
                                               signatureMethod:TDOAuthSignatureMethodHmacSha1];
     NSString *url = [[genericRequest URL] absoluteString];
@@ -283,7 +360,30 @@
     XCTAssert([authHeader isEqualToString:expectedHeader],
               @"Expected header value does does not match");
 }
-- (void)testGenericHeaderRecognizesSHA256
+- (void)testGenericEncodesJson
+{
+    NSURLRequest *genericRequest = [TDOAuth URLRequestForPath:@"/service"
+                                                   parameters:@{@"foo": @"bar", @"baz": @"bonk"}
+                                                         host:@"api.example.com"
+                                                  consumerKey:@"abcd"
+                                               consumerSecret:@"efgh"
+                                                  accessToken:@"ijkl"
+                                                  tokenSecret:@"mnop"
+                                                       scheme:@"http" // Not really valid, but it lets us test
+                                                requestMethod:@"BEG"
+                                                 dataEncoding:TDOAuthContentTypeJsonObject
+                                                 headerValues:nil
+                                              signatureMethod:TDOAuthSignatureMethodHmacSha1];
+    NSString *authHeader = [genericRequest valueForHTTPHeaderField:@"Authorization"];
+    NSString *expectedHeader = @"OAuth oauth_token=\"ijkl\", "\
+    "oauth_nonce=\"static-nonce-for-testing\", "\
+    "oauth_signature_method=\"HMAC-SHA1\", oauth_consumer_key=\"abcd\", "\
+    "oauth_timestamp=\"1456789012\", oauth_version=\"1.0\", "\
+    "oauth_signature=\"%2FUo90sRcITkznrl9UoOqN8fCv40%3D\"";
+    XCTAssert([authHeader isEqualToString:expectedHeader],
+              @"Expected header value does does not match");
+}
+- (void)testGenericRecognizesSHA256
 {
     NSURLRequest *genericRequest = [TDOAuth URLRequestForPath:@"/service"
                                                    parameters:@{@"foo": @"bar", @"baz": @"bonk"}
@@ -294,6 +394,7 @@
                                                   tokenSecret:@"mnop"
                                                        scheme:@"ftp" // Not really valid, but it lets us test
                                                 requestMethod:@"BEG"
+                                                 dataEncoding:TDOAuthContentTypeUrlEncodedForm
                                                  headerValues:nil
                                               signatureMethod:TDOAuthSignatureMethodHmacSha256];
     NSString *authHeader = [genericRequest valueForHTTPHeaderField:@"Authorization"];
@@ -305,7 +406,7 @@
     XCTAssert([authHeader isEqualToString:expectedHeader],
               @"Expected header value does does not match");
 }
-- (void)testGenericHeaderRejectsInvalidSignatureMethod
+- (void)testGenericRejectsInvalidSignatureMethod
 {
     NSURLRequest *genericRequest = [TDOAuth URLRequestForPath:@"/service"
                                                    parameters:@{@"foo": @"bar", @"baz": @"bonk"}
@@ -316,8 +417,26 @@
                                                   tokenSecret:@"mnop"
                                                        scheme:@"ftp" // Not really valid, but it lets us test
                                                 requestMethod:@"BEG"
+                                                 dataEncoding:TDOAuthContentTypeUrlEncodedForm
                                                  headerValues:nil
                                               signatureMethod:(TDOAuthSignatureMethod)1234];
+    XCTAssertNil(genericRequest,
+                 @"Expected request to fail with invalid hash function");
+}
+- (void)testGenericRejectsInvalidContentType
+{
+    NSURLRequest *genericRequest = [TDOAuth URLRequestForPath:@"/service"
+                                                   parameters:@{@"foo": @"bar", @"baz": @"bonk"}
+                                                         host:@"api.example.com"
+                                                  consumerKey:@"abcd"
+                                               consumerSecret:@"efgh"
+                                                  accessToken:@"ijkl"
+                                                  tokenSecret:@"mnop"
+                                                       scheme:@"ftp" // Not really valid, but it lets us test
+                                                requestMethod:@"BEG"
+                                                 dataEncoding:(TDOAuthContentType)1234
+                                                 headerValues:nil
+                                              signatureMethod:TDOAuthSignatureMethodHmacSha1];
     XCTAssertNil(genericRequest,
                  @"Expected request to fail with invalid hash function");
 }
