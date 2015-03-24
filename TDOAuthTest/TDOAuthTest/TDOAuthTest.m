@@ -87,7 +87,6 @@
 }
 - (void)testGetHeaderAuthField
 {
-    // Not a very complete test. It needs to parse the whole thing and force the time to a set value.
     NSString *authHeader = [getRequest valueForHTTPHeaderField:@"Authorization"];
     NSString *expectedHeader = @"OAuth oauth_token=\"ijkl\", "\
                                 "oauth_nonce=\"static-nonce-for-testing\", "\
@@ -128,10 +127,13 @@
 }
 - (void)testPostHeaderAuthField
 {
-    // Not a very complete test. It needs to parse the whole thing and force the time to a set value.
-    NSString *authHeader = [getRequest valueForHTTPHeaderField:@"Authorization"];
-    //OAuth oauth_token="ijkl", oauth_nonce="DCD69F8B-654C-4316-ACC3-891F4FE561D4", oauth_signature_method="HMAC-SHA1", oauth_consumer_key="abcd", oauth_timestamp="1427068142", oauth_version="1.0", oauth_signature="9NQezmVaPBLhnvpRQ6LPawoiBDw%3D"
-    XCTAssert([authHeader hasPrefix:@"OAuth oauth_token=\"ijkl\", oauth_nonce=\""],
-              @"Expected beginning of header to be canned value");
+    NSString *authHeader = [postRequest valueForHTTPHeaderField:@"Authorization"];
+    NSString *expectedHeader = @"OAuth oauth_token=\"ijkl\", "\
+    "oauth_nonce=\"static-nonce-for-testing\", "\
+    "oauth_signature_method=\"HMAC-SHA1\", oauth_consumer_key=\"abcd\", "\
+    "oauth_timestamp=\"1456789012\", oauth_version=\"1.0\", "\
+    "oauth_signature=\"pr%2ForWfyT9CsKTGW85AwjHmFjd8%3D\"";
+    XCTAssert([authHeader isEqualToString:expectedHeader],
+              @"Expected header value does does not match");
 }
 @end
