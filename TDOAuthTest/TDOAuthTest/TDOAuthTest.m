@@ -122,6 +122,10 @@
     XCTAssert([contentLength isEqualToString:@"7"],
               @"Content-Length is not expected value)");
 
+    NSString *acceptValue = [postRequest valueForHTTPHeaderField: @"Accept"];
+    XCTAssertNil(acceptValue,
+                 @"Accept is not expected value)");
+
 }
 - (void)testPostHeaderAuthField
 {
@@ -232,7 +236,7 @@
                                                   tokenSecret:@"mnop"
                                                        scheme:@"ftp" // Not really valid, but it lets us test
                                                        method:@"BEG"
-                                                 headerValues:nil
+                                                 headerValues:@{@"Accept": @"application/json"}
                                               signatureMethod:nil];
     NSString *url = [[genericRequest URL] absoluteString];
     XCTAssert([url isEqualToString:@"ftp://api.example.com/service"],
@@ -246,6 +250,9 @@
     XCTAssert([contentLength isEqualToString:@"16"],
               @"Content-Length is not expected value)");
 
+    NSString *acceptValue = [genericRequest valueForHTTPHeaderField: @"Accept"];
+    XCTAssert([acceptValue isEqualToString:@"application/json"],
+              @"Accept is not expected value)");
 }
 - (void)testGenericHeaderAuthField
 {

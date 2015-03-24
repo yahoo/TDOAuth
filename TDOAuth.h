@@ -86,6 +86,14 @@
  @p method may be any string value. There is no validation, so remember that all
  currently-defined HTTP methods are uppercase and the RFC specifies that the method
  is case-sensitive.
+ @p headerValues accepts a hash of key-value pairs (both must be strings) that specify
+ HTTP header values to be included in the resulting URL Request. For example, the argument
+ value @{@"Accept": @"application/json"} will include the header to indicate the server
+ should respond with JSON. Other values are acceptable, depending on the server, but be 
+ careful. Values you supply will override the defaults which are set for User-Agent
+ (set to "app-bundle-name/version" your app resources), Accept-Encoding (set to "gzip")
+ and the calculated Authentication header. Attempting to specify the latter will be fatal.
+ You should also avoid passing in values for the Content-Type and Content-Length header fields.
  @p signatureMethod may be "HMAC-SHA1", "HMAC-SHA256" or nil. Invalid values will be detected
  and the method will return a nil value instead of an NSURLRequest object. nil values for the
  signatureMethod will behave as "HMAC-SHA1". Note that HMAC-256 is not included in the RFC

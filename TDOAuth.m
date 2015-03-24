@@ -162,13 +162,23 @@ static NSString* timestamp() {
     return header;
 }
 
-- (NSMutableURLRequest *)request {
+- (NSMutableURLRequest *)requestWithHeaderValues:(NSDictionary *)headerValues {
     NSMutableURLRequest *rq = [NSMutableURLRequest requestWithURL:url
                                                       cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
                                                   timeoutInterval:TDOAuthURLRequestTimeout];
     [rq setValue:OMGUserAgent() forHTTPHeaderField:@"User-Agent"];
     [rq setValue:[self authorizationHeader] forHTTPHeaderField:@"Authorization"];
     [rq setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
+    if (headerValues) // nil is allowed
+    {
+        for (NSString* key in headerValues) {
+            id value = [headerValues objectForKey:key];
+            if ([value isKindOfClass:[NSString class]])
+            {
+                [rq setValue:value forHTTPHeaderField:key];
+            }
+        }
+    }
     [rq setHTTPMethod:method];
     return rq;
 }
@@ -261,14 +271,14 @@ static NSString* timestamp() {
     {
         oauth->url = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"%@://%@%@",
                                                     scheme, host, path]];
-        rq = [oauth request];
+        rq = [oauth requestWithHeaderValues:headerValues];
     }
     else
     {
         oauth->url = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"%@://%@%@",
                                                     scheme, host, unencodedPathWithoutQuery]];
         NSMutableString *postbody = [oauth setParameters:unencodedParameters];
-        rq = [oauth request];
+        rq = [oauth requestWithHeaderValues:headerValues];
 
         if (postbody.length) {
             [rq setHTTPBody:[postbody dataUsingEncoding:NSUTF8StringEncoding]];
