@@ -29,6 +29,11 @@
 
 #import <Foundation/Foundation.h>
 
+typedef NS_ENUM(NSInteger, TDOAuthSignatureMethod) {
+    TDOAuthSignatureMethodHmacSha1,
+    TDOAuthSignatureMethodHmacSha256,
+};
+
 /**
   This OAuth implementation doesn't cover the whole spec (eg. it’s HMAC only).
   But you'll find it works with almost all the OAuth implementations you need
@@ -94,10 +99,10 @@
  (set to "app-bundle-name/version" your app resources), Accept-Encoding (set to "gzip")
  and the calculated Authentication header. Attempting to specify the latter will be fatal.
  You should also avoid passing in values for the Content-Type and Content-Length header fields.
- @p signatureMethod may be "HMAC-SHA1", "HMAC-SHA256" or nil. Invalid values will be detected
- and the method will return a nil value instead of an NSURLRequest object. nil values for the
- signatureMethod will behave as "HMAC-SHA1". Note that HMAC-256 is not included in the RFC
- for OAuth 1.0a so many servers will not support it.
+ @p signatureMethod accepts an enum and should normally be set to TDOAuthSignatureMethodHmacSha1.
+ You have the option of using HMAC-SHA256 by setting this parameter to 
+ TDOAuthSignatureMethodHmacSha256; this is not included in the RFC for OAuth 1.0a, so most servers
+ will not support it.
 */
 
 + (NSURLRequest *)URLRequestForPath:(NSString *)unencodedPathWithoutQuery
@@ -110,7 +115,7 @@
                              scheme:(NSString *)scheme
                              method:(NSString *)method
                        headerValues:(NSDictionary *)headerValues
-                    signatureMethod:(NSString *)signatureMethod;
+                    signatureMethod:(TDOAuthSignatureMethod)signatureMethod;
 
 /**
  OAuth requires the UTC timestamp we send to be accurate. The user's device

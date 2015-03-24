@@ -9,10 +9,5 @@
 #import <XCTest/XCTest.h>
 #import "TDOAuth.h"
 
-@interface TDOAuthTest : XCTestCase {
-@public
-    NSURLRequest        *getRequest;
-    NSURLRequest        *postRequest;
-}
-
+@interface TDOAuthTest : XCTestCase
 @end

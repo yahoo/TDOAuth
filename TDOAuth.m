@@ -77,7 +77,7 @@ static NSString* timestamp() {
 {
     NSURL *url;
     NSString *signature_secret;
-    NSString *signature_method;
+    TDOAuthSignatureMethod signature_method;
     NSDictionary *oauthParams; // these are pre-percent encoded
     NSDictionary *params;     // these are pre-percent encoded
     NSString *method;
@@ -88,16 +88,26 @@ static NSString* timestamp() {
            consumerSecret:(NSString *)consumerSecret
               accessToken:(NSString *)accessToken
               tokenSecret:(NSString *)tokenSecret
-          signatureMethod:(NSString *)signatureMethod
+          signatureMethod:(TDOAuthSignatureMethod)signatureMethod
 {
-    signature_method = signatureMethod; // Validated by the caller
+    NSString *smString;
+    if (signatureMethod == TDOAuthSignatureMethodHmacSha256) {
+        smString = @"HMAC-SHA256";
+    } else if ((signatureMethod == TDOAuthSignatureMethodHmacSha1) || (!signatureMethod)) {
+        smString = @"HMAC-SHA1";
+    } else {
+        self = nil;
+        return self;
+    }
+    signature_method = signatureMethod;
+    
     oauthParams = [NSDictionary dictionaryWithObjectsAndKeys:
-                  consumerKey,      @"oauth_consumer_key",
-                  nonce(),          @"oauth_nonce",
-                  timestamp(),      @"oauth_timestamp",
-                  @"1.0",           @"oauth_version",
-                  signature_method, @"oauth_signature_method",
-                  accessToken,      @"oauth_token",
+                  consumerKey,  @"oauth_consumer_key",
+                  nonce(),      @"oauth_nonce",
+                  timestamp(),  @"oauth_timestamp",
+                  @"1.0",       @"oauth_version",
+                  smString,     @"oauth_signature_method",
+                  accessToken,  @"oauth_token",
                   // LEAVE accessToken last or you'll break XAuth attempts
                   nil];
     signature_secret = [NSString stringWithFormat:@"%@&%@", consumerSecret, tokenSecret ?: @""];
@@ -133,11 +143,10 @@ static NSString* timestamp() {
     
     NSMutableData *digest;
     NSString *result;
-    if ([signature_method isEqualToString:@"HMAC-SHA256"]) {
+    if (signature_method == TDOAuthSignatureMethodHmacSha256) {
         digest = [NSMutableData dataWithLength:CC_SHA256_DIGEST_LENGTH];
         CCHmac(kCCHmacAlgSHA256, secret.bytes, secret.length, sigbase.bytes, sigbase.length, digest.mutableBytes);
-    } else {
-        // SHA1
+    } else { // assume TDOAuthSignatureMethodHmacSha1
         digest = [NSMutableData dataWithLength:CC_SHA1_DIGEST_LENGTH];
         CCHmac(kCCHmacAlgSHA1, secret.bytes, secret.length, sigbase.bytes, sigbase.length, digest.mutableBytes);
     }
@@ -220,7 +229,7 @@ static NSString* timestamp() {
                                scheme:@"http"
                                method:@"GET"
                          headerValues:nil
-                      signatureMethod:nil];
+                      signatureMethod:TDOAuthSignatureMethodHmacSha1];
 }
 
 + (NSURLRequest *)URLRequestForPath:(NSString *)unencodedPathWithoutQuery
@@ -233,35 +242,18 @@ static NSString* timestamp() {
                              scheme:(NSString *)scheme
                              method:(NSString *)method
                        headerValues:(NSDictionary *)headerValues
-                    signatureMethod:(NSString *)signatureMethod;
+                    signatureMethod:(TDOAuthSignatureMethod)signatureMethod;
 {
     if (!host || !unencodedPathWithoutQuery || !scheme || !method)
         return nil;
 
-    NSString *sm = signatureMethod;
-    if (!signatureMethod) {
-        sm = @"HMAC-SHA1";
-    } else if ((![sm isEqualTo:@"HMAC-SHA1"]) && (![sm isEqualToString:@"HMAC-SHA256"])) {
-        return nil;
-    }
     TDOAuth *oauth = [[TDOAuth alloc] initWithConsumerKey:consumerKey
                                            consumerSecret:consumerSecret
                                               accessToken:accessToken
                                               tokenSecret:tokenSecret
-                                          signatureMethod:sm];
-
-    // We don't use pcen as we don't want to percent encode eg. /, this is perhaps
-    // not the most all encompassing solution, but in practice it seems to work
-    // everywhere and means that programmer error is *much* less likely.
-    NSString *encodedPathWithoutQuery = [unencodedPathWithoutQuery stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-
-    id path = [oauth setParameters:unencodedParameters];
-    if (path) {
-        [path insertString:@"?" atIndex:0];
-        [path insertString:encodedPathWithoutQuery atIndex:0];
-    } else {
-        path = encodedPathWithoutQuery;
-    }
+                                          signatureMethod:signatureMethod];
+    if (!oauth) // This would happen with someone slipping in an unsupported signature method
+        return nil;
 
     oauth->method = method;
     oauth->unencodedHostAndPathWithoutQuery = [host.lowercaseString stringByAppendingString:unencodedPathWithoutQuery];
@@ -269,6 +261,19 @@ static NSString* timestamp() {
     NSMutableURLRequest *rq;
     if ([method isEqualToString:@"GET"])
     {
+        // We don't use pcen as we don't want to percent encode eg. /, this is perhaps
+        // not the most all encompassing solution, but in practice it seems to work
+        // everywhere and means that programmer error is *much* less likely.
+        NSString *encodedPathWithoutQuery = [unencodedPathWithoutQuery stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        
+        id path = [oauth setParameters:unencodedParameters];
+        if (path) {
+            [path insertString:@"?" atIndex:0];
+            [path insertString:encodedPathWithoutQuery atIndex:0];
+        } else {
+            path = encodedPathWithoutQuery;
+        }
+
         oauth->url = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"%@://%@%@",
                                                     scheme, host, path]];
         rq = [oauth requestWithHeaderValues:headerValues];
@@ -309,7 +314,7 @@ static NSString* timestamp() {
                                scheme:scheme
                                method:@"GET"
                          headerValues:nil
-                      signatureMethod:nil];
+                      signatureMethod:TDOAuthSignatureMethodHmacSha1];
 }
 
 + (NSURLRequest *)URLRequestForPath:(NSString *)unencodedPath
@@ -330,7 +335,7 @@ static NSString* timestamp() {
                                scheme:@"https"
                                method:@"POST"
                          headerValues:nil
-                      signatureMethod:nil];
+                      signatureMethod:TDOAuthSignatureMethodHmacSha1];
     
 }
 

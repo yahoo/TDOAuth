@@ -15,35 +15,57 @@
 {
     [super setUp];
     [TDOAuth enableStaticValuesForAutomatedTests];
-    getRequest = [TDOAuth URLRequestForPath:@"/service"
-                              GETParameters:@{@"foo": @"bar"}
-                                       host:@"api.example.com"
-                                consumerKey:@"abcd"
-                             consumerSecret:@"efgh"
-                                accessToken:@"ijkl"
-                                tokenSecret:@"mnop"];
-    postRequest = [TDOAuth URLRequestForPath:@"/service"
-                              POSTParameters:@{@"foo": @"bar"}
-                                        host:@"api.example.com"
-                                 consumerKey:@"abcd"
-                              consumerSecret:@"efgh"
-                                 accessToken:@"ijkl"
-                                 tokenSecret:@"mnop"];}
-
+}
 - (void)tearDown
 {
-    getRequest = nil;
     [super tearDown];
+}
+
++ (NSURLRequest *)makeGetRequest
+{
+    return [TDOAuth URLRequestForPath:@"/service"
+                        GETParameters:@{@"foo": @"bar"}
+                                 host:@"api.example.com"
+                          consumerKey:@"abcd"
+                       consumerSecret:@"efgh"
+                          accessToken:@"ijkl"
+                          tokenSecret:@"mnop"];
+}
++ (NSURLRequest *)makePostRequest
+{
+    return [TDOAuth URLRequestForPath:@"/service"
+                       POSTParameters:@{@"foo": @"bar"}
+                                 host:@"api.example.com"
+                          consumerKey:@"abcd"
+                       consumerSecret:@"efgh"
+                          accessToken:@"ijkl"
+                          tokenSecret:@"mnop"];
+}
++ (NSURLRequest *)makeGenericRequest
+{
+    return [TDOAuth URLRequestForPath:@"/service"
+                           parameters:@{@"foo": @"bar", @"baz": @"bonk"}
+                                 host:@"api.example.com"
+                          consumerKey:@"abcd"
+                       consumerSecret:@"efgh"
+                          accessToken:@"ijkl"
+                          tokenSecret:@"mnop"
+                               scheme:@"http"
+                               method:@"BEG"
+                         headerValues:nil
+                      signatureMethod:TDOAuthSignatureMethodHmacSha1];
 }
 
 - (void)testGetMethod
 {
+    NSURLRequest *getRequest = [TDOAuthTest makeGetRequest];
     XCTAssert([[getRequest HTTPMethod] isEqualToString:@"GET"],
               "method (verb) expected to be GET");
 }
 
 - (void)testGetBody
 {
+    NSURLRequest *getRequest = [TDOAuthTest makeGetRequest];
     NSData *body = [getRequest HTTPBody];
     //NSString *bodyString = [[NSString alloc] initWithData:body encoding:NSUTF8StringEncoding];
     XCTAssertNil(body,
@@ -52,6 +74,7 @@
 
 - (void)testGetUrl
 {
+    NSURLRequest *getRequest = [TDOAuthTest makeGetRequest];
     NSString *url = [[getRequest URL] absoluteString];
     XCTAssert([url isEqualToString:@"http://api.example.com/service?foo=bar"],
               "url does not match expected value");
@@ -68,7 +91,6 @@
 
 - (void)testGetUrlWithHttps
 {
-    
     NSURLRequest *httpsRequest = [TDOAuth URLRequestForPath: @"/service"
                                               GETParameters:@{@"foo": @"bar"}
                                                      scheme:@"https"
@@ -85,6 +107,7 @@
 }
 - (void)testGetHeaderAuthField
 {
+    NSURLRequest *getRequest = [TDOAuthTest makeGetRequest];
     NSString *authHeader = [getRequest valueForHTTPHeaderField:@"Authorization"];
     NSString *expectedHeader = @"OAuth oauth_token=\"ijkl\", "\
                                 "oauth_nonce=\"static-nonce-for-testing\", "\
@@ -97,11 +120,13 @@
 
 - (void)testPostMethod
 {
+    NSURLRequest *postRequest = [TDOAuthTest makePostRequest];
     XCTAssert([[postRequest HTTPMethod] isEqualToString:@"POST"],
               "method (verb) expected to be POST");
 }
 - (void)testPostBody
 {
+    NSURLRequest *postRequest = [TDOAuthTest makePostRequest];
     NSData *body = [postRequest HTTPBody];
     NSString *bodyString = [[NSString alloc] initWithData:body encoding:NSUTF8StringEncoding];
     XCTAssert([bodyString isEqualToString:@"foo=bar"],
@@ -110,6 +135,7 @@
 
 - (void)testPostUrl
 {
+    NSURLRequest *postRequest = [TDOAuthTest makePostRequest];
     NSString *url = [[postRequest URL] absoluteString];
     XCTAssert([url isEqualToString:@"https://api.example.com/service"],
               "url does not match expected value");
@@ -129,6 +155,7 @@
 }
 - (void)testPostHeaderAuthField
 {
+    NSURLRequest *postRequest = [TDOAuthTest makePostRequest];
     NSString *authHeader = [postRequest valueForHTTPHeaderField:@"Authorization"];
     NSString *expectedHeader = @"OAuth oauth_token=\"ijkl\", "\
     "oauth_nonce=\"static-nonce-for-testing\", "\
@@ -141,17 +168,7 @@
 
 - (void)testGenericCallHasRightMethod
 {
-    NSURLRequest *genericRequest = [TDOAuth URLRequestForPath:@"/service"
-                                                   parameters:@{@"foo": @"bar"}
-                                                         host:@"api.example.com"
-                                                  consumerKey:@"abcd"
-                                               consumerSecret:@"efgh"
-                                                  accessToken:@"ijkl"
-                                                  tokenSecret:@"mnop"
-                                                       scheme:@"http"
-                                                       method:@"BEG"
-                                                 headerValues:nil
-                                              signatureMethod:nil];
+    NSURLRequest *genericRequest = [TDOAuthTest makeGenericRequest];
     XCTAssert([[genericRequest HTTPMethod] isEqualToString:@"BEG"],
               "method (verb) expected to be BEG");
 }
@@ -168,7 +185,7 @@
                                                        scheme:@"http"
                                                        method:@"BEG"
                                                  headerValues:nil
-                                              signatureMethod:nil];
+                                              signatureMethod:TDOAuthSignatureMethodHmacSha1];
     XCTAssertNil(genericRequest,
                  "should fail when path is missing");
 }
@@ -185,7 +202,7 @@
                                                        scheme:@"http"
                                                        method:@"BEG"
                                                  headerValues:nil
-                                              signatureMethod:nil];
+                                              signatureMethod:TDOAuthSignatureMethodHmacSha1];
     XCTAssertNil(genericRequest,
                  "should fail when host is missing");
 }
@@ -203,7 +220,7 @@
                                                        scheme:nil
                                                        method:@"BEG"
                                                  headerValues:nil
-                                              signatureMethod:nil];
+                                              signatureMethod:TDOAuthSignatureMethodHmacSha1];
     XCTAssertNil(genericRequest,
               "should fail when scheme is missing");
 }
@@ -220,7 +237,7 @@
                                                        scheme:@"http"
                                                        method:nil
                                                  headerValues:nil
-                                              signatureMethod:nil];
+                                              signatureMethod:TDOAuthSignatureMethodHmacSha1];
     XCTAssertNil(genericRequest,
                  "should fail when method is missing");
 }
@@ -237,7 +254,7 @@
                                                        scheme:@"ftp" // Not really valid, but it lets us test
                                                        method:@"BEG"
                                                  headerValues:@{@"Accept": @"application/json"}
-                                              signatureMethod:nil];
+                                              signatureMethod:TDOAuthSignatureMethodHmacSha1];
     NSString *url = [[genericRequest URL] absoluteString];
     XCTAssert([url isEqualToString:@"ftp://api.example.com/service"],
               "url does not match expected value");
@@ -256,23 +273,13 @@
 }
 - (void)testGenericHeaderAuthField
 {
-    NSURLRequest *genericRequest = [TDOAuth URLRequestForPath:@"/service"
-                                                   parameters:@{@"foo": @"bar", @"baz": @"bonk"}
-                                                         host:@"api.example.com"
-                                                  consumerKey:@"abcd"
-                                               consumerSecret:@"efgh"
-                                                  accessToken:@"ijkl"
-                                                  tokenSecret:@"mnop"
-                                                       scheme:@"ftp" // Not really valid, but it lets us test
-                                                       method:@"BEG"
-                                                 headerValues:nil
-                                              signatureMethod:nil];
+    NSURLRequest *genericRequest = [TDOAuthTest makeGenericRequest];
     NSString *authHeader = [genericRequest valueForHTTPHeaderField:@"Authorization"];
     NSString *expectedHeader = @"OAuth oauth_token=\"ijkl\", "\
     "oauth_nonce=\"static-nonce-for-testing\", "\
     "oauth_signature_method=\"HMAC-SHA1\", oauth_consumer_key=\"abcd\", "\
     "oauth_timestamp=\"1456789012\", oauth_version=\"1.0\", "\
-    "oauth_signature=\"432kDrQVWpMi1PNf3OSbOe9gcw8%3D\"";
+    "oauth_signature=\"ycBj862NX5D9cCFrtWcBU2uzkdc%3D\"";
     XCTAssert([authHeader isEqualToString:expectedHeader],
               @"Expected header value does does not match");
 }
@@ -288,35 +295,13 @@
                                                        scheme:@"ftp" // Not really valid, but it lets us test
                                                        method:@"BEG"
                                                  headerValues:nil
-                                              signatureMethod:@"HMAC-SHA256"];
+                                              signatureMethod:TDOAuthSignatureMethodHmacSha256];
     NSString *authHeader = [genericRequest valueForHTTPHeaderField:@"Authorization"];
     NSString *expectedHeader = @"OAuth oauth_token=\"ijkl\", "\
     "oauth_nonce=\"static-nonce-for-testing\", "\
     "oauth_signature_method=\"HMAC-SHA256\", oauth_consumer_key=\"abcd\", "\
     "oauth_timestamp=\"1456789012\", oauth_version=\"1.0\", "\
     "oauth_signature=\"pRxssqcfFnrUqF7i2L5j%2BpCk57gu33m3c9az5kNGors%3D\"";
-    XCTAssert([authHeader isEqualToString:expectedHeader],
-              @"Expected header value does does not match");
-}
-- (void)testGenericHeaderRecognizesSHA1
-{
-    NSURLRequest *genericRequest = [TDOAuth URLRequestForPath:@"/service"
-                                                   parameters:@{@"foo": @"bar", @"baz": @"bonk"}
-                                                         host:@"api.example.com"
-                                                  consumerKey:@"abcd"
-                                               consumerSecret:@"efgh"
-                                                  accessToken:@"ijkl"
-                                                  tokenSecret:@"mnop"
-                                                       scheme:@"ftp" // Not really valid, but it lets us test
-                                                       method:@"BEG"
-                                                 headerValues:nil
-                                              signatureMethod:@"HMAC-SHA1"];
-    NSString *authHeader = [genericRequest valueForHTTPHeaderField:@"Authorization"];
-    NSString *expectedHeader = @"OAuth oauth_token=\"ijkl\", "\
-    "oauth_nonce=\"static-nonce-for-testing\", "\
-    "oauth_signature_method=\"HMAC-SHA1\", oauth_consumer_key=\"abcd\", "\
-    "oauth_timestamp=\"1456789012\", oauth_version=\"1.0\", "\
-    "oauth_signature=\"432kDrQVWpMi1PNf3OSbOe9gcw8%3D\"";
     XCTAssert([authHeader isEqualToString:expectedHeader],
               @"Expected header value does does not match");
 }
@@ -332,7 +317,7 @@
                                                        scheme:@"ftp" // Not really valid, but it lets us test
                                                        method:@"BEG"
                                                  headerValues:nil
-                                              signatureMethod:@"HMAC-SHA333"];
+                                              signatureMethod:(TDOAuthSignatureMethod)1234];
     XCTAssertNil(genericRequest,
                  @"Expected request to fail with invalid hash function");
 }
