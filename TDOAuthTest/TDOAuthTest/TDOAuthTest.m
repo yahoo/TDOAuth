@@ -14,7 +14,6 @@
 - (void)setUp
 {
     [super setUp];
-    [TDOAuth enableStaticValuesForAutomatedTests];
 }
 - (void)tearDown
 {

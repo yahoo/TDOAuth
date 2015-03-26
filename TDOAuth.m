@@ -47,26 +47,26 @@
 #endif
 
 static int TDOAuthUTCTimeOffset = 0;
-static BOOL TDOAuthUseStaticValuesForAutomatedTesting = NO;
+/* TDOAUTH_USE_STATIC_VALUES_FOR_AUTOMATIC_TESTING is defined in the XCode project. */
 
 static NSString* nonce() {
-    if (TDOAuthUseStaticValuesForAutomatedTesting) {
-        return @"static-nonce-for-testing";
-    } else {
-        CFUUIDRef uuid = CFUUIDCreate(NULL);
-        CFStringRef s = CFUUIDCreateString(NULL, uuid);
-        CFRelease(uuid);
-        return (__bridge_transfer NSString *)s;
-    }
+#ifdef TDOAUTH_USE_STATIC_VALUES_FOR_AUTOMATIC_TESTING
+    return @"static-nonce-for-testing";
+#else
+    CFUUIDRef uuid = CFUUIDCreate(NULL);
+    CFStringRef s = CFUUIDCreateString(NULL, uuid);
+    CFRelease(uuid);
+    return (__bridge_transfer NSString *)s;
+#endif
 }
 
 static NSString* timestamp() {
     time_t t;
-    if (TDOAuthUseStaticValuesForAutomatedTesting) {
-        t = 1456789012;
-    } else {
-        time(&t);
-    }
+#ifdef TDOAUTH_USE_STATIC_VALUES_FOR_AUTOMATIC_TESTING
+    t = 1456789012;
+#else
+    time(&t);
+#endif
     mktime(gmtime(&t));
     return [NSString stringWithFormat:@"%ld", t + TDOAuthUTCTimeOffset];
 }
@@ -379,8 +379,4 @@ static NSString* timestamp() {
     TDOAuthUTCTimeOffset = offset;
 }
 
-+(void)enableStaticValuesForAutomatedTests
-{
-    TDOAuthUseStaticValuesForAutomatedTesting = YES;
-}
 @end

@@ -186,6 +186,7 @@
 		C445D4A11ABF7B850076B639 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = TDOAUTH_USE_STATIC_VALUES_FOR_AUTOMATIC_TESTING;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
@@ -199,6 +200,7 @@
 		C445D4A21ABF7B850076B639 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = TDOAUTH_USE_STATIC_VALUES_FOR_AUTOMATIC_TESTING;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
