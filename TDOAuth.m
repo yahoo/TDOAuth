@@ -93,7 +93,7 @@ static NSString* timestamp() {
     NSString *smString;
     if (signatureMethod == TDOAuthSignatureMethodHmacSha256) {
         smString = @"HMAC-SHA256";
-    } else if ((signatureMethod == TDOAuthSignatureMethodHmacSha1) || (!signatureMethod)) {
+    } else if (signatureMethod == TDOAuthSignatureMethodHmacSha1) {
         smString = @"HMAC-SHA1";
     } else {
         self = nil;
