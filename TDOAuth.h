@@ -29,6 +29,15 @@
 
 #import <Foundation/Foundation.h>
 
+typedef NS_ENUM(NSInteger, TDOAuthSignatureMethod) {
+    TDOAuthSignatureMethodHmacSha1,
+    TDOAuthSignatureMethodHmacSha256,
+};
+typedef NS_ENUM(NSInteger, TDOAuthContentType) {
+    TDOAuthContentTypeUrlEncodedForm,
+    TDOAuthContentTypeJsonObject,
+};
+
 /**
   This OAuth implementation doesn't cover the whole spec (eg. it’s HMAC only).
   But you'll find it works with almost all the OAuth implementations you need
@@ -79,6 +88,45 @@
                         tokenSecret:(NSString *)tokenSecret;
 
 /**
+ This method allows the caller to specify particular values for many different parameters such
+ as scheme, method, header values and alternate signature hash algorithms.
+
+ @p scheme may be any string value, generally "http" or "https".
+ @p requestMethod may be any string value. There is no validation, so remember that all
+ currently-defined HTTP methods are uppercase and the RFC specifies that the method
+ is case-sensitive.
+ @p dataEncoding allows for the transmission of data as either URL-encoded form data or
+ JSON by passing the value TDOAuthContentTypeUrlEncodedForm or TDOAuthContentTypeJsonObject.
+ This parameter is ignored for the requestMethod "GET".
+ @p headerValues accepts a hash of key-value pairs (both must be strings) that specify
+ HTTP header values to be included in the resulting URL Request. For example, the argument
+ value @{@"Accept": @"application/json"} will include the header to indicate the server
+ should respond with JSON. Other values are acceptable, depending on the server, but be
+ careful. Values you supply will override the defaults which are set for User-Agent
+ (set to "app-bundle-name/version" your app resources), Accept-Encoding (set to "gzip")
+ and the calculated Authentication header. Attempting to specify the latter will be fatal.
+ You should also avoid passing in values for the Content-Type and Content-Length header fields.
+ @p signatureMethod accepts an enum and should normally be set to TDOAuthSignatureMethodHmacSha1.
+ You have the option of using HMAC-SHA256 by setting this parameter to
+ TDOAuthSignatureMethodHmacSha256; this is not included in the RFC for OAuth 1.0a, so most servers
+ will not support it.
+*/
+
++ (NSURLRequest *)URLRequestForPath:(NSString *)unencodedPathWithoutQuery
+                         parameters:(NSDictionary *)unencodedParameters
+                               host:(NSString *)host
+                        consumerKey:(NSString *)consumerKey
+                     consumerSecret:(NSString *)consumerSecret
+                        accessToken:(NSString *)accessToken
+                        tokenSecret:(NSString *)tokenSecret
+                             scheme:(NSString *)scheme
+                      requestMethod:(NSString *)method
+                       dataEncoding:(TDOAuthContentType)dataEncoding
+                       headerValues:(NSDictionary *)headerValues
+                    signatureMethod:(TDOAuthSignatureMethod)signatureMethod;
+
+/**
+
  OAuth requires the UTC timestamp we send to be accurate. The user's device
  may not be, and often isn't. To work around this you should set this to the
  UTC timestamp that you get back in HTTP headers from OAuth servers.
