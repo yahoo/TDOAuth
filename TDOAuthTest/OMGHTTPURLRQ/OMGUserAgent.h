@@ -1,3 +1,0 @@
-@class NSString;
-
-NSString *OMGUserAgent();

@@ -29,6 +29,11 @@
 
 #import <Foundation/Foundation.h>
 
+
+FOUNDATION_EXPORT double TDOAuthVersionNumber;
+FOUNDATION_EXPORT const unsigned char TDOAuthVersionString[];
+
+
 typedef NS_ENUM(NSInteger, TDOAuthSignatureMethod) {
     TDOAuthSignatureMethodHmacSha1,
     TDOAuthSignatureMethodHmacSha256,

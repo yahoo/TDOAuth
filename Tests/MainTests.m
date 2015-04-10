@@ -7,7 +7,7 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "TDOAuthTest.h"
+#import "MainTests.h"
 
 @implementation TDOAuthTest
 

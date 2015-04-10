@@ -31,7 +31,7 @@
 
 #import "TDOAuth.h"
 #import <CommonCrypto/CommonHMAC.h>
-#import <OMGUserAgent.h>
+#import <OMGHTTPURLRQ/OMGUserAgent.h>
 
 #define TDPCEN(s) \
     ((__bridge_transfer NSString *)CFURLCreateStringByAddingPercentEscapes(NULL, (__bridge CFStringRef)[s description], NULL, CFSTR("!*'();:@&=+$,/?%#[]"), kCFStringEncodingUTF8))
