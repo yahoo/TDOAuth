@@ -81,7 +81,7 @@ static NSString* timestamp() {
     NSDictionary *oauthParams; // these are pre-percent encoded
     NSDictionary *params;     // these are pre-percent encoded
     NSString *method;
-    NSString *unencodedHostAndPathWithoutQuery; // we keep this because NSURL drops trailing slashes and the port number
+    NSString *hostAndPathWithoutQuery; // we keep this because NSURL drops trailing slashes and the port number
 }
 
 - (id)initWithConsumerKey:(NSString *)consumerKey
@@ -133,7 +133,7 @@ static NSString* timestamp() {
     return [NSString stringWithFormat:@"%@&%@%%3A%%2F%%2F%@&%@",
             method,
             url.scheme.lowercaseString,
-            TDPCEN(unencodedHostAndPathWithoutQuery),
+            TDPCEN(hostAndPathWithoutQuery),
             TDPCEN(p3)];
 }
 
@@ -258,17 +258,17 @@ static NSString* timestamp() {
     if (!oauth) // This would happen with someone slipping in an unsupported signature method
         return nil;
 
+    // We don't use pcen as we don't want to percent encode eg. /, this is perhaps
+    // not the most all encompassing solution, but in practice it seems to work
+    // everywhere and means that programmer error is *much* less likely.
+    NSString *encodedPathWithoutQuery = [unencodedPathWithoutQuery stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+
     oauth->method = method;
-    oauth->unencodedHostAndPathWithoutQuery = [host.lowercaseString stringByAppendingString:unencodedPathWithoutQuery];
+    oauth->hostAndPathWithoutQuery = [host.lowercaseString stringByAppendingString:encodedPathWithoutQuery];
 
     NSMutableURLRequest *rq;
     if ([method isEqualToString:@"GET"])
     {
-        // We don't use pcen as we don't want to percent encode eg. /, this is perhaps
-        // not the most all encompassing solution, but in practice it seems to work
-        // everywhere and means that programmer error is *much* less likely.
-        NSString *encodedPathWithoutQuery = [unencodedPathWithoutQuery stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-
         id path = [oauth setParameters:unencodedParameters];
         if (path) {
             [path insertString:@"?" atIndex:0];
@@ -284,7 +284,7 @@ static NSString* timestamp() {
     else
     {
         oauth->url = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"%@://%@%@",
-                                                    scheme, host, unencodedPathWithoutQuery]];
+                                                    scheme, host, encodedPathWithoutQuery]];
         if ((dataEncoding == TDOAuthContentTypeUrlEncodedForm) || (unencodedParameters == nil))
         {
             NSMutableString *postbody = [oauth setParameters:unencodedParameters];
