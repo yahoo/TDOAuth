@@ -476,4 +476,51 @@
                  @"Expected request to fail with invalid hash function");
 }
 
+- (void)testGenericURLEncoding {
+    NSURLRequest *genericRequest = [TDOAuth URLRequestForPath:@"/service/\\subDirectoryWithBackslash"
+                                                   parameters:@{@"foo": @"bar", @"baz": @"bonk"}
+                                                         host:@"api.example.com"
+                                                  consumerKey:@"abcd"
+                                               consumerSecret:@"efgh"
+                                                  accessToken:@"ijkl"
+                                                  tokenSecret:@"mnop"
+                                                       scheme:@"ftp" // Not really valid, but it lets us test
+                                                requestMethod:@"BEG"
+                                                 dataEncoding:TDOAuthContentTypeUrlEncodedForm
+                                                 headerValues:nil
+                                              signatureMethod:TDOAuthSignatureMethodHmacSha1];
+    NSString *url = [[genericRequest URL] absoluteString];
+    XCTAssertEqualObjects(url, @"ftp://api.example.com/service/%5CsubDirectoryWithBackslash",
+                          "url does not match expected value");
+
+    NSString *authHeader = [genericRequest valueForHTTPHeaderField:@"Authorization"];
+    NSString *expectedHeader = @"OAuth oauth_token=\"ijkl\", "\
+    "oauth_nonce=\"static-nonce-for-testing\", "\
+    "oauth_signature_method=\"HMAC-SHA1\", oauth_consumer_key=\"abcd\", "\
+    "oauth_timestamp=\"1456789012\", oauth_version=\"1.0\", "\
+    "oauth_signature=\"SVHQ336AsUnnwG48LIsyr%2FYDi6A%3D\"";
+    XCTAssertEqualObjects(authHeader, expectedHeader, @"Expected header value does does not match");
+}
+
+- (void)testGetURLEncoding {
+    NSURLRequest *getRequest = [TDOAuth URLRequestForPath:@"/service/\\subDirectoryWithBackslash"
+                                            GETParameters:@{@"foo": @"bar", @"baz": @"bonk"}
+                                                     host:@"api.example.com"
+                                              consumerKey:@"abcd"
+                                           consumerSecret:@"efgh"
+                                              accessToken:@"ijkl"
+                                              tokenSecret:@"mnop"];
+    NSString *url = [[getRequest URL] absoluteString];
+    XCTAssertEqualObjects(url, @"http://api.example.com/service/%5CsubDirectoryWithBackslash?foo=bar&baz=bonk",
+              "url does not match expected value");
+
+    NSString *authHeader = [getRequest valueForHTTPHeaderField:@"Authorization"];
+    NSString *expectedHeader = @"OAuth oauth_token=\"ijkl\", "\
+    "oauth_nonce=\"static-nonce-for-testing\", "\
+    "oauth_signature_method=\"HMAC-SHA1\", oauth_consumer_key=\"abcd\", "\
+    "oauth_timestamp=\"1456789012\", oauth_version=\"1.0\", "\
+    "oauth_signature=\"am5ojjNME7KLGoPwpBBGnAJA3g4%3D\"";
+    XCTAssertEqualObjects(authHeader, expectedHeader, @"Expected header value does does not match");
+}
+
 @end
