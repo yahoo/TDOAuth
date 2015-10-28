@@ -262,7 +262,7 @@ static NSString* timestamp() {
     oauth->unencodedHostAndPathWithoutQuery = [host.lowercaseString stringByAppendingString:unencodedPathWithoutQuery];
 
     NSMutableURLRequest *rq;
-    if ([method isEqualToString:@"GET"])
+    if ([method isEqualToString:@"GET"] || [method isEqualToString:@"DELETE"] || [method isEqualToString:@"HEAD"])
     {
         // We don't use pcen as we don't want to percent encode eg. /, this is perhaps
         // not the most all encompassing solution, but in practice it seems to work
