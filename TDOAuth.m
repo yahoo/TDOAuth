@@ -270,7 +270,7 @@ static NSString* timestamp() {
     if ([method isEqualToString:@"GET"] || [method isEqualToString:@"DELETE"] || [method isEqualToString:@"HEAD"])
     {
         id path = [oauth setParameters:unencodedParameters];
-        if (path) {
+        if (path && unencodedParameters) {
             [path insertString:@"?" atIndex:0];
             [path insertString:encodedPathWithoutQuery atIndex:0];
         } else {
