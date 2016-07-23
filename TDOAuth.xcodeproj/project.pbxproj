@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		63433C091AD856CA00077584 /* OMGHTTPURLRQ.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 63EF926D1AD8329C00554141 /* OMGHTTPURLRQ.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		63433C0A1AD856CD00077584 /* TDOAuth.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 63EF92671AD8316400554141 /* TDOAuth.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		63779DAF1AD833DE008E3AD6 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 63779DAE1AD833DE008E3AD6 /* Info.plist */; };
 		63779DB01AD852ED008E3AD6 /* TDOAuth.h in Headers */ = {isa = PBXBuildFile; fileRef = C43B88621AC064C9005FAD49 /* TDOAuth.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		63779DB11AD852F0008E3AD6 /* TDOAuth.h in Headers */ = {isa = PBXBuildFile; fileRef = C43B88621AC064C9005FAD49 /* TDOAuth.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		63779DB21AD8548F008E3AD6 /* TDOAuth.m in Sources */ = {isa = PBXBuildFile; fileRef = C43B88631AC064C9005FAD49 /* TDOAuth.m */; };
@@ -212,7 +211,7 @@
 		C445D49D1ABF7B850076B639 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0630;
+				LastUpgradeCheck = 0730;
 				TargetAttributes = {
 					635A5C131AD82F6B00CFB170 = {
 						CreatedOnToolsVersion = 6.3;
@@ -243,7 +242,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				63779DAF1AD833DE008E3AD6 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -341,6 +339,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.tweetdeck.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = TDOAuth;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -392,6 +391,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.tweetdeck.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = TDOAuth;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -452,6 +452,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.tweetdeck.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = TDOAuth;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -504,6 +505,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.tweetdeck.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = TDOAuth;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -519,6 +521,7 @@
 			buildSettings = {
 				CURRENT_PROJECT_VERSION = 1.1.1;
 				DYLIB_CURRENT_VERSION = "$(CURRENT_PROJECT_VERSION)";
+				ENABLE_TESTABILITY = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = TDOAUTH_USE_STATIC_VALUES_FOR_AUTOMATIC_TESTING;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -592,6 +595,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tweetdeck.tdoauth.tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				WRAPPER_EXTENSION = xctest;
@@ -634,6 +638,7 @@
 				INFOPLIST_FILE = "Tests/Tests-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tweetdeck.tdoauth.tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				WRAPPER_EXTENSION = xctest;
