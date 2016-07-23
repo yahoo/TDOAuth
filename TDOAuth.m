@@ -34,7 +34,7 @@
 #import <OMGHTTPURLRQ/OMGUserAgent.h>
 
 #define TDPCEN(s) \
-    ((__bridge_transfer NSString *)CFURLCreateStringByAddingPercentEscapes(NULL, (__bridge CFStringRef)[s description], NULL, CFSTR("!*'();:@&=+$,/?%#[]"), kCFStringEncodingUTF8))
+      ([[s description] stringByAddingPercentEncodingWithAllowedCharacters:[[NSCharacterSet characterSetWithCharactersInString:@"!*'();:@&=+$,/?%#[] "] invertedSet]])
 
 #define TDChomp(s) { \
     const NSUInteger length = [s length]; \
