@@ -523,4 +523,18 @@
     XCTAssertEqualObjects(authHeader, expectedHeader, @"Expected header value does does not match");
 }
 
+- (void)testGetURLEncodingWithSpecialCharacters
+{
+    NSURLRequest *getRequest = [TDOAuth URLRequestForPath:@"/service/\\subDirectoryWithBackslash"
+                                            GETParameters:@{@"foo": @"^!*'();:@&=+$,/?%#[]{}\"`<>\\| abc123._-~."}
+                                                     host:@"api.example.com"
+                                              consumerKey:@"abcd"
+                                           consumerSecret:@"efgh"
+                                              accessToken:@"ijkl"
+                                              tokenSecret:@"mnop"];
+    NSString *url = [[getRequest URL] absoluteString];
+    XCTAssertEqualObjects(url, @"http://api.example.com/service/%5CsubDirectoryWithBackslash?foo=%5E%21%2A%27%28%29%3B%3A%40%26%3D%2B%24%2C%2F%3F%25%23%5B%5D%7B%7D%22%60%3C%3E%5C%7C%20abc123._-~.",
+                          "url does not match expected value");
+}
+
 @end
