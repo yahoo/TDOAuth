@@ -2,8 +2,6 @@ BSD 2-Clause License
 
  Copyright 2011 TweetDeck Inc. All rights reserved.
 
- Design and implementation, Max Howell, @mxcl.
-
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions are met:
 
