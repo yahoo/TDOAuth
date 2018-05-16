@@ -1,4 +1,5 @@
-/*
+BSD 2-Clause License
+
  Copyright 2011 TweetDeck Inc. All rights reserved.
 
  Design and implementation, Max Howell, @mxcl.
@@ -27,4 +28,3 @@
  The views and conclusions contained in the software and documentation are
  those of the authors and should not be interpreted as representing official
  policies, either expressed or implied, of TweetDeck Inc.
-*/
