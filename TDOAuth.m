@@ -267,7 +267,7 @@ static NSString* timestamp() {
     oauth->hostAndPathWithoutQuery = [host.lowercaseString stringByAppendingString:encodedPathWithoutQuery];
 
     NSMutableURLRequest *rq;
-    if ([method isEqualToString:@"GET"] || [method isEqualToString:@"DELETE"] || [method isEqualToString:@"HEAD"])
+    if ([method isEqualToString:@"GET"] || [method isEqualToString:@"DELETE"] || [method isEqualToString:@"HEAD"] || ([method isEqualToString:@"POST"] && dataEncoding == TDOAuthContentTypeUrlEncodedParameter))
     {
         id path = [oauth setParameters:unencodedParameters];
         if (path && unencodedParameters) {
