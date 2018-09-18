@@ -40,7 +40,7 @@ typedef NS_ENUM(NSInteger, TDOAuthSignatureMethod) {
 };
 typedef NS_ENUM(NSInteger, TDOAuthContentType) {
     TDOAuthContentTypeUrlEncodedForm,
-    TDOAuthContentTypeUrlEncodedParameter,
+    TDOAuthContentTypeUrlEncodedQuery,
     TDOAuthContentTypeJsonObject,
 };
 
@@ -102,8 +102,8 @@ typedef NS_ENUM(NSInteger, TDOAuthContentType) {
  currently-defined HTTP methods are uppercase and the RFC specifies that the method
  is case-sensitive.
  @p dataEncoding allows for the transmission of data as either URL-encoded form data,
- URL-encoded parameter(s) or JSON by passing the value TDOAuthContentTypeUrlEncodedForm,
- TDOAuthContentTypeUrlEncodedParameter or TDOAuthContentTypeJsonObject.
+ query string or JSON by passing the value TDOAuthContentTypeUrlEncodedForm,
+ TDOAuthContentTypeUrlEncodedQuery or TDOAuthContentTypeJsonObject.
  This parameter is ignored for the requestMethod "GET".
  @p headerValues accepts a hash of key-value pairs (both must be strings) that specify
  HTTP header values to be included in the resulting URL Request. For example, the argument

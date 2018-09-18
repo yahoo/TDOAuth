@@ -171,7 +171,7 @@
 
 - (void)testPostUrlParameters
 {
-    NSURLRequest *postRequest = [TDOAuthTest makePostRequestWithDataEncoding:TDOAuthContentTypeUrlEncodedParameter];
+    NSURLRequest *postRequest = [TDOAuthTest makePostRequestWithDataEncoding:TDOAuthContentTypeUrlEncodedQuery];
     
     NSString *url = [[postRequest URL] absoluteString];
     XCTAssert([url isEqualToString:@"http://api.example.com/service?foo=bar&baz=bonk"],
