@@ -40,8 +40,8 @@ typedef NS_ENUM(NSInteger, TDOAuthSignatureMethod) {
 };
 typedef NS_ENUM(NSInteger, TDOAuthContentType) {
     TDOAuthContentTypeUrlEncodedForm,
-    TDOAuthContentTypeUrlEncodedQuery,
     TDOAuthContentTypeJsonObject,
+    TDOAuthContentTypeUrlEncodedQuery,
 };
 
 /**
