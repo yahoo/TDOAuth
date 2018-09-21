@@ -40,6 +40,21 @@
                           accessToken:@"ijkl"
                           tokenSecret:@"mnop"];
 }
++ (NSURLRequest *)makePostRequestWithDataEncoding:(TDOAuthContentType)dataEncoding
+{
+    return [TDOAuth URLRequestForPath:@"/service"
+                           parameters:@{@"foo": @"bar", @"baz": @"bonk"}
+                                 host:@"api.example.com"
+                          consumerKey:@"abcd"
+                       consumerSecret:@"efgh"
+                          accessToken:@"ijkl"
+                          tokenSecret:@"mnop"
+                               scheme:@"http"
+                        requestMethod:@"POST"
+                         dataEncoding:dataEncoding
+                         headerValues:nil
+                      signatureMethod:TDOAuthSignatureMethodHmacSha1];
+}
 + (NSURLRequest *)makeGenericRequestWithHTTPMethod:(NSString *)method
 {
     return [TDOAuth URLRequestForPath:@"/service"
@@ -153,6 +168,24 @@
                  @"Accept is not expected value)");
 
 }
+
+- (void)testPostUrlParameters
+{
+    NSURLRequest *postRequest = [TDOAuthTest makePostRequestWithDataEncoding:TDOAuthContentTypeUrlEncodedQuery];
+    
+    NSString *url = [[postRequest URL] absoluteString];
+    XCTAssert([url isEqualToString:@"http://api.example.com/service?foo=bar&baz=bonk"],
+              "url does not match expected value");
+    
+    NSString *contentType = [postRequest valueForHTTPHeaderField: @"Content-Type"];
+    XCTAssertNil(contentType,
+                 @"Content-Type was present when not expected)");
+    
+    NSString *contentLength = [postRequest valueForHTTPHeaderField: @"Content-Length"];
+    XCTAssertNil(contentLength,
+                 @"Content-Length was set when not expected)");
+}
+
 - (void)testPostHeaderAuthField
 {
     NSURLRequest *postRequest = [TDOAuthTest makePostRequest];
