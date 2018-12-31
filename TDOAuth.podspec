@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = 'TDOAuth'
-  s.version = '1.1.6'
+  s.version = '1.2.0'
   s.requires_arc = true
   s.source_files = '*.{m,h}'
   s.source = { :git => "https://github.com/tweetdeck/#{s.name}.git", :tag => s.version }
@@ -8,6 +8,8 @@ Pod::Spec.new do |s|
   s.summary = 'Elegant, simple and tiny OAuth 1.x solution'
 
   s.ios.deployment_target = '5.0'
+  s.tvos.deployment_target = '11.0'
+  s.watchos.deployment_target = '3.0'
   s.osx.deployment_target = '10.7'
 
   s.dependency 'OMGHTTPURLRQ/UserAgent'
