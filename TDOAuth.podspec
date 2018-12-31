@@ -3,7 +3,7 @@ Pod::Spec.new do |s|
   s.version = '1.2.0'
   s.requires_arc = true
   s.source_files = '*.{m,h}'
-  s.source = { :git => "https://github.com/tweetdeck/#{s.name}.git", :tag => s.version }
+  s.source = { :git => "https://github.com/yahoo/#{s.name}.git", :tag => s.version }
   s.license = { :type => 'MIT', :text => 'OHAI CocoaPods linter!' }
   s.summary = 'Elegant, simple and tiny OAuth 1.x solution'
 
