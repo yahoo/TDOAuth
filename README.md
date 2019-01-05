@@ -1,20 +1,29 @@
-A BSD-licensed single-header-single-source OAuth1 implementation.
+# TDOAuth
 
-[![Build Status](https://travis-ci.org/tweetdeck-archive/TDOAuth.svg?branch=master)](https://travis-ci.org/tweetdeck-archive/TDOAuth)
+[![CI Status](https://img.shields.io/travis/Adam Kaplan/TDOAuth.svg?style=flat)](https://travis-ci.org/Adam Kaplan/TDOAuth)
+[![Version](https://img.shields.io/cocoapods/v/TDOAuth.svg?style=flat)](https://cocoapods.org/pods/TDOAuth)
+[![License](https://img.shields.io/cocoapods/l/TDOAuth.svg?style=flat)](https://cocoapods.org/pods/TDOAuth)
+[![Platform](https://img.shields.io/cocoapods/p/TDOAuth.svg?style=flat)](https://cocoapods.org/pods/TDOAuth)
 
-Use CocoaPods:
+## Example
 
-    pod 'TDOAuth'
-    
+To run the example project, clone the repo, and run `pod install` from the Example directory first.
 
-Or Carthage:
+## Requirements
 
-    github "tweetdeck/TDOAuth"
+## Installation
 
-Or just drag and drop the two sources and grab
-[OMGUserAgent.{h,m}](https://github.com/mxcl/OMGHTTPURLRQ).
+TDOAuth is available through [CocoaPods](https://cocoapods.org). To install
+it, simply add the following line to your Podfile:
 
-Usage is fully documented in the header.
+```ruby
+pod 'TDOAuth'
+```
 
-Tested against Foursquare and Twitter. If you test it against something else,
-please fork and list the services you used it against here. Thanks.
+## Author
+
+Adam Kaplan, adamkaplan@yahoo-inc.com
+
+## License
+
+TDOAuth is available under the MIT license. See the LICENSE file for more info.
