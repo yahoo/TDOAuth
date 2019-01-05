@@ -1,0 +1,31 @@
+PODS:
+  - Nimble (7.3.1)
+  - OMGHTTPURLRQ/UserAgent (3.2.4)
+  - Quick (1.3.2)
+  - TDOAuth (1.3.0):
+    - OMGHTTPURLRQ/UserAgent
+
+DEPENDENCIES:
+  - Nimble (~> 7.3)
+  - Quick (~> 1.3)
+  - TDOAuth (from `../`)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Nimble
+    - OMGHTTPURLRQ
+    - Quick
+
+EXTERNAL SOURCES:
+  TDOAuth:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  Nimble: 04f732da099ea4d153122aec8c2a88fd0c7219ae
+  OMGHTTPURLRQ: 9ac96bdf5c90a33f75836630729ea1adc312a9ed
+  Quick: 2623cb30d7a7f41ca62f684f679586558f483d46
+  TDOAuth: 23d2003b60c5db549386b96cdb96f070bee0b3d6
+
+PODFILE CHECKSUM: 85acb2ac591ed7fffd4deedde0ee6c6eda2abcc0
+
+COCOAPODS: 1.6.0.beta.2

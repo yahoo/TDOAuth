@@ -1,12 +1,14 @@
 use_frameworks!
 
 target 'TDOAuth_Example' do
+  platform :ios, '9.3'
+
   pod 'TDOAuth', :path => '../'
 
   target 'TDOAuth_Tests' do
     inherit! :search_paths
 
-    pod 'Quick', '~> 1.2.0'
-    pod 'Nimble', '~> 7.0.2'
+    pod 'Quick', '~> 1.3'
+    pod 'Nimble', '~> 7.3'
   end
 end
