@@ -8,21 +8,6 @@
 import UIKit
 import CommonCrypto.CommonHMAC
 
-/*
- + (NSURLRequest *)URLRequestForPath:(NSString *)unencodedPathWithoutQuery
-                    parameters:(NSDictionary *)unencodedParameters
-                    host:(NSString *)host
-                    consumerKey:(NSString *)consumerKey
-                    consumerSecret:(NSString *)consumerSecret
-                    accessToken:(NSString *)accessToken
-                    tokenSecret:(NSString *)tokenSecret
-                    scheme:(NSString *)scheme
-                    requestMethod:(NSString *)method
-                    dataEncoding:(TDOAuthContentType)dataEncoding
-                    headerValues:(NSDictionary *)headerValues
-                    signatureMethod:(TDOAuthSignatureMethod)signatureMethod;
- */
-
 /// Generic protocol to support OAuth 1.0 signers, examples provided in the RFC:
 /// HMAC-SHA1 (Client Secret + Shared Secret) https://tools.ietf.org/html/rfc5849#section-3.4.2
 /// RSA-SHA1  (Client Secret) https://tools.ietf.org/html/rfc5849#section-3.4.3
@@ -58,17 +43,47 @@ public class OAuth1Sha256Signer: OAuth1Signer {
         parBakedHmacContext = context
     }
 
+    /// The value to sign, per RFC 5849, section 3.4.1.1
+    /// https://tools.ietf.org/html/rfc5849#section-3.4.1.1
+    ///
+    /// The string should already be normalized and composed according to section 3.4.1.3.2
+    /// https://tools.ietf.org/html/rfc5849#section-3.4.1.3.2
+    ///
+    /// The resulting string is base64 encoded in conformance with section 6.8
+    /// https://tools.ietf.org/html/rfc2045#section-6.8
+    ///
+    /// - Parameter value: Value to sign according to RFC 5849 section 3.4.1.1
+    /// - Returns: The signed value as a base64 encoded string
     public func sign(_ value: String) -> String {
         var valueLocal = value
         let valueLength = value.lengthOfBytes(using: .utf8)
 
         var context = parBakedHmacContext
+
         let signed = withUnsafeMutablePointer(to: &context) { ctx -> String in
-            CCHmacUpdate(ctx, &valueLocal, valueLength)
-            var buffer = UnsafeMutableBufferPointer<UInt32>.allocate(capacity: Int(CC_SHA256_DIGEST_LENGTH))
-            CCHmacFinal(ctx, &buffer)
-            let data = Data(buffer: buffer)
-            return data.base64EncodedString()
+            ////////
+            var signingKey = OAuth1Sha256Signer.generateSigningKey(material: (consumerSecret: "KEY", accessTokenSecret: "TOKEN"))
+            let signingKeyLength = signingKey.lengthOfBytes(using: String.Encoding.utf8)
+            var ctx = CCHmacContext()
+            let contextPtr = UnsafeMutablePointer(&ctx)
+            CCHmacInit(contextPtr, CCHmacAlgorithm(kCCHmacAlgSHA256), &signingKey, signingKeyLength)
+            ////////
+
+            CCHmacUpdate(contextPtr, &valueLocal, valueLength)
+            //var buffer = Array<UInt8>(repeating: 0, count: Int(CC_SHA256_DIGEST_LENGTH)) //UnsafeMutableBufferPointer<UInt8>.allocate(capacity: Int(CC_SHA256_DIGEST_LENGTH))
+            //var buffer = UnsafeMutableBufferPointer<UInt8>.allocate(capacity: Int(CC_SHA256_DIGEST_LENGTH))
+            //var buffer = UnsafeMutableRawPointer.allocate(byteCount: Int(CC_SHA256_DIGEST_LENGTH), alignment: MemoryLayout.alignment(ofValue: UInt8.self))
+            var buffer = Data(repeating: 0, count: Int(CC_SHA256_DIGEST_LENGTH) + 1)
+            buffer.withUnsafeMutableBytes { bufPtr -> Void in
+                CCHmacFinal(contextPtr, bufPtr)
+            }
+            //CCHmacFinal(contextPtr, &buffer)
+            //let data = Data(buffer: buffer)
+//            let data = Data(bytesNoCopy: buffer,
+//                            count: Int(CC_SHA256_DIGEST_LENGTH),
+//                            deallocator: .custom { pointer, _ in pointer.deallocate() })
+            let encoded = data.base64EncodedString()
+            return encoded
         }
         return signed
     }
@@ -86,31 +101,311 @@ public class OAuth1Sha256Signer: OAuth1Signer {
 /// See https://tools.ietf.org/html/rfc5849
 open class OAuth1<T: OAuth1Signer> {
 
+    public typealias KeyValuePair = (key: String, value: String)
+
+    public let version = "1.0"
+
     public let consumerKey: String
 
     public let accessToken: String?
 
-    public var signer: T
+    public let signer: T
 
-    //private let oauthParameters: [String: Any]
+    /// Generate a new timestamp as seconds since the epoch
+    var timestamp: String { return String(format: "%0.f", Date().timeIntervalSince1970) }
+
+    /// Generate a new one-time nonce value in the form of a random UUID
+    var nonce: String { return UUID().uuidString }
+
+    var oauthParameters: [KeyValuePair] {
+        var params = [
+            ("oauth_consumer_key",       consumerKey),
+            ("oauth_nonce",              nonce),
+            ("oauth_timestamp",          timestamp),
+            ("oauth_version",            version),
+            ("oauth_signature_method",   signer.signatureMethod)
+        ]
+
+        // Support xAuth attempts, where the token may be nil
+        if let accessToken = accessToken {
+            params.append(("oauth_token", accessToken))
+        }
+
+        // Ensure all parameters are always base64 encoded
+        let encodedParams = params.map { (pair: KeyValuePair) -> KeyValuePair in
+            return (pair.key.addingUrlSafePercentEncoding(), pair.value.addingUrlSafePercentEncoding())
+        }
+
+        return encodedParams
+    }
 
     public init(withConsumerKey consumerKey: String, accessToken: String?, signer: T) {
         self.consumerKey = consumerKey
         self.accessToken = accessToken
         self.signer = signer
+    }
 
-//        oauthParameters = [
-//            "oauth_consumer_key":       consumerKey,
-//            "oauth_nonce":              nonce(),
-//            "oauth_timestamp":          timestamp(),
-//            "oauth_version":            "1.0",
-//            "oauth_signature_method":   signer.signatureMethod,
-//            "oauth_token":              accessToken
-//        ]
+    /// Signs a URLRequest
+    ///
+    /// - Parameter request: The request to sign
+    /// - Returns: The copied and signed request, or nil if the request could not be signed
+    func sign(request: URLRequest) -> URLRequest? {
+        guard let signatureBase = signatureBaseString(request: request) else { return nil }
+
+        var oauthParameters = self.oauthParameters
+        oauthParameters.append(("oauth_signature", signer.sign(signatureBase)))
+
+        // 3.5.1.  Authorization Header
+        //
+        // Protocol parameters can be transmitted using the HTTP "Authorization"
+        // header field as defined by [RFC2617] with the auth-scheme name set to
+        // "OAuth" (case insensitive).
+        //
+        // Protocol parameters SHALL be included in the "Authorization" header
+        // field as follows:
+        //
+        // 1.  Parameter names and values are encoded per Parameter Encoding
+        // (Section 3.6).
+        oauthParameters = oauthParameters.map {
+            return ($0.key.addingUrlSafePercentEncoding(), $0.value.addingUrlSafePercentEncoding())
+        }
+
+        // 2.  Each parameter's name is immediately followed by an "=" character
+        // (ASCII code 61), a """ character (ASCII code 34), the parameter
+        // value (MAY be empty), and another """ character (ASCII code 34).
+        let oauthParameterStrings = oauthParameters.map { "\($0.key)=\"\($0.value)\"" }
+
+        // 3.  Parameters are separated by a "," character (ASCII code 44) and
+        // OPTIONAL linear whitespace per [RFC2617].
+        let oauthParameterString = oauthParameterStrings.joined(separator: ",")
+
+        // 4.  The OPTIONAL "realm" parameter MAY be added and interpreted per
+        // [RFC2617] section 1.2.
+        // Needed?
+
+        // Assemble the header
+        let authHeader = "OAuth \(oauthParameterString)"
+
+        // Assemble the updated request
+        var updatedRequest = request
+        updatedRequest.addValue(authHeader, forHTTPHeaderField: "Authorization")
+        return updatedRequest
+    }
+
+    func dictionary(fromQueryParameters parameters: [URLQueryItem]) -> [String: String] {
+        let urlQueryPairs: [KeyValuePair]? = parameters.map { (queryItem: URLQueryItem) in
+            return (queryItem.name, queryItem.value ?? "")
+        }
+
+        guard let pairs = urlQueryPairs else { return [:] }
+        return Dictionary(uniqueKeysWithValues: pairs)
+    }
+
+    func signatureBaseString(request: URLRequest) -> String? {
+        guard let url = request.url,
+            let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
+            else { return nil }
+
+        // This code executes the steps in rfc5849 Section 3.4.1.1
+        // https://tools.ietf.org/html/rfc5849#section-3.4.1.1
+        //
+        // The signature base string is constructed by concatenating together,
+        // in order, the following HTTP request elements:
+        //
+        // 1.  The HTTP request method in uppercase.  For example: "HEAD",
+        // "GET", "POST", etc.  If the request uses a custom HTTP method, it
+        // MUST be encoded (Section 3.6).
+        let method = (request.httpMethod?.uppercased() ?? "").addingUrlSafePercentEncoding()
+
+        // 2.  An "&" character (ASCII code 38).
+        //
+        // 3.  The base string URI from Section 3.4.1.2, after being encoded
+        // (Section 3.6).
+        let baseStringUri = self.baseStringUri(fromUrl: url)
+
+        // 4.  An "&" character (ASCII code 38).
+        //
+        // 5.  The request parameters as normalized in Section 3.4.1.3.2, after
+        // being encoded (Section 3.6).
+        let formData: Data?
+        if let contentType = request.value(forHTTPHeaderField: "Content-Type")?.lowercased(),
+            contentType.starts(with: "application/x-www-form-urlencoded") {
+            formData = request.httpBody
+        } else {
+            formData = nil
+        }
+
+        let queryItems: [URLQueryItem] = components.queryItems ?? []
+        let normalizedRequestParameters = self.normalizedParameters(queryItems: queryItems, formData: formData)
+        let encodedNormalizedRequestParameters = normalizedRequestParameters.addingUrlSafePercentEncoding()
+
+        let signatureBase = "\(method)&\(baseStringUri)&\(encodedNormalizedRequestParameters)"
+        return signatureBase
+    }
+
+    func baseStringUri(fromUrl url: URL) -> String {
+        // 3.4.1.2.  Base String URI
+        //
+        // The scheme, authority, and path of the request resource URI [RFC3986]
+        // are included by constructing an "http" or "https" URI representing
+        // the request resource (without the query or fragment) as follows:
+        //
+        // 1.  The scheme and host MUST be in lowercase.
+        //
+        // 2.  The host and port values MUST match the content of the HTTP
+        //     request "Host" header field.
+        //
+        // 3.  The port MUST be included if it is not the default port for the
+        //     scheme, and MUST be excluded if it is the default.  Specifically,
+        //     the port MUST be excluded when making an HTTP request [RFC2616]
+        //     to port 80 or when making an HTTPS request [RFC2818] to port 443.
+        //     All other non-default port numbers MUST be included.
+        //
+        // For example, the HTTP request:
+        //
+        // GET /r%20v/X?id=123 HTTP/1.1
+        // Host: EXAMPLE.COM:80
+        //
+        // is represented by the base string URI: "http://example.com/r%20v/X".
+        //
+        // In another example, the HTTPS request:
+        //
+        // GET /?q=1 HTTP/1.1
+        // Host: www.example.net:8080
+        //
+        // is represented by the base string URI:
+        // "https://www.example.net:8080/".
+        let scheme = url.scheme?.lowercased() ?? "https"
+        let host = url.host ?? ""
+        let port: String
+        switch url.port {
+        case .some(let p) where p == 80 && scheme == "http": // default port, elide
+            fallthrough
+        case .some(let p) where p == 443 && scheme == "https": // default port, elide
+            fallthrough
+        case .none:
+            port = ""
+        case .some(let p):
+            port = ":\(p)"
+        }
+        let path = url.path
+        let baseStringUri = "\(scheme)://\(host)\(port)\(path)"
+        return baseStringUri
+    }
+
+    func normalizedParameters(queryItems: [URLQueryItem], formData: Data?) -> String {
+        // 3.4.1.3.2.  Parameters Normalization
+        //
+        // The parameters collected in Section 3.4.1.3 are normalized into a
+        // single string as follows:
+        //
+        // 1.  First, the name and value of each parameter are encoded
+        // (Section 3.6).
+        var parameters = collectParameters(queryItems: queryItems, formData: formData)
+
+        // 2.  The parameters are sorted by name, using ascending byte value
+        // ordering.  If two or more parameters share the same name, they
+        // are sorted by their value.
+        parameters.sort { lval,rval  -> Bool in
+            switch lval.key.compare(rval.key) {
+            case .orderedSame:
+                return lval.value.compare(rval.value) == .orderedAscending
+            case .orderedAscending:
+                return true
+            case .orderedDescending:
+                return false
+            }
+        }
+
+        // 3.  The name of each parameter is concatenated to its corresponding
+        // value using an "=" character (ASCII code 61) as a separator, even
+        // if the value is empty.
+        let parameterStrings = parameters.map { keyValuePair -> String in
+            return "\(keyValuePair.key)=\(keyValuePair.value)"
+        }
+
+        // 4.  The sorted name/value pairs are concatenated together into a
+        // single string by using an "&" character (ASCII code 38) as
+        // separator.
+        let normalizedParameters = parameterStrings.joined(separator: "&")
+        return normalizedParameters
+    }
+
+    func collectParameters(queryItems: [URLQueryItem], formData: Data?) -> [KeyValuePair] {
+        // The parameters from the following sources are collected into a single
+        // list of name/value pairs:
+        //
+        // o  The query component of the HTTP request URI as defined by
+        // [RFC3986], Section 3.4.  The query component is parsed into a list
+        // of name/value pairs by treating it as an
+        // "application/x-www-form-urlencoded" string, separating the names
+        // and values and decoding them as defined by
+        // [W3C.REC-html40-19980424], Section 17.13.4.
+        var parameters: [KeyValuePair] = queryItems.map { queryItem in
+            let name = queryItem.name.addingUrlSafePercentEncoding()
+            let value = queryItem.value?.addingUrlSafePercentEncoding()
+            return (name, value ?? "")
+        }
+
+        // o  The OAuth HTTP "Authorization" header field (Section 3.5.1) if
+        //     present.  The header's content is parsed into a list of name/value
+        // pairs excluding the "realm" parameter if present.  The parameter
+        // values are decoded as defined by Section 3.5.1.
+        parameters.append(contentsOf: oauthParameters)
+
+        if let formData = formData {
+            let formParameters = collectParameters(formData: formData)
+            parameters.append(contentsOf: formParameters)
+        }
+
+        // The "oauth_signature" parameter MUST be excluded from the signature
+        // base string if present.  Parameters not explicitly included in the
+        // request MUST be excluded from the signature base string (e.g., the
+        // "oauth_version" parameter when omitted).
+        return parameters
+    }
+
+    /// Parse Data containing HTTP form data in the format required for application/x-www-form-urlencoded,
+    /// returning KeyValuePair list of parameters if the form data was well formed.
+    ///
+    /// - Parameter formData: The form data to turn into parameters
+    /// - Returns: A list of parameters
+    func collectParameters(formData: Data) -> [KeyValuePair] {
+        // o  The HTTP request entity-body, but only if all of the following
+        // conditions are met:
+        //
+        //      *  The entity-body is single-part.
+        //
+        //      *  The entity-body follows the encoding requirements of the
+        //          "application/x-www-form-urlencoded" content-type as defined by
+        //          [W3C.REC-html40-19980424].
+        //
+        //      *  The HTTP request entity-header includes the "Content-Type"
+        //          header field set to "application/x-www-form-urlencoded".
+        //
+        // The entity-body is parsed into a list of decoded name/value pairs
+        // as described in [W3C.REC-html40-19980424], Section 17.13.4
+        guard let formString = String(data: formData, encoding: .utf8) else { return [] }
+
+        let formItems = formString.components(separatedBy: "&")
+
+        let formParameters = formItems.compactMap { item -> KeyValuePair? in
+            let parts = item.split(separator: "=")
+            guard let key = parts.first, parts.count < 3 else { return nil }
+
+            return (key: String(key), value: String(parts.last ?? ""))
+        }
+        return formParameters
     }
 }
 
-//func x() {
-//    let oa1 = OAuth1<OAuth1Sha256Signer>(withConsumerKey: "", consumerSecret: "", accessToken: nil, accessTokenSecret: nil)
-//    oa1.signer = OAuth1Sha256Signer()
-//}
+
+let urlSafeCharacters: CharacterSet = CharacterSet(charactersIn: "^!*'();:@&=+$,/?%#[]{}\"`<>\\| ").inverted
+
+extension String {
+
+    func addingUrlSafePercentEncoding() -> String {
+        return self.addingPercentEncoding(withAllowedCharacters: urlSafeCharacters) ?? ""
+    }
+
+}
