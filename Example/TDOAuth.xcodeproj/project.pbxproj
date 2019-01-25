@@ -13,8 +13,11 @@
 		607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* Main.storyboard */; };
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
-		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
+		607FACEC1AFB9204008FA782 /* OAuth1Spec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* OAuth1Spec.swift */; };
 		E275974C927D09FFF948EC95 /* Pods_TDOAuth_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAAF381AB2F9CEDDA6859531 /* Pods_TDOAuth_Example.framework */; };
+		FCCE3C4521FAE14200522CBD /* HMACSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCCE3C4421FAE14200522CBD /* HMACSpec.swift */; };
+		FCCE3C4721FAE1E000522CBD /* PlaintextSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCCE3C4621FAE1E000522CBD /* PlaintextSpec.swift */; };
+		FCCE3C4921FAE23F00522CBD /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCCE3C4821FAE23F00522CBD /* Utils.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,7 +42,7 @@
 		607FACDF1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		607FACE51AFB9204008FA782 /* TDOAuth_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TDOAuth_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
+		607FACEB1AFB9204008FA782 /* OAuth1Spec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuth1Spec.swift; sourceTree = "<group>"; };
 		70000C48C40675E0511B301D /* Pods_TDOAuth_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TDOAuth_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		93D280C710EC98A8AABBFAAE /* TDOAuth.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = TDOAuth.podspec; path = ../TDOAuth.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		9D208AB80362E64DB1A8B657 /* Pods-TDOAuth_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TDOAuth_Example.debug.xcconfig"; path = "Target Support Files/Pods-TDOAuth_Example/Pods-TDOAuth_Example.debug.xcconfig"; sourceTree = "<group>"; };
@@ -47,6 +50,9 @@
 		CA3FCD1E3D0B1AEF932CC096 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		E6AC1FB932F461059AB20B60 /* Pods-TDOAuth_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TDOAuth_Example.release.xcconfig"; path = "Target Support Files/Pods-TDOAuth_Example/Pods-TDOAuth_Example.release.xcconfig"; sourceTree = "<group>"; };
 		FAAF381AB2F9CEDDA6859531 /* Pods_TDOAuth_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TDOAuth_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FCCE3C4421FAE14200522CBD /* HMACSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HMACSpec.swift; sourceTree = "<group>"; };
+		FCCE3C4621FAE1E000522CBD /* PlaintextSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaintextSpec.swift; sourceTree = "<group>"; };
+		FCCE3C4821FAE23F00522CBD /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -126,7 +132,10 @@
 		607FACE81AFB9204008FA782 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				607FACEB1AFB9204008FA782 /* Tests.swift */,
+				607FACEB1AFB9204008FA782 /* OAuth1Spec.swift */,
+				FCCE3C4421FAE14200522CBD /* HMACSpec.swift */,
+				FCCE3C4621FAE1E000522CBD /* PlaintextSpec.swift */,
+				FCCE3C4821FAE23F00522CBD /* Utils.swift */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
 			);
 			path = Tests;
@@ -370,7 +379,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				607FACEC1AFB9204008FA782 /* Tests.swift in Sources */,
+				FCCE3C4521FAE14200522CBD /* HMACSpec.swift in Sources */,
+				FCCE3C4721FAE1E000522CBD /* PlaintextSpec.swift in Sources */,
+				607FACEC1AFB9204008FA782 /* OAuth1Spec.swift in Sources */,
+				FCCE3C4921FAE23F00522CBD /* Utils.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

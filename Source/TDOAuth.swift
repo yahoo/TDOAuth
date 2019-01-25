@@ -6,108 +6,17 @@
 //
 
 import UIKit
-import CommonCrypto.CommonHMAC
-
-/// Generic protocol to support OAuth 1.0 signers, examples provided in the RFC:
-/// HMAC-SHA1 (Client Secret + Shared Secret) https://tools.ietf.org/html/rfc5849#section-3.4.2
-/// RSA-SHA1  (Client Secret) https://tools.ietf.org/html/rfc5849#section-3.4.3
-/// PLAINTEXT (Client Secret + Shared Secret) https://tools.ietf.org/html/rfc5849#section-3.4.4
-///
-/// (SHA1 has not been secure in ages, but the spec allows any algo like SHA256)
-public protocol OAuth1Signer {
-
-    associatedtype KeyMaterial
-
-    var signatureMethod: String { get }
-
-    init(withMaterial: KeyMaterial)
-
-    func sign(_ value: String) -> String
-}
-
-public class OAuth1Sha256Signer: OAuth1Signer {
-
-    public typealias KeyMaterial = (consumerSecret: String, accessTokenSecret: String?)
-
-    public let signatureMethod = "HMAC-SHA256"
-
-    private let parBakedHmacContext: CCHmacContext
-
-    public required init(withMaterial material: KeyMaterial) {
-        var signingKey = OAuth1Sha256Signer.generateSigningKey(material: material)
-        let signingKeyLength = signingKey.lengthOfBytes(using: String.Encoding.utf8)
-
-        var context = CCHmacContext()
-        let contextPtr = UnsafeMutablePointer(&context)
-        CCHmacInit(contextPtr, CCHmacAlgorithm(kCCHmacAlgSHA256), &signingKey, signingKeyLength)
-        parBakedHmacContext = context
-    }
-
-    /// The value to sign, per RFC 5849, section 3.4.1.1
-    /// https://tools.ietf.org/html/rfc5849#section-3.4.1.1
-    ///
-    /// The string should already be normalized and composed according to section 3.4.1.3.2
-    /// https://tools.ietf.org/html/rfc5849#section-3.4.1.3.2
-    ///
-    /// The resulting string is base64 encoded in conformance with section 6.8
-    /// https://tools.ietf.org/html/rfc2045#section-6.8
-    ///
-    /// - Parameter value: Value to sign according to RFC 5849 section 3.4.1.1
-    /// - Returns: The signed value as a base64 encoded string
-    public func sign(_ value: String) -> String {
-        var valueLocal = value
-        let valueLength = value.lengthOfBytes(using: .utf8)
-
-        var context = parBakedHmacContext
-
-        let signed = withUnsafeMutablePointer(to: &context) { ctx -> String in
-            ////////
-            var signingKey = OAuth1Sha256Signer.generateSigningKey(material: (consumerSecret: "KEY", accessTokenSecret: "TOKEN"))
-            let signingKeyLength = signingKey.lengthOfBytes(using: String.Encoding.utf8)
-            var ctx = CCHmacContext()
-            let contextPtr = UnsafeMutablePointer(&ctx)
-            CCHmacInit(contextPtr, CCHmacAlgorithm(kCCHmacAlgSHA256), &signingKey, signingKeyLength)
-            ////////
-
-            CCHmacUpdate(contextPtr, &valueLocal, valueLength)
-            //var buffer = Array<UInt8>(repeating: 0, count: Int(CC_SHA256_DIGEST_LENGTH)) //UnsafeMutableBufferPointer<UInt8>.allocate(capacity: Int(CC_SHA256_DIGEST_LENGTH))
-            //var buffer = UnsafeMutableBufferPointer<UInt8>.allocate(capacity: Int(CC_SHA256_DIGEST_LENGTH))
-            //var buffer = UnsafeMutableRawPointer.allocate(byteCount: Int(CC_SHA256_DIGEST_LENGTH), alignment: MemoryLayout.alignment(ofValue: UInt8.self))
-            var buffer = Data(repeating: 0, count: Int(CC_SHA256_DIGEST_LENGTH) + 1)
-            buffer.withUnsafeMutableBytes { bufPtr -> Void in
-                CCHmacFinal(contextPtr, bufPtr)
-            }
-            //CCHmacFinal(contextPtr, &buffer)
-            //let data = Data(buffer: buffer)
-//            let data = Data(bytesNoCopy: buffer,
-//                            count: Int(CC_SHA256_DIGEST_LENGTH),
-//                            deallocator: .custom { pointer, _ in pointer.deallocate() })
-            let encoded = data.base64EncodedString()
-            return encoded
-        }
-        return signed
-    }
-
-    // The signature secret is created by concatenating the consumer secret and access token
-    public static func generateSigningKey(material: KeyMaterial) -> String {
-        var generatedSecret = material.consumerSecret.appending("&")
-        if let accessTokenSecret = material.accessTokenSecret {
-            generatedSecret.append(contentsOf: accessTokenSecret)
-        }
-        return generatedSecret
-    }
-}
 
 /// See https://tools.ietf.org/html/rfc5849
 open class OAuth1<T: OAuth1Signer> {
 
     public typealias KeyValuePair = (key: String, value: String)
 
-    public let version = "1.0"
-
     public let consumerKey: String
 
     public let accessToken: String?
+
+    public var includeVersionParameter: Bool = true
 
     public let signer: T
 
@@ -122,11 +31,23 @@ open class OAuth1<T: OAuth1Signer> {
             ("oauth_consumer_key",       consumerKey),
             ("oauth_nonce",              nonce),
             ("oauth_timestamp",          timestamp),
-            ("oauth_version",            version),
             ("oauth_signature_method",   signer.signatureMethod)
         ]
 
+        // oauth_version
+        // OPTIONAL.  If present, MUST be set to "1.0".  Provides the
+        // version of the authentication process as defined in this
+        // specification.
+        if includeVersionParameter {
+            params.append(("oauth_version", "1.0"))
+        }
+
         // Support xAuth attempts, where the token may be nil
+        //
+        // oauth_token
+        // The token value used to associate the request with the resource
+        // owner.  If the request is not associated with a resource owner
+        // (no token available), clients MAY omit the parameter.
         if let accessToken = accessToken {
             params.append(("oauth_token", accessToken))
         }
@@ -149,7 +70,7 @@ open class OAuth1<T: OAuth1Signer> {
     ///
     /// - Parameter request: The request to sign
     /// - Returns: The copied and signed request, or nil if the request could not be signed
-    func sign(request: URLRequest) -> URLRequest? {
+    func sign(request: URLRequest, realm: String? = nil) -> URLRequest? {
         guard let signatureBase = signatureBaseString(request: request) else { return nil }
 
         var oauthParameters = self.oauthParameters
@@ -177,14 +98,19 @@ open class OAuth1<T: OAuth1Signer> {
 
         // 3.  Parameters are separated by a "," character (ASCII code 44) and
         // OPTIONAL linear whitespace per [RFC2617].
-        let oauthParameterString = oauthParameterStrings.joined(separator: ",")
+        let oauthParameterString = oauthParameterStrings.joined(separator: ", ")
 
         // 4.  The OPTIONAL "realm" parameter MAY be added and interpreted per
         // [RFC2617] section 1.2.
-        // Needed?
+        let realmString: String
+        if let realm = realm {
+            realmString = "realm=\"\(realm)\", "
+        } else {
+            realmString = ""
+        }
 
         // Assemble the header
-        let authHeader = "OAuth \(oauthParameterString)"
+        let authHeader = "OAuth \(realmString)\(oauthParameterString)"
 
         // Assemble the updated request
         var updatedRequest = request
@@ -221,7 +147,7 @@ open class OAuth1<T: OAuth1Signer> {
         //
         // 3.  The base string URI from Section 3.4.1.2, after being encoded
         // (Section 3.6).
-        let baseStringUri = self.baseStringUri(fromUrl: url)
+        let baseStringUri = self.baseStringUri(fromUrl: url).addingUrlSafePercentEncoding()
 
         // 4.  An "&" character (ASCII code 38).
         //
@@ -236,10 +162,9 @@ open class OAuth1<T: OAuth1Signer> {
         }
 
         let queryItems: [URLQueryItem] = components.queryItems ?? []
-        let normalizedRequestParameters = self.normalizedParameters(queryItems: queryItems, formData: formData)
-        let encodedNormalizedRequestParameters = normalizedRequestParameters.addingUrlSafePercentEncoding()
+        let normalizedRequestParameters = self.normalizedParameters(queryItems: queryItems, formData: formData).addingUrlSafePercentEncoding()
 
-        let signatureBase = "\(method)&\(baseStringUri)&\(encodedNormalizedRequestParameters)"
+        let signatureBase = "\(method)&\(baseStringUri)&\(normalizedRequestParameters)"
         return signatureBase
     }
 
@@ -306,7 +231,7 @@ open class OAuth1<T: OAuth1Signer> {
         // 2.  The parameters are sorted by name, using ascending byte value
         // ordering.  If two or more parameters share the same name, they
         // are sorted by their value.
-        parameters.sort { lval,rval  -> Bool in
+        parameters.sort { lval, rval  -> Bool in
             switch lval.key.compare(rval.key) {
             case .orderedSame:
                 return lval.value.compare(rval.value) == .orderedAscending
@@ -393,19 +318,17 @@ open class OAuth1<T: OAuth1Signer> {
             let parts = item.split(separator: "=")
             guard let key = parts.first, parts.count < 3 else { return nil }
 
-            return (key: String(key), value: String(parts.last ?? ""))
+            // Swap the form encoding's "+" for " " (space)
+            let encodedKey = key.replacingOccurrences(of: "+", with: " ").addingUrlSafePercentEncoding()
+            let value: String
+            if parts.count > 1 {
+                value = parts[1].replacingOccurrences(of: "+", with: " ").addingUrlSafePercentEncoding()
+            } else {
+                value = ""
+            }
+
+            return (key: encodedKey, value: value)
         }
         return formParameters
     }
-}
-
-
-let urlSafeCharacters: CharacterSet = CharacterSet(charactersIn: "^!*'();:@&=+$,/?%#[]{}\"`<>\\| ").inverted
-
-extension String {
-
-    func addingUrlSafePercentEncoding() -> String {
-        return self.addingPercentEncoding(withAllowedCharacters: urlSafeCharacters) ?? ""
-    }
-
 }
