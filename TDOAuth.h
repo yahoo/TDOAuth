@@ -80,6 +80,15 @@ typedef NS_ENUM(NSInteger, TDOAuthContentType) {
                         tokenSecret:(NSString *)tokenSecret;
 
 /**
+  Allow to pass NSURLComponents. READ THE DOCUMENTATION IN PREVIOUS GET METHODS!
+ */
++ (NSURLRequest *)URLRequestForGETURLComponents:(NSURLComponents *)urlComponents
+                                    consumerKey:(NSString *)consumerKey
+                                 consumerSecret:(NSString *)consumerSecret
+                                    accessToken:(NSString *)accessToken
+                                    tokenSecret:(NSString *)tokenSecret;
+
+/**
   We always POST with HTTPS. This is because at least half the time the user's
   data is at least somewhat private, but also because apparently some carriers
   mangle POST requests and break them. We saw this in France for example.
