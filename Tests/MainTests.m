@@ -129,7 +129,7 @@
                                 "oauth_signature_method=\"HMAC-SHA1\", oauth_consumer_key=\"abcd\", "\
                                 "oauth_timestamp=\"1456789012\", oauth_version=\"1.0\", "\
                                 "oauth_signature=\"O4hspbDTqHlLdqfXxR0jSly9bkU%3D\"";
-    XCTAssert([authHeader isEqualToString:expectedHeader],
+    XCTAssertEqualObjects(authHeader, expectedHeader,
               @"Expected header value does does not match");
 }
 
@@ -195,7 +195,7 @@
     "oauth_signature_method=\"HMAC-SHA1\", oauth_consumer_key=\"abcd\", "\
     "oauth_timestamp=\"1456789012\", oauth_version=\"1.0\", "\
     "oauth_signature=\"pr%2ForWfyT9CsKTGW85AwjHmFjd8%3D\"";
-    XCTAssert([authHeader isEqualToString:expectedHeader],
+    XCTAssertEqualObjects(authHeader, expectedHeader,
               @"Expected header value does does not match");
 }
 
@@ -425,7 +425,7 @@
     "oauth_signature_method=\"HMAC-SHA1\", oauth_consumer_key=\"abcd\", "\
     "oauth_timestamp=\"1456789012\", oauth_version=\"1.0\", "\
     "oauth_signature=\"ycBj862NX5D9cCFrtWcBU2uzkdc%3D\"";
-    XCTAssert([authHeader isEqualToString:expectedHeader],
+    XCTAssertEqualObjects(authHeader, expectedHeader,
               @"Expected header value does does not match");
 }
 - (void)testGenericEncodesJson
@@ -448,7 +448,7 @@
     "oauth_signature_method=\"HMAC-SHA1\", oauth_consumer_key=\"abcd\", "\
     "oauth_timestamp=\"1456789012\", oauth_version=\"1.0\", "\
     "oauth_signature=\"%2FUo90sRcITkznrl9UoOqN8fCv40%3D\"";
-    XCTAssert([authHeader isEqualToString:expectedHeader],
+    XCTAssertEqualObjects(authHeader, expectedHeader,
               @"Expected header value does does not match");
 }
 - (void)testGenericRecognizesSHA256
@@ -471,7 +471,7 @@
     "oauth_signature_method=\"HMAC-SHA256\", oauth_consumer_key=\"abcd\", "\
     "oauth_timestamp=\"1456789012\", oauth_version=\"1.0\", "\
     "oauth_signature=\"pRxssqcfFnrUqF7i2L5j%2BpCk57gu33m3c9az5kNGors%3D\"";
-    XCTAssert([authHeader isEqualToString:expectedHeader],
+    XCTAssertEqualObjects(authHeader, expectedHeader,
               @"Expected header value does does not match");
 }
 - (void)testGenericRejectsInvalidSignatureMethod

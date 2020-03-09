@@ -121,13 +121,13 @@ static NSString* timestamp() {
     }
     signature_method = signatureMethod;
 
-    NSMutableArray<TDOQueryItem *> *mutableParams = @[[TDOQueryItem itemWithName:@"oauth_consumer_key" value:consumerKey],
-                                                      [TDOQueryItem itemWithName:@"oauth_nonce" value:nonce()],
+    NSMutableArray<TDOQueryItem *> *mutableParams = @[[TDOQueryItem itemWithName:@"oauth_nonce" value:nonce()],
+                                                      [TDOQueryItem itemWithName:@"oauth_signature_method" value:smString],
+                                                      [TDOQueryItem itemWithName:@"oauth_consumer_key" value:consumerKey],
                                                       [TDOQueryItem itemWithName:@"oauth_timestamp" value:timestamp()],
-                                                      [TDOQueryItem itemWithName:@"oauth_version" value:@"1.0"],
-                                                      [TDOQueryItem itemWithName:@"oauth_signature_method" value:smString]];
+                                                      [TDOQueryItem itemWithName:@"oauth_version" value:@"1.0"]].mutableCopy;
     if (accessToken) {
-        [mutableParams addObject:[TDOQueryItem itemWithName:@"oauth_token" value:accessToken]];
+        [mutableParams insertObject:[TDOQueryItem itemWithName:@"oauth_token" value:accessToken] atIndex:0];
     }
     oauthParams = [mutableParams copy];
     signature_secret = [NSString stringWithFormat:@"%@&%@", consumerSecret, tokenSecret ?: @""];
@@ -219,11 +219,11 @@ static NSString* timestamp() {
 
 // unencodedParameters are encoded and assigned to self->params, returns encoded queryString
 
-- (id)setParameters:(NSArray<NSURLQueryItem *> *)unencodedParameters
+- (id)setParameters:(NSArray<TDOQueryItem *> *)unencodedParameters
 {
     NSMutableString *queryString = [NSMutableString string];
     NSMutableArray<TDOQueryItem *> *encodedParameters = [NSMutableArray new];
-    for (NSURLQueryItem *queryItem in unencodedParameters) {
+    for (TDOQueryItem *queryItem in unencodedParameters) {
         NSString *enkey = TDPCEN(queryItem.name);
         NSString *envalue = TDPCEN(queryItem.value);
         [encodedParameters addObject:[TDOQueryItem itemWithName:enkey value:envalue]];
@@ -273,12 +273,12 @@ static NSString* timestamp() {
                        headerValues:(NSDictionary *)headerValues
                     signatureMethod:(TDOAuthSignatureMethod)signatureMethod;
 {
-    NSMutableArray<NSURLQueryItem *> *queryItems = nil;
+    NSMutableArray<TDOQueryItem *> *queryItems = nil;
 
     if (unencodedParameters != nil) {
         queryItems = [NSMutableArray new];
         for (NSString *key in unencodedParameters.allKeys) {
-            NSURLQueryItem *queryItem = [NSURLQueryItem queryItemWithName:key value:unencodedParameters[key]];
+            TDOQueryItem *queryItem = [TDOQueryItem itemWithName:key value:unencodedParameters[key]];
             [queryItems addObject:queryItem];
         }
     }
@@ -298,7 +298,7 @@ static NSString* timestamp() {
 }
 
 + (NSURLRequest *)URLRequestForPath:(NSString *)unencodedPathWithoutQuery
-                         queryItems:(NSArray<NSURLQueryItem *> *)queryItems
+                         queryItems:(NSArray<TDOQueryItem *> *)queryItems
                                host:(NSString *)host
                         consumerKey:(NSString *)consumerKey
                      consumerSecret:(NSString *)consumerSecret
@@ -371,7 +371,7 @@ static NSString* timestamp() {
             if (error || !postbody) {
                 NSLog(@"Got an error encoding JSON: %@", error);
             } else {
-                [oauth setParameters:@{}]; // empty dictionary populates variables without putting data into the signature_base
+                [oauth setParameters:@[]]; // empty dictionary populates variables without putting data into the signature_base
                 rq = [oauth requestWithHeaderValues:headerValues];
 
                 if (postbody.length) {
@@ -414,14 +414,25 @@ static NSString* timestamp() {
                       signatureMethod:TDOAuthSignatureMethodHmacSha1];
 }
 
+#ifdef USE_NSURLCOMPONENTS
 + (NSURLRequest *)URLRequestForGETURLComponents:(NSURLComponents *)urlComponents
                                     consumerKey:(NSString *)consumerKey
                                  consumerSecret:(NSString *)consumerSecret
                                     accessToken:(NSString *)accessToken
                                     tokenSecret:(NSString *)tokenSecret
 {
+    NSMutableArray<TDOQueryItem *> *queryItems = nil;
+
+    if (urlComponents.queryItems != nil) {
+        queryItems = [NSMutableArray new];
+        for (NSURLQueryItem *item in urlComponents.queryItems) {
+            TDOQueryItem *queryItem = [TDOQueryItem itemWithName:item.name value:item.value];
+            [queryItems addObject:queryItem];
+        }
+    }
+
     return [self URLRequestForPath:urlComponents.path
-                        queryItems:urlComponents.queryItems
+                        queryItems:queryItems
                               host:urlComponents.host
                        consumerKey:consumerKey
                     consumerSecret:consumerSecret
@@ -433,7 +444,7 @@ static NSString* timestamp() {
                       headerValues:nil
                    signatureMethod:TDOAuthSignatureMethodHmacSha1];
 }
-
+#endif
 
 + (NSURLRequest *)URLRequestForPath:(NSString *)unencodedPath
                      POSTParameters:(NSDictionary *)unencodedParameters

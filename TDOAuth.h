@@ -28,11 +28,15 @@
 */
 
 #import <Foundation/Foundation.h>
+#import <Availability.h>
 
 
 FOUNDATION_EXPORT double TDOAuthVersionNumber;
 FOUNDATION_EXPORT const unsigned char TDOAuthVersionString[];
 
+#if defined(__IPHONE_8_0) && (__IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_8_0)
+#define USE_NSURLCOMPONENTS
+#endif
 
 typedef NS_ENUM(NSInteger, TDOAuthSignatureMethod) {
     TDOAuthSignatureMethodHmacSha1,
@@ -79,6 +83,7 @@ typedef NS_ENUM(NSInteger, TDOAuthContentType) {
                         accessToken:(NSString *)accessToken
                         tokenSecret:(NSString *)tokenSecret;
 
+#ifdef USE_NSURLCOMPONENTS
 /**
   Allow to pass NSURLComponents. READ THE DOCUMENTATION IN PREVIOUS GET METHODS!
  */
@@ -87,7 +92,7 @@ typedef NS_ENUM(NSInteger, TDOAuthContentType) {
                                  consumerSecret:(NSString *)consumerSecret
                                     accessToken:(NSString *)accessToken
                                     tokenSecret:(NSString *)tokenSecret;
-
+#endif
 /**
   We always POST with HTTPS. This is because at least half the time the user's
   data is at least somewhat private, but also because apparently some carriers
