@@ -20,7 +20,7 @@ public protocol OAuth1Signer {
 public extension OAuth1Signer where KeyMaterial == (consumerSecret: String, accessTokenSecret: String?) {
 
     // The signature secret is created by concatenating the consumer secret and access token
-    public static func generateSigningKey(material: KeyMaterial) -> String {
+    static func generateSigningKey(material: KeyMaterial) -> String {
         var generatedSecret = material.consumerSecret.appending("&")
         if let accessTokenSecret = material.accessTokenSecret {
             generatedSecret.append(contentsOf: accessTokenSecret)
