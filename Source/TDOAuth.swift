@@ -16,8 +16,6 @@ open class OAuth1<T: OAuth1Signer> {
 
     public let accessToken: String?
 
-    public var includeVersionParameter: Bool = true
-
     public let signer: T
 
     /// Generate a new timestamp as seconds since the epoch
@@ -26,40 +24,6 @@ open class OAuth1<T: OAuth1Signer> {
     /// Generate a new one-time nonce value in the form of a random UUID
     var nonce: String { return UUID().uuidString }
 
-    var oauthParameters: [KeyValuePair] {
-        var params = [
-            ("oauth_nonce",              nonce),
-            ("oauth_signature_method",   signer.signatureMethod),
-            ("oauth_consumer_key",       consumerKey),
-            ("oauth_timestamp",          timestamp)
-        ]
-
-        // oauth_version
-        // OPTIONAL.  If present, MUST be set to "1.0".  Provides the
-        // version of the authentication process as defined in this
-        // specification.
-        if includeVersionParameter {
-            params.append(("oauth_version", "1.0"))
-        }
-
-        // Support xAuth attempts, where the token may be nil
-        //
-        // oauth_token
-        // The token value used to associate the request with the resource
-        // owner.  If the request is not associated with a resource owner
-        // (no token available), clients MAY omit the parameter.
-        if let accessToken = accessToken {
-            params.insert(("oauth_token", accessToken), at: 0)
-        }
-
-        // Ensure all parameters are always base64 encoded
-        let encodedParams = params.map { (pair: KeyValuePair) -> KeyValuePair in
-            return (pair.key.addingUrlSafePercentEncoding(), pair.value.addingUrlSafePercentEncoding())
-        }
-
-        return encodedParams
-    }
-
     public required init(withConsumerKey consumerKey: String, accessToken: String?, signer: T) {
         self.consumerKey = consumerKey
         self.accessToken = accessToken
@@ -67,13 +31,21 @@ open class OAuth1<T: OAuth1Signer> {
     }
 
     /// Signs a URLRequest
-    ///
-    /// - Parameter request: The request to sign
+    /// - Parameters:
+    ///   - request: The request to sign
+    ///   - callback: Optional. Default: nil. The callback URL in string form (not URL encoded), or the string "oob" per RFC 5849 section 1.2
+    ///   - realm: Optional. Default: nil. The realm to use for this access request
+    ///   - includeVersionParameter: Optional. Default: true. Set to false to exclude the oauth_version=1.0 parameter in the Authorization header
     /// - Returns: The copied and signed request, or nil if the request could not be signed
-    public func sign(request: URLRequest, realm: String? = nil) -> URLRequest? {
-        guard let signatureBase = signatureBaseString(request: request) else { return nil }
+    public func sign(request: URLRequest, callback: String? = nil, realm: String? = nil, includeVersionParameter: Bool = true) -> URLRequest? {
+        var oauthParameters = self.generateOauthParameters(includeVersionParameter: includeVersionParameter)
 
-        var oauthParameters = self.oauthParameters
+        if let callback = callback {
+            oauthParameters.append((key: "oauth_callback", value: callback))
+        }
+
+        guard let signatureBase = signatureBaseString(request: request, oauthParameters: oauthParameters) else { return nil }
+
         oauthParameters.append(("oauth_signature", signer.sign(signatureBase)))
 
         // 3.5.1.  Authorization Header
@@ -118,7 +90,41 @@ open class OAuth1<T: OAuth1Signer> {
         return updatedRequest
     }
 
-    func signatureBaseString(request: URLRequest) -> String? {
+    func generateOauthParameters(includeVersionParameter: Bool) -> [KeyValuePair] {
+        var params = [
+            ("oauth_nonce",              nonce),
+            ("oauth_signature_method",   signer.signatureMethod),
+            ("oauth_consumer_key",       consumerKey),
+            ("oauth_timestamp",          timestamp)
+        ]
+
+        // oauth_version
+        // OPTIONAL.  If present, MUST be set to "1.0".  Provides the
+        // version of the authentication process as defined in this
+        // specification.
+        if includeVersionParameter {
+            params.append(("oauth_version", "1.0"))
+        }
+
+        // Support xAuth attempts, where the token may be nil
+        //
+        // oauth_token
+        // The token value used to associate the request with the resource
+        // owner.  If the request is not associated with a resource owner
+        // (no token available), clients MAY omit the parameter.
+        if let accessToken = accessToken {
+            params.insert(("oauth_token", accessToken), at: 0)
+        }
+
+        // Ensure all parameters are always base64 encoded
+        let encodedParams = params.map { (pair: KeyValuePair) -> KeyValuePair in
+            return (pair.key.addingUrlSafePercentEncoding(), pair.value.addingUrlSafePercentEncoding())
+        }
+
+        return encodedParams
+    }
+
+    func signatureBaseString(request: URLRequest, oauthParameters: [KeyValuePair]) -> String? {
         guard let url = request.url,
             let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
             else { return nil }
@@ -153,7 +159,7 @@ open class OAuth1<T: OAuth1Signer> {
         }
 
         let queryItems: [URLQueryItem] = components.queryItems ?? []
-        let normalizedRequestParameters = self.normalizedParameters(queryItems: queryItems, formData: formData).addingUrlSafePercentEncoding()
+        let normalizedRequestParameters = self.normalizedParameters(queryItems: queryItems, oauthParameters: oauthParameters, formData: formData).addingUrlSafePercentEncoding()
 
         let signatureBase = "\(method)&\(baseStringUri)&\(normalizedRequestParameters)"
         return signatureBase
@@ -209,7 +215,7 @@ open class OAuth1<T: OAuth1Signer> {
         return baseStringUri
     }
 
-    func normalizedParameters(queryItems: [URLQueryItem], formData: Data?) -> String {
+    func normalizedParameters(queryItems: [URLQueryItem], oauthParameters: [KeyValuePair], formData: Data?) -> String {
         // 3.4.1.3.2.  Parameters Normalization
         //
         // The parameters collected in Section 3.4.1.3 are normalized into a
@@ -217,7 +223,7 @@ open class OAuth1<T: OAuth1Signer> {
         //
         // 1.  First, the name and value of each parameter are encoded
         // (Section 3.6).
-        var parameters = collectParameters(queryItems: queryItems, formData: formData)
+        var parameters = collectParameters(queryItems: queryItems, oauthParameters: oauthParameters, formData: formData)
 
         // 2.  The parameters are sorted by name, using ascending byte value
         // ordering.  If two or more parameters share the same name, they
@@ -247,7 +253,7 @@ open class OAuth1<T: OAuth1Signer> {
         return normalizedParameters
     }
 
-    func collectParameters(queryItems: [URLQueryItem], formData: Data?) -> [KeyValuePair] {
+    func collectParameters(queryItems: [URLQueryItem], oauthParameters: [KeyValuePair], formData: Data?) -> [KeyValuePair] {
         // The parameters from the following sources are collected into a single
         // list of name/value pairs:
         //
@@ -267,8 +273,14 @@ open class OAuth1<T: OAuth1Signer> {
         //     present.  The header's content is parsed into a list of name/value
         // pairs excluding the "realm" parameter if present.  The parameter
         // values are decoded as defined by Section 3.5.1.
-        parameters.append(contentsOf: oauthParameters)
+        oauthParameters.forEach { pair in
+            let key = pair.key.addingUrlSafePercentEncoding()
+            let value = pair.value.addingUrlSafePercentEncoding()
+            parameters.append((key: key, value: value))
+        }
 
+        // o  The HTTP request entity-body, but only if all of the following
+        //   conditions are met
         if let formData = formData {
             let formParameters = collectParameters(formData: formData)
             parameters.append(contentsOf: formParameters)

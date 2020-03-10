@@ -94,7 +94,7 @@ public class HMACSigner: OAuth1Signer {
     /// - Parameter value: Value to sign according to RFC 5849 section 3.4.1.1
     /// - Returns: The signed value as a base64 encoded string
     public func sign(_ value: String) -> String {
-        var context = hmacContext
+        var context = hmacContext // copy the immutable pre-compiled instance struct
         let signed = withUnsafeMutablePointer(to: &context) { contextPtr -> String in
 
             let valueLength = value.lengthOfBytes(using: .utf8)

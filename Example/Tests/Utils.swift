@@ -17,11 +17,6 @@ public class CompatTestOAuth1<T: OAuth1Signer>: OAuth1<T> {
     public override var timestamp: String { return testTimestamp  }
 }
 
-//@objc public class TDOAuthCompatUtil: NSObject {
-//    @objc static func setTestSigner() {
-//        TDOAuthCompat.OAuth1Type = CompatTestOAuth1.self
-//    }
-//}
 @objc extension TDOAuthCompat {
     @objc static func setTestSigner() {
         TDOAuthCompat.OAuth1Type = CompatTestOAuth1.self
