@@ -38,3 +38,7 @@ import Foundation
         return oauth1.sign(request: urlRequest)
     }
 }
+
+@objc public extension NSString {
+    @objc var TDOAuth_addingUrlSafePercentEncoding: String { (self as String).addingUrlSafePercentEncoding() }
+}

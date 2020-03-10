@@ -143,7 +143,7 @@
     // We don't use pcen as we don't want to percent encode eg. /, this is perhaps
     // not the most all encompassing solution, but in practice it seems to work
     // everywhere and means that programmer error is *much* less likely.
-    NSString *encodedPathWithoutQuery = [unencodedPathWithoutQuery stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSString *encodedPathWithoutQuery = [unencodedPathWithoutQuery stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLPathAllowedCharacterSet];
 
     NSURL *url;
     NSMutableURLRequest *rq;

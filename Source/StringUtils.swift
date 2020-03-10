@@ -9,7 +9,7 @@ import Foundation
 
 let urlSafeCharacters: CharacterSet = CharacterSet(charactersIn: "^!*'();:@&=+$,/?%#[]{}\"`<>\\| ").inverted
 
-extension String {
+public extension String {
 
     func addingUrlSafePercentEncoding() -> String {
         return self.addingPercentEncoding(withAllowedCharacters: urlSafeCharacters) ?? ""
