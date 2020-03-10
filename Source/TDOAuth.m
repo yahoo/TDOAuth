@@ -206,7 +206,7 @@
 + (NSMutableString *)setParameters:(NSDictionary *)unencodedParameters {
     NSMutableString *queryString = [NSMutableString string];
     NSMutableDictionary *encodedParameters = [NSMutableDictionary new];
-    for (NSString *key in [unencodedParameters.allKeys sortedArrayUsingSelector:@selector(compare:)])
+    for (NSString *key in unencodedParameters.allKeys)
     {
         NSString *enkey = TDPCEN(key);
         NSString *envalue = TDPCEN(unencodedParameters[key]);

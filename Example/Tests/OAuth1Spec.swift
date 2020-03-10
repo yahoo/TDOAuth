@@ -172,4 +172,42 @@ class RFC5839Spec: XCTestCase {
         XCTAssertNotNil(signedRequest)
         XCTAssertEqual(authHeader, expected)
     }
+
+    func testIgnoresHostCase() {
+        oauth1 = TestOAuth1(withConsumerKey: "dpf43f3p2l4k3l03", accessToken: nil, signer: signer)
+
+        let signedRequest = oauth1.sign(request: rfcRequest)
+        let expectAuthHeader = signedRequest?.value(forHTTPHeaderField: "Authorization")
+
+        var uppercaseRequest = rfcRequest
+        var components = URLComponents(url: uppercaseRequest.url!, resolvingAgainstBaseURL: false)
+        let uppercaseHost = components?.host?.uppercased()
+        components?.host = uppercaseHost
+        uppercaseRequest.url = components?.url!
+
+        let signedRequest2 = oauth1.sign(request: uppercaseRequest)
+        let gotAuthHeader = signedRequest2?.value(forHTTPHeaderField: "Authorization")
+
+        XCTAssertNotNil(signedRequest)
+        XCTAssertEqual(expectAuthHeader, gotAuthHeader)
+    }
+
+    func testIgnoresSchemeCase() {
+        oauth1 = TestOAuth1(withConsumerKey: "dpf43f3p2l4k3l03", accessToken: nil, signer: signer)
+
+        let signedRequest = oauth1.sign(request: rfcRequest)
+        let expectAuthHeader = signedRequest?.value(forHTTPHeaderField: "Authorization")
+
+        var uppercaseRequest = rfcRequest
+        var components = URLComponents(url: uppercaseRequest.url!, resolvingAgainstBaseURL: false)
+        let uppercaseHost = components?.scheme?.uppercased()
+        components?.scheme = uppercaseHost
+        uppercaseRequest.url = components?.url!
+
+        let signedRequest2 = oauth1.sign(request: uppercaseRequest)
+        let gotAuthHeader = signedRequest2?.value(forHTTPHeaderField: "Authorization")
+
+        XCTAssertNotNil(signedRequest)
+        XCTAssertEqual(expectAuthHeader, gotAuthHeader)
+    }
 }

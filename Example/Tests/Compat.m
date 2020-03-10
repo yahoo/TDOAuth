@@ -219,7 +219,7 @@
     NSURLRequest *deleteRequest = [self.class makeGenericRequestWithHTTPMethod:@"DELETE"];
 
     NSString *url = [[deleteRequest URL] absoluteString];
-    XCTAssert([url isEqualToString:@"http://api.example.com/service?foo=bar&baz=bonk"],
+    XCTAssertEqualObjects(url, @"http://api.example.com/service?foo=bar&baz=bonk",
               "url does not match expected value");
 
     NSString *contentType = [deleteRequest valueForHTTPHeaderField: @"Content-Type"];

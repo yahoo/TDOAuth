@@ -192,7 +192,7 @@ open class OAuth1<T: OAuth1Signer> {
         // is represented by the base string URI:
         // "https://www.example.net:8080/".
         let scheme = url.scheme?.lowercased() ?? "https"
-        let host = url.host ?? ""
+        let host = url.host?.lowercased() ?? ""
         let port: String
         switch url.port {
         case .some(let p) where p == 80 && scheme == "http": // default port, elide
@@ -204,7 +204,7 @@ open class OAuth1<T: OAuth1Signer> {
         case .some(let p):
             port = ":\(p)"
         }
-        let path = url.path
+        let path = url.path.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
         let baseStringUri = "\(scheme)://\(host)\(port)\(path)"
         return baseStringUri
     }
