@@ -11,16 +11,6 @@ import TDOAuth
 
 class ViewController: UIViewController {
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
     // Provide these 4 values based on your specific use case
     // See the README file for additional examples.
     var consumerSecret: String = "my-consumer-secret"
@@ -44,4 +34,3 @@ class ViewController: UIViewController {
         return signedRequest
     }
 }
-
