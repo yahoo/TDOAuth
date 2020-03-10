@@ -23,6 +23,20 @@
          <BuildActionEntry
             buildForTesting = "YES"
             buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "40DBC6667C68DD4A6E9CBCA49FFE921D"
+               BuildableName = "Pods_TDOAuth_Example.framework"
+               BlueprintName = "Pods-TDOAuth_Example"
+               ReferencedContainer = "container:Pods/Pods.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
             buildForProfiling = "NO"
             buildForArchiving = "NO"
             buildForAnalyzing = "YES">
@@ -32,6 +46,20 @@
                BuildableName = "TDOAuth_Tests.xctest"
                BlueprintName = "TDOAuth_Tests"
                ReferencedContainer = "container:TDOAuth.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "4D5E268CF89A66BADF554F5C9BFD2222"
+               BuildableName = "Pods_TDOAuth_Tests.framework"
+               BlueprintName = "Pods-TDOAuth_Tests"
+               ReferencedContainer = "container:Pods/Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
