@@ -27,9 +27,15 @@ Pod::Spec.new do |s|
 
   s.swift_version = '4.0'
 
-  s.source_files = 'Source/*.{swift,h,m}'
+  s.default_subspec = 'ObjC'
 
-  # s.public_header_files = 'Pod/Classes/**/*.h'
-  # s.frameworks = 'UIKit', 'MapKit'
-  s.dependency 'OMGHTTPURLRQ/UserAgent'
+  s.subspec 'Swift' do |ss|
+    ss.source_files = 'Source/*.swift'
+    ss.dependency 'OMGHTTPURLRQ/UserAgent'
+  end
+
+  s.subspec 'ObjC' do |ss|
+    ss.dependency 'TDOAuth/Swift'
+    ss.source_files = 'Source/*.{h,m}'
+  end
 end

@@ -18,7 +18,7 @@ class HMACSpec: XCTestCase {
         let signedRequest = oauth1.sign(request: rfcRequest)
         let authHeader = signedRequest?.value(forHTTPHeaderField: "Authorization")
 
-        let expected = "OAuth oauth_consumer_key=\"dpf43f3p2l4k3l03\", oauth_nonce=\"kllo9940pd9333jh\", oauth_timestamp=\"1191242096\", oauth_signature_method=\"HMAC-SHA224\", oauth_version=\"1.0\", oauth_token=\"nnch734d00sl2jdk\", oauth_signature=\"ycgflrLS%2B1kf4HAiA5YbFWTlosayqxpESKfC%2FA%3D%3D\""
+        let expected = "OAuth oauth_token=\"nnch734d00sl2jdk\", oauth_nonce=\"kllo9940pd9333jh\", oauth_signature_method=\"HMAC-SHA224\", oauth_consumer_key=\"dpf43f3p2l4k3l03\", oauth_timestamp=\"1191242096\", oauth_version=\"1.0\", oauth_signature=\"ycgflrLS%2B1kf4HAiA5YbFWTlosayqxpESKfC%2FA%3D%3D\""
 
         XCTAssertNotNil(signedRequest)
         XCTAssertEqual(authHeader, expected)
@@ -31,7 +31,7 @@ class HMACSpec: XCTestCase {
         let signedRequest = oauth1.sign(request: rfcRequest)
         let authHeader = signedRequest?.value(forHTTPHeaderField: "Authorization")
 
-        let expected = "OAuth oauth_consumer_key=\"dpf43f3p2l4k3l03\", oauth_nonce=\"kllo9940pd9333jh\", oauth_timestamp=\"1191242096\", oauth_signature_method=\"HMAC-SHA256\", oauth_version=\"1.0\", oauth_token=\"nnch734d00sl2jdk\", oauth_signature=\"WVPzl1j6ZsnkIjWr7e3OZ3jkenL57KwaLFhYsroX1hg%3D\""
+        let expected = "OAuth oauth_token=\"nnch734d00sl2jdk\", oauth_nonce=\"kllo9940pd9333jh\", oauth_signature_method=\"HMAC-SHA256\", oauth_consumer_key=\"dpf43f3p2l4k3l03\", oauth_timestamp=\"1191242096\", oauth_version=\"1.0\", oauth_signature=\"WVPzl1j6ZsnkIjWr7e3OZ3jkenL57KwaLFhYsroX1hg%3D\""
 
         XCTAssertNotNil(signedRequest)
         XCTAssertEqual(authHeader, expected)
@@ -44,7 +44,7 @@ class HMACSpec: XCTestCase {
         let signedRequest = oauth1.sign(request: rfcRequest)
         let authHeader = signedRequest?.value(forHTTPHeaderField: "Authorization")
 
-        let expected = "OAuth oauth_consumer_key=\"dpf43f3p2l4k3l03\", oauth_nonce=\"kllo9940pd9333jh\", oauth_timestamp=\"1191242096\", oauth_signature_method=\"HMAC-SHA384\", oauth_version=\"1.0\", oauth_token=\"nnch734d00sl2jdk\", oauth_signature=\"l59uSHEtmBKa3ePDQbKT3yYr7KBiI9NbN0qX6xj594WQz%2FcWLoTX1871hNYq2Q6P\""
+        let expected = "OAuth oauth_token=\"nnch734d00sl2jdk\", oauth_nonce=\"kllo9940pd9333jh\", oauth_signature_method=\"HMAC-SHA384\", oauth_consumer_key=\"dpf43f3p2l4k3l03\", oauth_timestamp=\"1191242096\", oauth_version=\"1.0\", oauth_signature=\"l59uSHEtmBKa3ePDQbKT3yYr7KBiI9NbN0qX6xj594WQz%2FcWLoTX1871hNYq2Q6P\""
 
         XCTAssertNotNil(signedRequest)
         XCTAssertEqual(authHeader, expected)
@@ -57,7 +57,7 @@ class HMACSpec: XCTestCase {
         let signedRequest = oauth1.sign(request: rfcRequest)
         let authHeader = signedRequest?.value(forHTTPHeaderField: "Authorization")
 
-        let expected = "OAuth oauth_consumer_key=\"dpf43f3p2l4k3l03\", oauth_nonce=\"kllo9940pd9333jh\", oauth_timestamp=\"1191242096\", oauth_signature_method=\"HMAC-SHA512\", oauth_version=\"1.0\", oauth_token=\"nnch734d00sl2jdk\", oauth_signature=\"nQYVqZl8EkEH4fThSn%2B25i1gc68aX%2BFHTHSAXrxIl2ixdAofXM%2Fpq2x90UaOFIZQxvkzE5VRZpPbjo6i%2Bfe6rg%3D%3D\""
+        let expected = "OAuth oauth_token=\"nnch734d00sl2jdk\", oauth_nonce=\"kllo9940pd9333jh\", oauth_signature_method=\"HMAC-SHA512\", oauth_consumer_key=\"dpf43f3p2l4k3l03\", oauth_timestamp=\"1191242096\", oauth_version=\"1.0\", oauth_signature=\"nQYVqZl8EkEH4fThSn%2B25i1gc68aX%2BFHTHSAXrxIl2ixdAofXM%2Fpq2x90UaOFIZQxvkzE5VRZpPbjo6i%2Bfe6rg%3D%3D\""
 
         XCTAssertNotNil(signedRequest)
         XCTAssertEqual(authHeader, expected)

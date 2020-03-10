@@ -28,10 +28,10 @@ open class OAuth1<T: OAuth1Signer> {
 
     var oauthParameters: [KeyValuePair] {
         var params = [
-            ("oauth_consumer_key",       consumerKey),
             ("oauth_nonce",              nonce),
-            ("oauth_timestamp",          timestamp),
-            ("oauth_signature_method",   signer.signatureMethod)
+            ("oauth_signature_method",   signer.signatureMethod),
+            ("oauth_consumer_key",       consumerKey),
+            ("oauth_timestamp",          timestamp)
         ]
 
         // oauth_version
@@ -49,7 +49,7 @@ open class OAuth1<T: OAuth1Signer> {
         // owner.  If the request is not associated with a resource owner
         // (no token available), clients MAY omit the parameter.
         if let accessToken = accessToken {
-            params.append(("oauth_token", accessToken))
+            params.insert(("oauth_token", accessToken), at: 0)
         }
 
         // Ensure all parameters are always base64 encoded
@@ -60,7 +60,7 @@ open class OAuth1<T: OAuth1Signer> {
         return encodedParams
     }
 
-    public init(withConsumerKey consumerKey: String, accessToken: String?, signer: T) {
+    public required init(withConsumerKey consumerKey: String, accessToken: String?, signer: T) {
         self.consumerKey = consumerKey
         self.accessToken = accessToken
         self.signer = signer
@@ -70,7 +70,7 @@ open class OAuth1<T: OAuth1Signer> {
     ///
     /// - Parameter request: The request to sign
     /// - Returns: The copied and signed request, or nil if the request could not be signed
-    func sign(request: URLRequest, realm: String? = nil) -> URLRequest? {
+    public func sign(request: URLRequest, realm: String? = nil) -> URLRequest? {
         guard let signatureBase = signatureBaseString(request: request) else { return nil }
 
         var oauthParameters = self.oauthParameters
@@ -116,15 +116,6 @@ open class OAuth1<T: OAuth1Signer> {
         var updatedRequest = request
         updatedRequest.addValue(authHeader, forHTTPHeaderField: "Authorization")
         return updatedRequest
-    }
-
-    func dictionary(fromQueryParameters parameters: [URLQueryItem]) -> [String: String] {
-        let urlQueryPairs: [KeyValuePair]? = parameters.map { (queryItem: URLQueryItem) in
-            return (queryItem.name, queryItem.value ?? "")
-        }
-
-        guard let pairs = urlQueryPairs else { return [:] }
-        return Dictionary(uniqueKeysWithValues: pairs)
     }
 
     func signatureBaseString(request: URLRequest) -> String? {

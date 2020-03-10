@@ -17,7 +17,7 @@ class PlaintextSpec: XCTestCase {
         let signedRequest = oauth1.sign(request: rfcRequest)
         let authHeader = signedRequest?.value(forHTTPHeaderField: "Authorization")
 
-        let expected = "OAuth oauth_consumer_key=\"dpf43f3p2l4k3l03\", oauth_nonce=\"kllo9940pd9333jh\", oauth_timestamp=\"1191242096\", oauth_signature_method=\"PLAINTEXT\", oauth_version=\"1.0\", oauth_token=\"nnch734d00sl2jdk\", oauth_signature=\"kd94hf93k423kf44%26pfkkdhi9sl3r4s00\""
+        let expected = "OAuth oauth_token=\"nnch734d00sl2jdk\", oauth_nonce=\"kllo9940pd9333jh\", oauth_signature_method=\"PLAINTEXT\", oauth_consumer_key=\"dpf43f3p2l4k3l03\", oauth_timestamp=\"1191242096\", oauth_version=\"1.0\", oauth_signature=\"kd94hf93k423kf44%26pfkkdhi9sl3r4s00\""
 
         XCTAssertNotNil(signedRequest)
         XCTAssertEqual(authHeader, expected)
@@ -31,7 +31,7 @@ class PlaintextSpec: XCTestCase {
         let signedRequest = oauth1.sign(request: rfcRequest)
         let authHeader = signedRequest?.value(forHTTPHeaderField: "Authorization")
 
-        let expected = "OAuth oauth_consumer_key=\"dpf43f3p2l4k3l03\", oauth_nonce=\"kllo9940pd9333jh\", oauth_timestamp=\"1191242096\", oauth_signature_method=\"PLAINTEXT\", oauth_version=\"1.0\", oauth_token=\"nnch734d00sl2jdk\", oauth_signature=\"kd94hf93k423kf44%26\""
+        let expected = "OAuth oauth_token=\"nnch734d00sl2jdk\", oauth_nonce=\"kllo9940pd9333jh\", oauth_signature_method=\"PLAINTEXT\", oauth_consumer_key=\"dpf43f3p2l4k3l03\", oauth_timestamp=\"1191242096\", oauth_version=\"1.0\", oauth_signature=\"kd94hf93k423kf44%26\""
 
         XCTAssertNotNil(signedRequest)
         XCTAssertEqual(authHeader, expected)

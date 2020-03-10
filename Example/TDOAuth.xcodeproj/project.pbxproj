@@ -15,6 +15,7 @@
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		607FACEC1AFB9204008FA782 /* OAuth1Spec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* OAuth1Spec.swift */; };
 		E275974C927D09FFF948EC95 /* Pods_TDOAuth_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAAF381AB2F9CEDDA6859531 /* Pods_TDOAuth_Example.framework */; };
+		FC71E7F42416E7A200CCC34C /* Compat.m in Sources */ = {isa = PBXBuildFile; fileRef = FC71E7F32416E7A200CCC34C /* Compat.m */; };
 		FCCE3C4521FAE14200522CBD /* HMACSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCCE3C4421FAE14200522CBD /* HMACSpec.swift */; };
 		FCCE3C4721FAE1E000522CBD /* PlaintextSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCCE3C4621FAE1E000522CBD /* PlaintextSpec.swift */; };
 		FCCE3C4921FAE23F00522CBD /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCCE3C4821FAE23F00522CBD /* Utils.swift */; };
@@ -50,6 +51,8 @@
 		CA3FCD1E3D0B1AEF932CC096 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		E6AC1FB932F461059AB20B60 /* Pods-TDOAuth_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TDOAuth_Example.release.xcconfig"; path = "Target Support Files/Pods-TDOAuth_Example/Pods-TDOAuth_Example.release.xcconfig"; sourceTree = "<group>"; };
 		FAAF381AB2F9CEDDA6859531 /* Pods_TDOAuth_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TDOAuth_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FC71E7F22416E7A100CCC34C /* TDOAuth_Tests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TDOAuth_Tests-Bridging-Header.h"; sourceTree = "<group>"; };
+		FC71E7F32416E7A200CCC34C /* Compat.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Compat.m; sourceTree = "<group>"; };
 		FCCE3C4421FAE14200522CBD /* HMACSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HMACSpec.swift; sourceTree = "<group>"; };
 		FCCE3C4621FAE1E000522CBD /* PlaintextSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaintextSpec.swift; sourceTree = "<group>"; };
 		FCCE3C4821FAE23F00522CBD /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
@@ -136,6 +139,8 @@
 				FCCE3C4421FAE14200522CBD /* HMACSpec.swift */,
 				FCCE3C4621FAE1E000522CBD /* PlaintextSpec.swift */,
 				FCCE3C4821FAE23F00522CBD /* Utils.swift */,
+				FC71E7F32416E7A200CCC34C /* Compat.m */,
+				FC71E7F22416E7A100CCC34C /* TDOAuth_Tests-Bridging-Header.h */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
 			);
 			path = Tests;
@@ -225,7 +230,7 @@
 					};
 					607FACE41AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1130;
 						TestTargetID = 607FACCF1AFB9204008FA782;
 					};
 				};
@@ -352,6 +357,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FCCE3C4521FAE14200522CBD /* HMACSpec.swift in Sources */,
+				FC71E7F42416E7A200CCC34C /* Compat.m in Sources */,
 				FCCE3C4721FAE1E000522CBD /* PlaintextSpec.swift in Sources */,
 				607FACEC1AFB9204008FA782 /* OAuth1Spec.swift in Sources */,
 				FCCE3C4921FAE23F00522CBD /* Utils.swift in Sources */,
@@ -521,6 +527,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = C3D5597E4B5E4F23317AF495 /* Pods-TDOAuth_Tests.debug.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -533,7 +540,10 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Tests/TDOAuth_Tests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TDOAuth_Example.app/TDOAuth_Example";
 			};
 			name = Debug;
@@ -542,6 +552,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 230A0DC00434D5A541890603 /* Pods-TDOAuth_Tests.release.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -550,7 +561,9 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Tests/TDOAuth_Tests-Bridging-Header.h";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TDOAuth_Example.app/TDOAuth_Example";
 			};
 			name = Release;
