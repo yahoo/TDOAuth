@@ -101,7 +101,11 @@ public class HMACSigner: OAuth1Signer {
             value.withCString { CCHmacUpdate(contextPtr, $0, valueLength) }
 
             var buffer = Data(repeating: 0, count: signatureAlgorithm.digestLength)
-            buffer.withUnsafeMutableBytes { CCHmacFinal(contextPtr, $0) }
+            buffer.withUnsafeMutableBytes { buf in
+                if let bufPtr = buf.baseAddress {
+                    CCHmacFinal(contextPtr, bufPtr)
+                }
+            }
 
             return buffer.base64EncodedString(options: [])
         }
