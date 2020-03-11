@@ -9,6 +9,10 @@
 #import <XCTest/XCTest.h>
 #import "MainTests.h"
 
+#if defined(__IPHONE_8_0) && (__IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_8_0)
+#define TEST_NSURLCOMPONENTS
+#endif
+
 @implementation TDOAuthTest
 
 - (void)setUp
@@ -31,6 +35,7 @@
                           tokenSecret:@"mnop"];
 }
 
+#ifdef TEST_NSURLCOMPONENTS
 + (NSURLRequest *)makeGetComponentsRequest
 {
     NSURLComponents *components = [NSURLComponents new];
@@ -45,6 +50,7 @@
                                       accessToken:@"ijkl"
                                       tokenSecret:@"mnop"];
 }
+#endif
 
 + (NSURLRequest *)makePostRequest
 {
@@ -120,6 +126,7 @@
 
 }
 
+#ifdef TEST_NSURLCOMPONENTS
 - (void)testGetComponentsUrl
 {
     NSURLRequest *getRequest = [TDOAuthTest makeGetComponentsRequest];
@@ -136,6 +143,7 @@
               @"Content-Length was set when not expected)");
 
 }
+#endif
 
 - (void)testGetUrlWithHttps
 {
@@ -166,6 +174,7 @@
               @"Expected header value does does not match");
 }
 
+#ifdef TEST_NSURLCOMPONENTS
 - (void)testGetComponentsHeaderAuthField
 {
     NSURLRequest *getRequest = [TDOAuthTest makeGetComponentsRequest];
@@ -178,6 +187,7 @@
     XCTAssertEqualObjects(authHeader, expectedHeader,
               @"Expected header value does does not match");
 }
+#endif
 
 - (void)testPostMethod
 {
