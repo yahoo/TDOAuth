@@ -7,10 +7,10 @@ Pod::Spec.new do |s|
   s.license = { :type => 'MIT', :text => 'OHAI CocoaPods linter!' }
   s.summary = 'Elegant, simple and tiny OAuth 1.x solution'
 
-  s.ios.deployment_target = '8.0'
+  s.ios.deployment_target = '5.0'
   s.tvos.deployment_target = '11.0'
   s.watchos.deployment_target = '3.0'
-  s.osx.deployment_target = '10.10'
+  s.osx.deployment_target = '10.7'
 
   s.dependency 'OMGHTTPURLRQ/UserAgent'
   s.homepage = 'https://github.com/tweetdeck/TDOAuth'
