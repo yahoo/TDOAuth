@@ -30,6 +30,22 @@
                           accessToken:@"ijkl"
                           tokenSecret:@"mnop"];
 }
+
++ (NSURLRequest *)makeGetComponentsRequest
+{
+    NSURLComponents *components = [NSURLComponents new];
+    components.scheme = @"http";
+    components.host = @"api.example.com";
+    components.path = @"/service";
+    components.queryItems = @[[NSURLQueryItem queryItemWithName:@"foo" value:@"baz"],
+                              [NSURLQueryItem queryItemWithName:@"foo" value:@"bar"]];
+    return [TDOAuth URLRequestForGETURLComponents:components
+                                      consumerKey:@"abcd"
+                                   consumerSecret:@"efgh"
+                                      accessToken:@"ijkl"
+                                      tokenSecret:@"mnop"];
+}
+
 + (NSURLRequest *)makePostRequest
 {
     return [TDOAuth URLRequestForPath:@"/service"
@@ -104,6 +120,23 @@
 
 }
 
+- (void)testGetComponentsUrl
+{
+    NSURLRequest *getRequest = [TDOAuthTest makeGetComponentsRequest];
+    NSString *url = [[getRequest URL] absoluteString];
+    XCTAssertEqualObjects(url, @"http://api.example.com/service?foo=baz&foo=bar",
+              "url does not match expected value");
+
+    NSString *contentType = [getRequest valueForHTTPHeaderField: @"Content-Type"];
+    XCTAssertNil(contentType,
+              @"Content-Type was present when not expected)");
+
+    NSString *contentLength = [getRequest valueForHTTPHeaderField: @"Content-Length"];
+    XCTAssertNil(contentLength,
+              @"Content-Length was set when not expected)");
+
+}
+
 - (void)testGetUrlWithHttps
 {
     NSURLRequest *httpsRequest = [TDOAuth URLRequestForPath: @"/service"
@@ -129,6 +162,19 @@
                                 "oauth_signature_method=\"HMAC-SHA1\", oauth_consumer_key=\"abcd\", "\
                                 "oauth_timestamp=\"1456789012\", oauth_version=\"1.0\", "\
                                 "oauth_signature=\"O4hspbDTqHlLdqfXxR0jSly9bkU%3D\"";
+    XCTAssertEqualObjects(authHeader, expectedHeader,
+              @"Expected header value does does not match");
+}
+
+- (void)testGetComponentsHeaderAuthField
+{
+    NSURLRequest *getRequest = [TDOAuthTest makeGetComponentsRequest];
+    NSString *authHeader = [getRequest valueForHTTPHeaderField:@"Authorization"];
+    NSString *expectedHeader = @"OAuth oauth_token=\"ijkl\", "\
+                                "oauth_nonce=\"static-nonce-for-testing\", "\
+                                "oauth_signature_method=\"HMAC-SHA1\", oauth_consumer_key=\"abcd\", "\
+                                "oauth_timestamp=\"1456789012\", oauth_version=\"1.0\", "\
+                                "oauth_signature=\"jNwFfrG89t4oSjeWzEy%2BTH%2F2qzk%3D\"";
     XCTAssertEqualObjects(authHeader, expectedHeader,
               @"Expected header value does does not match");
 }
