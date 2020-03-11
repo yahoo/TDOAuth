@@ -371,7 +371,7 @@ static NSString* timestamp() {
             if (error || !postbody) {
                 NSLog(@"Got an error encoding JSON: %@", error);
             } else {
-                [oauth setParameters:@[]]; // empty dictionary populates variables without putting data into the signature_base
+                [oauth setParameters:@[]]; // empty array populates variables without putting data into the signature_base
                 rq = [oauth requestWithHeaderValues:headerValues];
 
                 if (postbody.length) {
