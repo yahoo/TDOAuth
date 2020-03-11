@@ -184,10 +184,10 @@ class RFC5839Spec: XCTestCase {
         XCTAssertEqual(authHeader, expected)
     }
 
-            // This is a nonsensical edge case wherein the access_token is optional
-            // but the RFC does not state that the token_secret MUST be omitted
-            // if the access_token is not provided. Logically the client wouldn't
-            // have a secret without a token, but whatever...
+    // This is a nonsensical edge case wherein the access_token is optional
+    // but the RFC does not state that the token_secret MUST be omitted
+    // if the access_token is not provided. Logically the client wouldn't
+    // have a secret without a token, but whatever...
     func testAccessToken_excludesAccessTokenNotSecret() {
         oauth1 = TestOAuth1(withConsumerKey: "dpf43f3p2l4k3l03", accessToken: nil, signer: signer)
 
