@@ -34,7 +34,8 @@
 FOUNDATION_EXPORT double TDOAuthVersionNumber;
 FOUNDATION_EXPORT const unsigned char TDOAuthVersionString[];
 
-#if defined(__IPHONE_8_0) && (__IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_8_0)
+#if (defined(__IPHONE_8_0) && (__IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_8_0)) || \
+    (defined(__MAC_10_0)  && (__MAC_OS_X_VERSION_MAX_ALLOWED >= __MAC_10_10))
 #define USE_NSURLCOMPONENTS
 #endif
 

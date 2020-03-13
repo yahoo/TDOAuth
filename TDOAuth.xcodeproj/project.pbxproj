@@ -558,7 +558,7 @@
 				INFOPLIST_FILE = "";
 				"INFOPLIST_FILE[sdk=*]" = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				ONLY_ACTIVE_ARCH = YES;
 			};
 			name = Debug;
@@ -602,7 +602,7 @@
 				);
 				INFOPLIST_FILE = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 			};
 			name = Release;
 		};
