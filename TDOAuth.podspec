@@ -36,6 +36,6 @@ Pod::Spec.new do |s|
 
   s.subspec 'ObjC' do |ss|
     ss.dependency 'TDOAuth/Swift'
-    ss.source_files = 'Source/*.{h,m}'
+    ss.source_files = 'Source/compat/*.{swift,h,m}'
   end
 end

@@ -7,8 +7,6 @@
 
 import Foundation
 
-//var Signer: HMACSigner? = nil
-
 @objc public class TDOAuthCompat: NSObject {
 
     static var OAuth1Type: OAuth1.Type = OAuth1<HMACSigner>.self

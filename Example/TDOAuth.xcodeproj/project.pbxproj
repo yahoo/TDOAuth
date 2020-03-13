@@ -784,10 +784,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				FCCE3C4521FAE14200522CBD /* HMACSpec.swift in Sources */,
-				FC71E7F42416E7A200CCC34C /* Compat.m in Sources */,
 				FCCE3C4721FAE1E000522CBD /* PlaintextSpec.swift in Sources */,
 				607FACEC1AFB9204008FA782 /* OAuth1Spec.swift in Sources */,
 				FCCE3C4921FAE23F00522CBD /* Utils.swift in Sources */,
+				FC71E7F42416E7A200CCC34C /* Compat.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
