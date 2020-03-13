@@ -364,7 +364,7 @@ static NSString* timestamp() {
             NSError *error;
             // This falls back to dictionary as not sure what's the proper action here.
             NSMutableDictionary *unencodedParameters = [NSMutableDictionary new];
-            for (NSURLQueryItem *queryItem in queryItems) {
+            for (TDOQueryItem *queryItem in queryItems) {
                 unencodedParameters[queryItem.name] = queryItem.value;
             }
             NSData *postbody = [NSJSONSerialization dataWithJSONObject:unencodedParameters options:0 error:&error];
