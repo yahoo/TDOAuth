@@ -22,6 +22,27 @@
 #define TDOAuthURLRequestTimeout 30.0
 #endif
 
+@interface TDOQueryItem : NSObject
+@property(nonatomic, strong) NSString *name;
+@property(nonatomic, strong) NSString *value;
+
++ (instancetype)itemWithName:(NSString *)name value:(NSString *)value;
+@end
+
+@implementation TDOQueryItem
+
++ (instancetype)itemWithName:(NSString *)name value:(NSString *)value
+{
+    TDOQueryItem *item = [TDOQueryItem new];
+    if (item) {
+        item.name = name;
+        item.value = value;
+    }
+    return item;
+}
+
+@end
+
 @implementation TDOAuth
 
 + (NSURLRequest *)URLRequestForPath:(NSString *)unencodedPathWithoutQuery
@@ -91,6 +112,36 @@
                       signatureMethod:TDOAuthSignatureMethodHmacSha1];
 }
 
++ (NSURLRequest *)URLRequestForGETURLComponents:(NSURLComponents *)urlComponents
+                                    consumerKey:(NSString *)consumerKey
+                                 consumerSecret:(NSString *)consumerSecret
+                                    accessToken:(NSString *)accessToken
+                                    tokenSecret:(NSString *)tokenSecret
+{
+    NSMutableArray<TDOQueryItem *> *queryItems = nil;
+
+    if (urlComponents.queryItems != nil) {
+        queryItems = [NSMutableArray new];
+        for (NSURLQueryItem *item in urlComponents.queryItems) {
+            TDOQueryItem *queryItem = [TDOQueryItem itemWithName:item.name value:item.value];
+            [queryItems addObject:queryItem];
+        }
+    }
+
+    return [self URLRequestForPath:urlComponents.path
+                        queryItems:queryItems
+                              host:urlComponents.host
+                       consumerKey:consumerKey
+                    consumerSecret:consumerSecret
+                       accessToken:accessToken
+                       tokenSecret:tokenSecret
+                            scheme:urlComponents.scheme
+                     requestMethod:@"GET"
+                      dataEncoding:TDOAuthContentTypeUrlEncodedForm
+                      headerValues:nil
+                   signatureMethod:TDOAuthSignatureMethodHmacSha1];
+}
+
 + (NSURLRequest *)URLRequestForPath:(NSString *)unencodedPathWithoutQuery
                          parameters:(NSDictionary *)unencodedParameters
                                host:(NSString *)host
@@ -102,14 +153,47 @@
                       requestMethod:(NSString *)method
                        dataEncoding:(TDOAuthContentType)dataEncoding
                        headerValues:(NSDictionary *)headerValues
-                    signatureMethod:(TDOAuthSignatureMethod)signatureMethod
+                    signatureMethod:(TDOAuthSignatureMethod)signatureMethod;
 {
-    if (!host || !unencodedPathWithoutQuery || !scheme || !method) {
-        return nil;
+    NSMutableArray<TDOQueryItem *> *queryItems = nil;
+
+    if (unencodedParameters != nil) {
+        queryItems = [NSMutableArray new];
+        for (NSString *key in unencodedParameters.allKeys) {
+            TDOQueryItem *queryItem = [TDOQueryItem itemWithName:key value:unencodedParameters[key]];
+            [queryItems addObject:queryItem];
+        }
     }
 
+    return [self URLRequestForPath:unencodedPathWithoutQuery
+                        queryItems:[queryItems copy]
+                              host:host
+                       consumerKey:consumerKey
+                    consumerSecret:consumerSecret
+                       accessToken:accessToken
+                       tokenSecret:tokenSecret
+                            scheme:scheme
+                     requestMethod:method
+                      dataEncoding:dataEncoding
+                      headerValues:headerValues
+                   signatureMethod:signatureMethod];
+}
+
++ (NSURLRequest *)URLRequestForPath:(NSString *)unencodedPathWithoutQuery
+                         queryItems:(NSArray<TDOQueryItem *> *)queryItems
+                               host:(NSString *)host
+                        consumerKey:(NSString *)consumerKey
+                     consumerSecret:(NSString *)consumerSecret
+                        accessToken:(NSString *)accessToken
+                        tokenSecret:(NSString *)tokenSecret
+                             scheme:(NSString *)scheme
+                      requestMethod:(NSString *)method
+                       dataEncoding:(TDOAuthContentType)dataEncoding
+                       headerValues:(NSDictionary *)headerValues
+                    signatureMethod:(TDOAuthSignatureMethod)signatureMethod
+{
     NSURLRequest *request = [self generateURLRequestForPath:unencodedPathWithoutQuery
-                                                 parameters:unencodedParameters
+                                                 queryItems:queryItems
                                                        host:host
                                                      scheme:scheme
                                               requestMethod:method
@@ -129,7 +213,7 @@
 
 // METHOD ADAPTED FROM LEGACY OAUTH1 CLIENT
 + (NSURLRequest *)generateURLRequestForPath:(NSString *)unencodedPathWithoutQuery
-                                 parameters:(NSDictionary *)unencodedParameters
+                                 queryItems:(NSArray<TDOQueryItem *> *)queryItems
                                        host:(NSString *)host
                                      scheme:(NSString *)scheme
                               requestMethod:(NSString *)method
@@ -150,8 +234,8 @@
 
     if ([method isEqualToString:@"GET"] || [method isEqualToString:@"DELETE"] || [method isEqualToString:@"HEAD"] || (([method isEqualToString:@"POST"] || [method isEqualToString:@"PUT"]) && dataEncoding == TDOAuthContentTypeUrlEncodedQuery))
     {
-        NSMutableString *path = [self setParameters:unencodedParameters];
-        if (path && unencodedParameters) {
+        NSMutableString *path = [self setParameters:queryItems];
+        if (path && queryItems) {
             [path insertString:@"?" atIndex:0];
             [path insertString:encodedPathWithoutQuery atIndex:0];
         } else {
@@ -165,9 +249,9 @@
     {
         url = [[NSURL alloc] initWithString:[NSString stringWithFormat:@"%@://%@%@", scheme, host, encodedPathWithoutQuery]];
 
-        if ((dataEncoding == TDOAuthContentTypeUrlEncodedForm) || (unencodedParameters == nil))
+        if ((dataEncoding == TDOAuthContentTypeUrlEncodedForm) || (queryItems == nil))
         {
-            NSMutableString *postbody = [self setParameters:unencodedParameters];
+            NSMutableString *postbody = [self setParameters:queryItems];
             rq = [self requestWithHeaderValues:headerValues url:url method:method];
 
             if (postbody.length) {
@@ -179,6 +263,11 @@
         else if (dataEncoding == TDOAuthContentTypeJsonObject)
         {
             NSError *error;
+            // This falls back to dictionary as not sure what's the proper action here.
+            NSMutableDictionary *unencodedParameters = [NSMutableDictionary new];
+            for (TDOQueryItem *queryItem in queryItems) {
+                unencodedParameters[queryItem.name] = queryItem.value;
+            }
             NSData *postbody = [NSJSONSerialization dataWithJSONObject:unencodedParameters options:0 error:&error];
             if (error || !postbody) {
                 NSLog(@"Got an error encoding JSON: %@", error);
@@ -203,14 +292,13 @@
 
 // METHOD ADAPTED FROM LEGACY OAUTH1 CLIENT
 // unencodedParameters are encoded and assigned to self->params, returns encoded queryString
-+ (NSMutableString *)setParameters:(NSDictionary *)unencodedParameters {
++ (NSMutableString *)setParameters:(NSArray<TDOQueryItem *> *)unencodedParameters {
     NSMutableString *queryString = [NSMutableString string];
-    NSMutableDictionary *encodedParameters = [NSMutableDictionary new];
-    for (NSString *key in unencodedParameters.allKeys)
-    {
-        NSString *enkey = TDPCEN(key);
-        NSString *envalue = TDPCEN(unencodedParameters[key]);
-        encodedParameters[enkey] = envalue;
+    NSMutableArray<TDOQueryItem *> *encodedParameters = [NSMutableArray new];
+    for (TDOQueryItem *queryItem in unencodedParameters) {
+        NSString *enkey = TDPCEN(queryItem.name);
+        NSString *envalue = TDPCEN(queryItem.value);
+        [encodedParameters addObject:[TDOQueryItem itemWithName:enkey value:envalue]];
         [queryString appendString:enkey];
         [queryString appendString:@"="];
         [queryString appendString:envalue];

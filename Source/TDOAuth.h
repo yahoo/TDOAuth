@@ -28,6 +28,7 @@
 */
 
 #import <Foundation/Foundation.h>
+#import <Availability.h>
 
 typedef NS_ENUM(NSInteger, TDOAuthSignatureMethod) {
     TDOAuthSignatureMethodHmacSha1,
@@ -73,6 +74,15 @@ typedef NS_ENUM(NSInteger, TDOAuthContentType) {
                      consumerSecret:(NSString *)consumerSecret
                         accessToken:(NSString *)accessToken
                         tokenSecret:(NSString *)tokenSecret;
+
+/**
+  Allow to pass NSURLComponents. READ THE DOCUMENTATION IN PREVIOUS GET METHODS!
+ */
++ (NSURLRequest *)URLRequestForGETURLComponents:(NSURLComponents *)urlComponents
+                                    consumerKey:(NSString *)consumerKey
+                                 consumerSecret:(NSString *)consumerSecret
+                                    accessToken:(NSString *)accessToken
+                                    tokenSecret:(NSString *)tokenSecret;
 
 /**
   We always POST with HTTPS. This is because at least half the time the user's
