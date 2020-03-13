@@ -13,8 +13,8 @@ Pod::Spec.new do |s|
   s.osx.deployment_target = '10.7'
 
   s.dependency 'OMGHTTPURLRQ/UserAgent'
-  s.homepage = 'https://github.com/tweetdeck/TDOAuth'
+  s.homepage = 'https://github.com/yahoo/TDOAuth'
 
   s.social_media_url = 'https://twitter.com/mxcl'
-  s.authors  = { 'Max Howell' => 'mxcl@me.com' }
+  s.authors  = { 'Max Howell' => 'mxcl@me.com', 'Adam Kaplan' => 'adamkaplan@verizonmedia.com' }
 end
