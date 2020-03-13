@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = 'TDOAuth'
-  s.version = '1.2.1'
+  s.version = '1.3.0'
   s.requires_arc = true
   s.source_files = '*.{m,h}'
   s.source = { :git => "https://github.com/yahoo/#{s.name}.git", :tag => s.version }
