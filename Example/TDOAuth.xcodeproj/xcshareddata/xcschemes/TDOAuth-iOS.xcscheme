@@ -15,23 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "607FACCF1AFB9204008FA782"
-               BuildableName = "TDOAuth_Example.app"
-               BlueprintName = "TDOAuth_Example"
+               BuildableName = "TDOAuth-iOS.app"
+               BlueprintName = "TDOAuth-iOS"
                ReferencedContainer = "container:TDOAuth.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "40DBC6667C68DD4A6E9CBCA49FFE921D"
-               BuildableName = "Pods_TDOAuth_Example.framework"
-               BlueprintName = "Pods-TDOAuth_Example"
-               ReferencedContainer = "container:Pods/Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -48,20 +34,6 @@
                ReferencedContainer = "container:TDOAuth.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "NO"
-            buildForProfiling = "NO"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "4D5E268CF89A66BADF554F5C9BFD2222"
-               BuildableName = "Pods_TDOAuth_Tests.framework"
-               BlueprintName = "Pods-TDOAuth_Tests"
-               ReferencedContainer = "container:Pods/Pods.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -73,8 +45,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "607FACCF1AFB9204008FA782"
-            BuildableName = "TDOAuth_Example.app"
-            BlueprintName = "TDOAuth_Example"
+            BuildableName = "TDOAuth-iOS.app"
+            BlueprintName = "TDOAuth-iOS"
             ReferencedContainer = "container:TDOAuth.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -106,8 +78,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "607FACCF1AFB9204008FA782"
-            BuildableName = "TDOAuth_Example.app"
-            BlueprintName = "TDOAuth_Example"
+            BuildableName = "TDOAuth-iOS.app"
+            BlueprintName = "TDOAuth-iOS"
             ReferencedContainer = "container:TDOAuth.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -123,8 +95,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "607FACCF1AFB9204008FA782"
-            BuildableName = "TDOAuth_Example.app"
-            BlueprintName = "TDOAuth_Example"
+            BuildableName = "TDOAuth-iOS.app"
+            BlueprintName = "TDOAuth-iOS"
             ReferencedContainer = "container:TDOAuth.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

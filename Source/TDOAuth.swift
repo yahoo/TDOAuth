@@ -5,8 +5,6 @@
 //  Created by Adam Kaplan on 9/19/18.
 //
 
-import UIKit
-
 /// See https://tools.ietf.org/html/rfc5849
 open class OAuth1<T: OAuth1Signer> {
 
