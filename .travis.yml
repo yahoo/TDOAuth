@@ -1,6 +1,8 @@
+os: osx
+osx_image: xcode11.3
+#language: swift -- this is an alias to objective-c
 language: objective-c
-xcode_project: TDOAuth.xcodeproj
-xcode_scheme: "TDOAuth-OSX"
-xcode_sdk: macosx10.11
-osx_image: xcode7.3
-install: carthage bootstrap --platform Mac
+podfile: Example/Podfile
+xcode_workspace: Example/TDOAuth.xcworkspace
+xcode_scheme: TDOAuth_iOS
+xcode_destination: platform=iOS Simulator,OS=12.0,name=iPhone XS

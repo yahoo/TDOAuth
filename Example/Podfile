@@ -1,0 +1,29 @@
+use_frameworks!
+
+target 'TDOAuth_iOS' do
+  platform :ios, '9.3'
+
+  pod 'TDOAuth', :path => '../'
+
+  target 'TDOAuth_Tests' do
+    inherit! :search_paths
+  end
+end
+
+target 'TDOAuth_macOS' do
+  platform :osx, '10.10'
+
+  pod 'TDOAuth', :path => '../'
+end
+
+target 'TDOAuth_watchOS' do
+  platform :watchos, '3.0'
+
+  pod 'TDOAuth', :path => '../'
+end
+
+target 'TDOAuth_tvOS' do
+  platform :tvos, '11.0'
+
+  pod 'TDOAuth', :path => '../'
+end

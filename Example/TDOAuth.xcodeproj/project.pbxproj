@@ -1,0 +1,1388 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		05F69C2B8115A030FF9E4B9D /* Pods_TDOAuth_macOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5897B5C42516E19A5C8C497 /* Pods_TDOAuth_macOS.framework */; };
+		22EC786F5BFE02CF216B0FA3 /* Pods_TDOAuth_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70000C48C40675E0511B301D /* Pods_TDOAuth_Tests.framework */; };
+		56C6393E7A2BD30B14DE5FA7 /* Pods_TDOAuth_tvOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56522A3B52E63E0D9FBFAF95 /* Pods_TDOAuth_tvOS.framework */; };
+		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
+		607FACD81AFB9204008FA782 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* ViewController.swift */; };
+		607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* Main.storyboard */; };
+		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
+		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
+		607FACEC1AFB9204008FA782 /* OAuth1Spec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* OAuth1Spec.swift */; };
+		9810E2CF42C71CB54FC9817B /* Pods_TDOAuth_watchOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9AE6DB313043BFD421E116D /* Pods_TDOAuth_watchOS.framework */; };
+		ED3586181D3AC6A5F479F62A /* Pods_TDOAuth_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1468F75DCB0D1331A62E245C /* Pods_TDOAuth_iOS.framework */; };
+		FC71E7F42416E7A200CCC34C /* Compat.m in Sources */ = {isa = PBXBuildFile; fileRef = FC71E7F32416E7A200CCC34C /* Compat.m */; };
+		FCC067C9241C1940004997C8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC067C8241C1940004997C8 /* AppDelegate.swift */; };
+		FCC067CB241C1940004997C8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC067CA241C1940004997C8 /* ViewController.swift */; };
+		FCC067CE241C1940004997C8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FCC067CC241C1940004997C8 /* Main.storyboard */; };
+		FCC067D0241C1943004997C8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FCC067CF241C1943004997C8 /* Assets.xcassets */; };
+		FCC067D3241C1943004997C8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FCC067D1241C1943004997C8 /* LaunchScreen.storyboard */; };
+		FCC0682F241C1ADD004997C8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC0682E241C1ADD004997C8 /* AppDelegate.swift */; };
+		FCC06831241C1ADD004997C8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC06830241C1ADD004997C8 /* ViewController.swift */; };
+		FCC06833241C1ADE004997C8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FCC06832241C1ADE004997C8 /* Assets.xcassets */; };
+		FCC06836241C1ADE004997C8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FCC06834241C1ADE004997C8 /* Main.storyboard */; };
+		FCC0684E241C1CAD004997C8 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FCC0684C241C1CAD004997C8 /* Interface.storyboard */; };
+		FCC06850241C1CB0004997C8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FCC0684F241C1CB0004997C8 /* Assets.xcassets */; };
+		FCC06857241C1CB0004997C8 /* TDOAuth_watchOS Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = FCC06856241C1CB0004997C8 /* TDOAuth_watchOS Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		FCC0685C241C1CB0004997C8 /* InterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC0685B241C1CB0004997C8 /* InterfaceController.swift */; };
+		FCC0685E241C1CB0004997C8 /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC0685D241C1CB0004997C8 /* ExtensionDelegate.swift */; };
+		FCC06860241C1CB1004997C8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FCC0685F241C1CB1004997C8 /* Assets.xcassets */; };
+		FCC06864241C1CB1004997C8 /* TDOAuth_iOS.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = FCC0684A241C1CAD004997C8 /* TDOAuth_iOS.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		FCCE3C4521FAE14200522CBD /* HMACSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCCE3C4421FAE14200522CBD /* HMACSpec.swift */; };
+		FCCE3C4721FAE1E000522CBD /* PlaintextSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCCE3C4621FAE1E000522CBD /* PlaintextSpec.swift */; };
+		FCCE3C4921FAE23F00522CBD /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCCE3C4821FAE23F00522CBD /* Utils.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		607FACE61AFB9204008FA782 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 607FACC81AFB9204008FA782 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 607FACCF1AFB9204008FA782;
+			remoteInfo = TDOAuth;
+		};
+		FCC06858241C1CB0004997C8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 607FACC81AFB9204008FA782 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FCC06855241C1CB0004997C8;
+			remoteInfo = "TDOAuth-watchOS Extension";
+		};
+		FCC06862241C1CB1004997C8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 607FACC81AFB9204008FA782 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FCC06849241C1CAD004997C8;
+			remoteInfo = "TDOAuth-watchOS";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		FCC06827241C19AE004997C8 /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				FCC06864241C1CB1004997C8 /* TDOAuth_iOS.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FCC06868241C1CB1004997C8 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				FCC06857241C1CB0004997C8 /* TDOAuth_watchOS Extension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		1468F75DCB0D1331A62E245C /* Pods_TDOAuth_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TDOAuth_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1C20655D3A852FE7716372CC /* Pods-TDOAuth-watchOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TDOAuth-watchOS.release.xcconfig"; path = "Target Support Files/Pods-TDOAuth-watchOS/Pods-TDOAuth-watchOS.release.xcconfig"; sourceTree = "<group>"; };
+		230A0DC00434D5A541890603 /* Pods-TDOAuth_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TDOAuth_Tests.release.xcconfig"; path = "Target Support Files/Pods-TDOAuth_Tests/Pods-TDOAuth_Tests.release.xcconfig"; sourceTree = "<group>"; };
+		2D14F8A096135137C4E6DB73 /* Pods-TDOAuth_macOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TDOAuth_macOS.release.xcconfig"; path = "Target Support Files/Pods-TDOAuth_macOS/Pods-TDOAuth_macOS.release.xcconfig"; sourceTree = "<group>"; };
+		30002BC5DD85B11E7AEF8702 /* Pods-TDOAuth-TDOAuth-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TDOAuth-TDOAuth-tvOS.release.xcconfig"; path = "Target Support Files/Pods-TDOAuth-TDOAuth-tvOS/Pods-TDOAuth-TDOAuth-tvOS.release.xcconfig"; sourceTree = "<group>"; };
+		3216C4947C68022D1EB822BC /* Pods-TDOAuth-TDOAuth-macOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TDOAuth-TDOAuth-macOS.release.xcconfig"; path = "Target Support Files/Pods-TDOAuth-TDOAuth-macOS/Pods-TDOAuth-TDOAuth-macOS.release.xcconfig"; sourceTree = "<group>"; };
+		461C9C3A2340A0A74154EEAF /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		4E8C81414F890AC3288657D7 /* Pods-TDOAuth-TDOAuth-watchOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TDOAuth-TDOAuth-watchOS.debug.xcconfig"; path = "Target Support Files/Pods-TDOAuth-TDOAuth-watchOS/Pods-TDOAuth-TDOAuth-watchOS.debug.xcconfig"; sourceTree = "<group>"; };
+		54B84CCA03E19D50C8CEA839 /* Pods-TDOAuth_iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TDOAuth_iOS.debug.xcconfig"; path = "Target Support Files/Pods-TDOAuth_iOS/Pods-TDOAuth_iOS.debug.xcconfig"; sourceTree = "<group>"; };
+		56522A3B52E63E0D9FBFAF95 /* Pods_TDOAuth_tvOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TDOAuth_tvOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5C79D9B98B30AD31A1D3EB38 /* Pods-TDOAuth_watchOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TDOAuth_watchOS.debug.xcconfig"; path = "Target Support Files/Pods-TDOAuth_watchOS/Pods-TDOAuth_watchOS.debug.xcconfig"; sourceTree = "<group>"; };
+		5CE0A4079778E78ED46C3AB6 /* Pods-TDOAuth-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TDOAuth-tvOS.release.xcconfig"; path = "Target Support Files/Pods-TDOAuth-tvOS/Pods-TDOAuth-tvOS.release.xcconfig"; sourceTree = "<group>"; };
+		5E231B87344C98E6B45CCC3E /* Pods-TDOAuth_watchOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TDOAuth_watchOS.release.xcconfig"; path = "Target Support Files/Pods-TDOAuth_watchOS/Pods-TDOAuth_watchOS.release.xcconfig"; sourceTree = "<group>"; };
+		5FF3C15943060EB8E56DC52F /* Pods-TDOAuth-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TDOAuth-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-TDOAuth-tvOS/Pods-TDOAuth-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
+		607FACD01AFB9204008FA782 /* TDOAuth_iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TDOAuth_iOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		607FACD51AFB9204008FA782 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		607FACD71AFB9204008FA782 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		607FACDA1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		607FACDC1AFB9204008FA782 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		607FACDF1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		607FACE51AFB9204008FA782 /* TDOAuth_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TDOAuth_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		607FACEB1AFB9204008FA782 /* OAuth1Spec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuth1Spec.swift; sourceTree = "<group>"; };
+		684B8090A135E9AC446C5F00 /* Pods-TDOAuth-TDOAuth-iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TDOAuth-TDOAuth-iOS.debug.xcconfig"; path = "Target Support Files/Pods-TDOAuth-TDOAuth-iOS/Pods-TDOAuth-TDOAuth-iOS.debug.xcconfig"; sourceTree = "<group>"; };
+		70000C48C40675E0511B301D /* Pods_TDOAuth_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TDOAuth_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		76FBCD66A9A9A6BAB7A3D3B7 /* Pods-TDOAuth_tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TDOAuth_tvOS.release.xcconfig"; path = "Target Support Files/Pods-TDOAuth_tvOS/Pods-TDOAuth_tvOS.release.xcconfig"; sourceTree = "<group>"; };
+		93D280C710EC98A8AABBFAAE /* TDOAuth.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = TDOAuth.podspec; path = ../TDOAuth.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		93D7A66332E1717A6BDD5E6A /* Pods-TDOAuth-TDOAuth-macOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TDOAuth-TDOAuth-macOS.debug.xcconfig"; path = "Target Support Files/Pods-TDOAuth-TDOAuth-macOS/Pods-TDOAuth-TDOAuth-macOS.debug.xcconfig"; sourceTree = "<group>"; };
+		9959B17D524CC12D4166DCFA /* Pods-TDOAuth-TDOAuth-watchOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TDOAuth-TDOAuth-watchOS.release.xcconfig"; path = "Target Support Files/Pods-TDOAuth-TDOAuth-watchOS/Pods-TDOAuth-TDOAuth-watchOS.release.xcconfig"; sourceTree = "<group>"; };
+		9D208AB80362E64DB1A8B657 /* Pods-TDOAuth_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TDOAuth_Example.debug.xcconfig"; path = "Target Support Files/Pods-TDOAuth_Example/Pods-TDOAuth_Example.debug.xcconfig"; sourceTree = "<group>"; };
+		9F77DB6B9022875CAC95932E /* Pods-TDOAuth-watchOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TDOAuth-watchOS.debug.xcconfig"; path = "Target Support Files/Pods-TDOAuth-watchOS/Pods-TDOAuth-watchOS.debug.xcconfig"; sourceTree = "<group>"; };
+		A367F5DBC617A3C7D264ADAC /* Pods-TDOAuth_tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TDOAuth_tvOS.debug.xcconfig"; path = "Target Support Files/Pods-TDOAuth_tvOS/Pods-TDOAuth_tvOS.debug.xcconfig"; sourceTree = "<group>"; };
+		AEE5AD45140ED146D5B0C777 /* Pods-TDOAuth-macOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TDOAuth-macOS.release.xcconfig"; path = "Target Support Files/Pods-TDOAuth-macOS/Pods-TDOAuth-macOS.release.xcconfig"; sourceTree = "<group>"; };
+		BC34E4FE57B4FA5E71355897 /* Pods-TDOAuth-iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TDOAuth-iOS.debug.xcconfig"; path = "Target Support Files/Pods-TDOAuth-iOS/Pods-TDOAuth-iOS.debug.xcconfig"; sourceTree = "<group>"; };
+		C0971118E9D1967697873653 /* Pods-TDOAuth_macOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TDOAuth_macOS.debug.xcconfig"; path = "Target Support Files/Pods-TDOAuth_macOS/Pods-TDOAuth_macOS.debug.xcconfig"; sourceTree = "<group>"; };
+		C3D5597E4B5E4F23317AF495 /* Pods-TDOAuth_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TDOAuth_Tests.debug.xcconfig"; path = "Target Support Files/Pods-TDOAuth_Tests/Pods-TDOAuth_Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		C9AE6DB313043BFD421E116D /* Pods_TDOAuth_watchOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TDOAuth_watchOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CA3FCD1E3D0B1AEF932CC096 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		D79D0D298836D17453AEF405 /* Pods-TDOAuth-iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TDOAuth-iOS.release.xcconfig"; path = "Target Support Files/Pods-TDOAuth-iOS/Pods-TDOAuth-iOS.release.xcconfig"; sourceTree = "<group>"; };
+		E086AF97D6AA179CE14CFD51 /* Pods-TDOAuth-TDOAuth-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TDOAuth-TDOAuth-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-TDOAuth-TDOAuth-tvOS/Pods-TDOAuth-TDOAuth-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
+		E5897B5C42516E19A5C8C497 /* Pods_TDOAuth_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TDOAuth_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E6AC1FB932F461059AB20B60 /* Pods-TDOAuth_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TDOAuth_Example.release.xcconfig"; path = "Target Support Files/Pods-TDOAuth_Example/Pods-TDOAuth_Example.release.xcconfig"; sourceTree = "<group>"; };
+		ECC894BE67C3786829385505 /* Pods-TDOAuth-TDOAuth-iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TDOAuth-TDOAuth-iOS.release.xcconfig"; path = "Target Support Files/Pods-TDOAuth-TDOAuth-iOS/Pods-TDOAuth-TDOAuth-iOS.release.xcconfig"; sourceTree = "<group>"; };
+		F2EA75221BBDF7E5162DF034 /* Pods-TDOAuth_iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TDOAuth_iOS.release.xcconfig"; path = "Target Support Files/Pods-TDOAuth_iOS/Pods-TDOAuth_iOS.release.xcconfig"; sourceTree = "<group>"; };
+		FC71E7F22416E7A100CCC34C /* TDOAuth_Tests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TDOAuth_Tests-Bridging-Header.h"; sourceTree = "<group>"; };
+		FC71E7F32416E7A200CCC34C /* Compat.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Compat.m; sourceTree = "<group>"; };
+		FCC067C6241C1940004997C8 /* TDOAuth_tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TDOAuth_tvOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FCC067C8241C1940004997C8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		FCC067CA241C1940004997C8 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		FCC067CD241C1940004997C8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		FCC067CF241C1943004997C8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		FCC067D2241C1943004997C8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		FCC067D4241C1943004997C8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FCC0682C241C1ADD004997C8 /* TDOAuth_macOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TDOAuth_macOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FCC0682E241C1ADD004997C8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		FCC06830241C1ADD004997C8 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		FCC06832241C1ADE004997C8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		FCC06835241C1ADE004997C8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		FCC06837241C1ADE004997C8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FCC06838241C1ADE004997C8 /* TDOAuth_macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TDOAuth_macOS.entitlements; sourceTree = "<group>"; };
+		FCC0684A241C1CAD004997C8 /* TDOAuth_iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TDOAuth_iOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FCC0684D241C1CAD004997C8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
+		FCC0684F241C1CB0004997C8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		FCC06851241C1CB0004997C8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FCC06856241C1CB0004997C8 /* TDOAuth_watchOS Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "TDOAuth_watchOS Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		FCC0685B241C1CB0004997C8 /* InterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterfaceController.swift; sourceTree = "<group>"; };
+		FCC0685D241C1CB0004997C8 /* ExtensionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDelegate.swift; sourceTree = "<group>"; };
+		FCC0685F241C1CB1004997C8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		FCC06861241C1CB1004997C8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FCCE3C4421FAE14200522CBD /* HMACSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HMACSpec.swift; sourceTree = "<group>"; };
+		FCCE3C4621FAE1E000522CBD /* PlaintextSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaintextSpec.swift; sourceTree = "<group>"; };
+		FCCE3C4821FAE23F00522CBD /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		FEA2E254B73EF6B3268FFCAC /* Pods-TDOAuth-macOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TDOAuth-macOS.debug.xcconfig"; path = "Target Support Files/Pods-TDOAuth-macOS/Pods-TDOAuth-macOS.debug.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		5A6E6998F77390978A82FBAB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9810E2CF42C71CB54FC9817B /* Pods_TDOAuth_watchOS.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		607FACCD1AFB9204008FA782 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ED3586181D3AC6A5F479F62A /* Pods_TDOAuth_iOS.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		607FACE21AFB9204008FA782 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				22EC786F5BFE02CF216B0FA3 /* Pods_TDOAuth_Tests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FCC067C3241C1940004997C8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				56C6393E7A2BD30B14DE5FA7 /* Pods_TDOAuth_tvOS.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FCC06829241C1ADD004997C8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				05F69C2B8115A030FF9E4B9D /* Pods_TDOAuth_macOS.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FCC06853241C1CB0004997C8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		215A721C9998A2D332E318FA /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				9D208AB80362E64DB1A8B657 /* Pods-TDOAuth_Example.debug.xcconfig */,
+				E6AC1FB932F461059AB20B60 /* Pods-TDOAuth_Example.release.xcconfig */,
+				C3D5597E4B5E4F23317AF495 /* Pods-TDOAuth_Tests.debug.xcconfig */,
+				230A0DC00434D5A541890603 /* Pods-TDOAuth_Tests.release.xcconfig */,
+				BC34E4FE57B4FA5E71355897 /* Pods-TDOAuth-iOS.debug.xcconfig */,
+				D79D0D298836D17453AEF405 /* Pods-TDOAuth-iOS.release.xcconfig */,
+				FEA2E254B73EF6B3268FFCAC /* Pods-TDOAuth-macOS.debug.xcconfig */,
+				AEE5AD45140ED146D5B0C777 /* Pods-TDOAuth-macOS.release.xcconfig */,
+				5FF3C15943060EB8E56DC52F /* Pods-TDOAuth-tvOS.debug.xcconfig */,
+				5CE0A4079778E78ED46C3AB6 /* Pods-TDOAuth-tvOS.release.xcconfig */,
+				9F77DB6B9022875CAC95932E /* Pods-TDOAuth-watchOS.debug.xcconfig */,
+				1C20655D3A852FE7716372CC /* Pods-TDOAuth-watchOS.release.xcconfig */,
+				684B8090A135E9AC446C5F00 /* Pods-TDOAuth-TDOAuth-iOS.debug.xcconfig */,
+				ECC894BE67C3786829385505 /* Pods-TDOAuth-TDOAuth-iOS.release.xcconfig */,
+				93D7A66332E1717A6BDD5E6A /* Pods-TDOAuth-TDOAuth-macOS.debug.xcconfig */,
+				3216C4947C68022D1EB822BC /* Pods-TDOAuth-TDOAuth-macOS.release.xcconfig */,
+				E086AF97D6AA179CE14CFD51 /* Pods-TDOAuth-TDOAuth-tvOS.debug.xcconfig */,
+				30002BC5DD85B11E7AEF8702 /* Pods-TDOAuth-TDOAuth-tvOS.release.xcconfig */,
+				4E8C81414F890AC3288657D7 /* Pods-TDOAuth-TDOAuth-watchOS.debug.xcconfig */,
+				9959B17D524CC12D4166DCFA /* Pods-TDOAuth-TDOAuth-watchOS.release.xcconfig */,
+				54B84CCA03E19D50C8CEA839 /* Pods-TDOAuth_iOS.debug.xcconfig */,
+				F2EA75221BBDF7E5162DF034 /* Pods-TDOAuth_iOS.release.xcconfig */,
+				C0971118E9D1967697873653 /* Pods-TDOAuth_macOS.debug.xcconfig */,
+				2D14F8A096135137C4E6DB73 /* Pods-TDOAuth_macOS.release.xcconfig */,
+				A367F5DBC617A3C7D264ADAC /* Pods-TDOAuth_tvOS.debug.xcconfig */,
+				76FBCD66A9A9A6BAB7A3D3B7 /* Pods-TDOAuth_tvOS.release.xcconfig */,
+				5C79D9B98B30AD31A1D3EB38 /* Pods-TDOAuth_watchOS.debug.xcconfig */,
+				5E231B87344C98E6B45CCC3E /* Pods-TDOAuth_watchOS.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		607FACC71AFB9204008FA782 = {
+			isa = PBXGroup;
+			children = (
+				607FACF51AFB993E008FA782 /* Podspec Metadata */,
+				607FACD21AFB9204008FA782 /* Example for TDOAuth */,
+				607FACE81AFB9204008FA782 /* Tests */,
+				FCC067C7241C1940004997C8 /* TDOAuth-tvOS */,
+				FCC0682D241C1ADD004997C8 /* TDOAuth-macOS */,
+				FCC0684B241C1CAD004997C8 /* TDOAuth-watchOS */,
+				FCC0685A241C1CB0004997C8 /* TDOAuth-watchOS Extension */,
+				607FACD11AFB9204008FA782 /* Products */,
+				215A721C9998A2D332E318FA /* Pods */,
+				A1200777CB73031D771DA2DC /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		607FACD11AFB9204008FA782 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				607FACD01AFB9204008FA782 /* TDOAuth_iOS.app */,
+				607FACE51AFB9204008FA782 /* TDOAuth_Tests.xctest */,
+				FCC067C6241C1940004997C8 /* TDOAuth_tvOS.app */,
+				FCC0682C241C1ADD004997C8 /* TDOAuth_macOS.app */,
+				FCC0684A241C1CAD004997C8 /* TDOAuth_iOS.app */,
+				FCC06856241C1CB0004997C8 /* TDOAuth_watchOS Extension.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		607FACD21AFB9204008FA782 /* Example for TDOAuth */ = {
+			isa = PBXGroup;
+			children = (
+				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
+				607FACD71AFB9204008FA782 /* ViewController.swift */,
+				607FACD91AFB9204008FA782 /* Main.storyboard */,
+				607FACDC1AFB9204008FA782 /* Images.xcassets */,
+				607FACDE1AFB9204008FA782 /* LaunchScreen.xib */,
+				607FACD31AFB9204008FA782 /* Supporting Files */,
+			);
+			name = "Example for TDOAuth";
+			path = TDOAuth;
+			sourceTree = "<group>";
+		};
+		607FACD31AFB9204008FA782 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				607FACD41AFB9204008FA782 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		607FACE81AFB9204008FA782 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				607FACEB1AFB9204008FA782 /* OAuth1Spec.swift */,
+				FCCE3C4421FAE14200522CBD /* HMACSpec.swift */,
+				FCCE3C4621FAE1E000522CBD /* PlaintextSpec.swift */,
+				FCCE3C4821FAE23F00522CBD /* Utils.swift */,
+				FC71E7F32416E7A200CCC34C /* Compat.m */,
+				FC71E7F22416E7A100CCC34C /* TDOAuth_Tests-Bridging-Header.h */,
+				607FACE91AFB9204008FA782 /* Supporting Files */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		607FACE91AFB9204008FA782 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				607FACEA1AFB9204008FA782 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		607FACF51AFB993E008FA782 /* Podspec Metadata */ = {
+			isa = PBXGroup;
+			children = (
+				93D280C710EC98A8AABBFAAE /* TDOAuth.podspec */,
+				461C9C3A2340A0A74154EEAF /* README.md */,
+				CA3FCD1E3D0B1AEF932CC096 /* LICENSE */,
+			);
+			name = "Podspec Metadata";
+			sourceTree = "<group>";
+		};
+		A1200777CB73031D771DA2DC /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				70000C48C40675E0511B301D /* Pods_TDOAuth_Tests.framework */,
+				1468F75DCB0D1331A62E245C /* Pods_TDOAuth_iOS.framework */,
+				E5897B5C42516E19A5C8C497 /* Pods_TDOAuth_macOS.framework */,
+				56522A3B52E63E0D9FBFAF95 /* Pods_TDOAuth_tvOS.framework */,
+				C9AE6DB313043BFD421E116D /* Pods_TDOAuth_watchOS.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		FCC067C7241C1940004997C8 /* TDOAuth-tvOS */ = {
+			isa = PBXGroup;
+			children = (
+				FCC067C8241C1940004997C8 /* AppDelegate.swift */,
+				FCC067CA241C1940004997C8 /* ViewController.swift */,
+				FCC067CC241C1940004997C8 /* Main.storyboard */,
+				FCC067CF241C1943004997C8 /* Assets.xcassets */,
+				FCC067D1241C1943004997C8 /* LaunchScreen.storyboard */,
+				FCC067D4241C1943004997C8 /* Info.plist */,
+			);
+			path = "TDOAuth-tvOS";
+			sourceTree = "<group>";
+		};
+		FCC0682D241C1ADD004997C8 /* TDOAuth-macOS */ = {
+			isa = PBXGroup;
+			children = (
+				FCC0682E241C1ADD004997C8 /* AppDelegate.swift */,
+				FCC06830241C1ADD004997C8 /* ViewController.swift */,
+				FCC06832241C1ADE004997C8 /* Assets.xcassets */,
+				FCC06834241C1ADE004997C8 /* Main.storyboard */,
+				FCC06837241C1ADE004997C8 /* Info.plist */,
+				FCC06838241C1ADE004997C8 /* TDOAuth_macOS.entitlements */,
+			);
+			path = "TDOAuth-macOS";
+			sourceTree = "<group>";
+		};
+		FCC0684B241C1CAD004997C8 /* TDOAuth-watchOS */ = {
+			isa = PBXGroup;
+			children = (
+				FCC0684C241C1CAD004997C8 /* Interface.storyboard */,
+				FCC0684F241C1CB0004997C8 /* Assets.xcassets */,
+				FCC06851241C1CB0004997C8 /* Info.plist */,
+			);
+			path = "TDOAuth-watchOS";
+			sourceTree = "<group>";
+		};
+		FCC0685A241C1CB0004997C8 /* TDOAuth-watchOS Extension */ = {
+			isa = PBXGroup;
+			children = (
+				FCC0685B241C1CB0004997C8 /* InterfaceController.swift */,
+				FCC0685D241C1CB0004997C8 /* ExtensionDelegate.swift */,
+				FCC0685F241C1CB1004997C8 /* Assets.xcassets */,
+				FCC06861241C1CB1004997C8 /* Info.plist */,
+			);
+			path = "TDOAuth-watchOS Extension";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		607FACCF1AFB9204008FA782 /* TDOAuth_iOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 607FACEF1AFB9204008FA782 /* Build configuration list for PBXNativeTarget "TDOAuth_iOS" */;
+			buildPhases = (
+				BD136574D4773EF14A7740B6 /* [CP] Check Pods Manifest.lock */,
+				607FACCC1AFB9204008FA782 /* Sources */,
+				607FACCD1AFB9204008FA782 /* Frameworks */,
+				607FACCE1AFB9204008FA782 /* Resources */,
+				A410B60F9289D3F1CB417C6A /* [CP] Embed Pods Frameworks */,
+				FCC06827241C19AE004997C8 /* Embed Watch Content */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FCC06863241C1CB1004997C8 /* PBXTargetDependency */,
+			);
+			name = TDOAuth_iOS;
+			productName = TDOAuth;
+			productReference = 607FACD01AFB9204008FA782 /* TDOAuth_iOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+		607FACE41AFB9204008FA782 /* TDOAuth_Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 607FACF21AFB9204008FA782 /* Build configuration list for PBXNativeTarget "TDOAuth_Tests" */;
+			buildPhases = (
+				1E6C232284B62AC8B5C55731 /* [CP] Check Pods Manifest.lock */,
+				607FACE11AFB9204008FA782 /* Sources */,
+				607FACE21AFB9204008FA782 /* Frameworks */,
+				607FACE31AFB9204008FA782 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				607FACE71AFB9204008FA782 /* PBXTargetDependency */,
+			);
+			name = TDOAuth_Tests;
+			productName = Tests;
+			productReference = 607FACE51AFB9204008FA782 /* TDOAuth_Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		FCC067C5241C1940004997C8 /* TDOAuth_tvOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FCC067D5241C1943004997C8 /* Build configuration list for PBXNativeTarget "TDOAuth_tvOS" */;
+			buildPhases = (
+				F53998FEA93B554FFA006D81 /* [CP] Check Pods Manifest.lock */,
+				FCC067C2241C1940004997C8 /* Sources */,
+				FCC067C3241C1940004997C8 /* Frameworks */,
+				FCC067C4241C1940004997C8 /* Resources */,
+				195BCE20402A007191A95C58 /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TDOAuth_tvOS;
+			productName = "TDOAuth-tvOS";
+			productReference = FCC067C6241C1940004997C8 /* TDOAuth_tvOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+		FCC0682B241C1ADD004997C8 /* TDOAuth_macOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FCC06839241C1ADE004997C8 /* Build configuration list for PBXNativeTarget "TDOAuth_macOS" */;
+			buildPhases = (
+				E107581E2BADCBCBEEC72A46 /* [CP] Check Pods Manifest.lock */,
+				FCC06828241C1ADD004997C8 /* Sources */,
+				FCC06829241C1ADD004997C8 /* Frameworks */,
+				FCC0682A241C1ADD004997C8 /* Resources */,
+				BDD6C8E60F26DD0B81B9B67C /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TDOAuth_macOS;
+			productName = "TDOAuth-macOS";
+			productReference = FCC0682C241C1ADD004997C8 /* TDOAuth_macOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+		FCC06849241C1CAD004997C8 /* TDOAuth_watchOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FCC06869241C1CB1004997C8 /* Build configuration list for PBXNativeTarget "TDOAuth_watchOS" */;
+			buildPhases = (
+				22107ABD329770ED119C0471 /* [CP] Check Pods Manifest.lock */,
+				FCC06848241C1CAD004997C8 /* Resources */,
+				FCC06868241C1CB1004997C8 /* Embed App Extensions */,
+				5A6E6998F77390978A82FBAB /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FCC06859241C1CB0004997C8 /* PBXTargetDependency */,
+			);
+			name = TDOAuth_watchOS;
+			productName = "TDOAuth-watchOS";
+			productReference = FCC0684A241C1CAD004997C8 /* TDOAuth_iOS.app */;
+			productType = "com.apple.product-type.application.watchapp2";
+		};
+		FCC06855241C1CB0004997C8 /* TDOAuth_watchOS Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FCC06865241C1CB1004997C8 /* Build configuration list for PBXNativeTarget "TDOAuth_watchOS Extension" */;
+			buildPhases = (
+				FCC06852241C1CB0004997C8 /* Sources */,
+				FCC06853241C1CB0004997C8 /* Frameworks */,
+				FCC06854241C1CB0004997C8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "TDOAuth_watchOS Extension";
+			productName = "TDOAuth-watchOS Extension";
+			productReference = FCC06856241C1CB0004997C8 /* TDOAuth_watchOS Extension.appex */;
+			productType = "com.apple.product-type.watchkit2-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		607FACC81AFB9204008FA782 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1130;
+				LastUpgradeCheck = 1130;
+				ORGANIZATIONNAME = CocoaPods;
+				TargetAttributes = {
+					607FACCF1AFB9204008FA782 = {
+						CreatedOnToolsVersion = 6.3.1;
+						LastSwiftMigration = 0900;
+					};
+					607FACE41AFB9204008FA782 = {
+						CreatedOnToolsVersion = 6.3.1;
+						LastSwiftMigration = 1130;
+						TestTargetID = 607FACCF1AFB9204008FA782;
+					};
+					FCC067C5241C1940004997C8 = {
+						CreatedOnToolsVersion = 11.3.1;
+						ProvisioningStyle = Automatic;
+					};
+					FCC0682B241C1ADD004997C8 = {
+						CreatedOnToolsVersion = 11.3.1;
+						ProvisioningStyle = Automatic;
+					};
+					FCC06849241C1CAD004997C8 = {
+						CreatedOnToolsVersion = 11.3.1;
+						ProvisioningStyle = Automatic;
+					};
+					FCC06855241C1CB0004997C8 = {
+						CreatedOnToolsVersion = 11.3.1;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 607FACCB1AFB9204008FA782 /* Build configuration list for PBXProject "TDOAuth" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				English,
+				en,
+				Base,
+			);
+			mainGroup = 607FACC71AFB9204008FA782;
+			productRefGroup = 607FACD11AFB9204008FA782 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				607FACE41AFB9204008FA782 /* TDOAuth_Tests */,
+				607FACCF1AFB9204008FA782 /* TDOAuth_iOS */,
+				FCC067C5241C1940004997C8 /* TDOAuth_tvOS */,
+				FCC0682B241C1ADD004997C8 /* TDOAuth_macOS */,
+				FCC06849241C1CAD004997C8 /* TDOAuth_watchOS */,
+				FCC06855241C1CB0004997C8 /* TDOAuth_watchOS Extension */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		607FACCE1AFB9204008FA782 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */,
+				607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */,
+				607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		607FACE31AFB9204008FA782 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FCC067C4241C1940004997C8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FCC067D3241C1943004997C8 /* LaunchScreen.storyboard in Resources */,
+				FCC067D0241C1943004997C8 /* Assets.xcassets in Resources */,
+				FCC067CE241C1940004997C8 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FCC0682A241C1ADD004997C8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FCC06833241C1ADE004997C8 /* Assets.xcassets in Resources */,
+				FCC06836241C1ADE004997C8 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FCC06848241C1CAD004997C8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FCC06850241C1CB0004997C8 /* Assets.xcassets in Resources */,
+				FCC0684E241C1CAD004997C8 /* Interface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FCC06854241C1CB0004997C8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FCC06860241C1CB1004997C8 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		195BCE20402A007191A95C58 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-TDOAuth_tvOS/Pods-TDOAuth_tvOS-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/OMGHTTPURLRQ-tvOS/OMGHTTPURLRQ.framework",
+				"${BUILT_PRODUCTS_DIR}/TDOAuth-tvOS/TDOAuth.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OMGHTTPURLRQ.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TDOAuth.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TDOAuth_tvOS/Pods-TDOAuth_tvOS-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		1E6C232284B62AC8B5C55731 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-TDOAuth_Tests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		22107ABD329770ED119C0471 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-TDOAuth_watchOS-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A410B60F9289D3F1CB417C6A /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-TDOAuth_iOS/Pods-TDOAuth_iOS-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/OMGHTTPURLRQ-iOS/OMGHTTPURLRQ.framework",
+				"${BUILT_PRODUCTS_DIR}/TDOAuth-iOS/TDOAuth.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OMGHTTPURLRQ.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TDOAuth.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TDOAuth_iOS/Pods-TDOAuth_iOS-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		BD136574D4773EF14A7740B6 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-TDOAuth_iOS-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		BDD6C8E60F26DD0B81B9B67C /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-TDOAuth_macOS/Pods-TDOAuth_macOS-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/OMGHTTPURLRQ-macOS/OMGHTTPURLRQ.framework",
+				"${BUILT_PRODUCTS_DIR}/TDOAuth-macOS/TDOAuth.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OMGHTTPURLRQ.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TDOAuth.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TDOAuth_macOS/Pods-TDOAuth_macOS-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E107581E2BADCBCBEEC72A46 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-TDOAuth_macOS-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F53998FEA93B554FFA006D81 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-TDOAuth_tvOS-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		607FACCC1AFB9204008FA782 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
+				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		607FACE11AFB9204008FA782 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FCCE3C4521FAE14200522CBD /* HMACSpec.swift in Sources */,
+				FCCE3C4721FAE1E000522CBD /* PlaintextSpec.swift in Sources */,
+				607FACEC1AFB9204008FA782 /* OAuth1Spec.swift in Sources */,
+				FCCE3C4921FAE23F00522CBD /* Utils.swift in Sources */,
+				FC71E7F42416E7A200CCC34C /* Compat.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FCC067C2241C1940004997C8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FCC067CB241C1940004997C8 /* ViewController.swift in Sources */,
+				FCC067C9241C1940004997C8 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FCC06828241C1ADD004997C8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FCC06831241C1ADD004997C8 /* ViewController.swift in Sources */,
+				FCC0682F241C1ADD004997C8 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FCC06852241C1CB0004997C8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FCC0685E241C1CB0004997C8 /* ExtensionDelegate.swift in Sources */,
+				FCC0685C241C1CB0004997C8 /* InterfaceController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		607FACE71AFB9204008FA782 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 607FACCF1AFB9204008FA782 /* TDOAuth_iOS */;
+			targetProxy = 607FACE61AFB9204008FA782 /* PBXContainerItemProxy */;
+		};
+		FCC06859241C1CB0004997C8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FCC06855241C1CB0004997C8 /* TDOAuth_watchOS Extension */;
+			targetProxy = FCC06858241C1CB0004997C8 /* PBXContainerItemProxy */;
+		};
+		FCC06863241C1CB1004997C8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FCC06849241C1CAD004997C8 /* TDOAuth_watchOS */;
+			targetProxy = FCC06862241C1CB1004997C8 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		607FACD91AFB9204008FA782 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				607FACDA1AFB9204008FA782 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		607FACDE1AFB9204008FA782 /* LaunchScreen.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				607FACDF1AFB9204008FA782 /* Base */,
+			);
+			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+		FCC067CC241C1940004997C8 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FCC067CD241C1940004997C8 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		FCC067D1241C1943004997C8 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FCC067D2241C1943004997C8 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		FCC06834241C1ADE004997C8 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FCC06835241C1ADE004997C8 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		FCC0684C241C1CAD004997C8 /* Interface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FCC0684D241C1CAD004997C8 /* Base */,
+			);
+			name = Interface.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		607FACED1AFB9204008FA782 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		607FACEE1AFB9204008FA782 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 5.0;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		607FACF01AFB9204008FA782 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 54B84CCA03E19D50C8CEA839 /* Pods-TDOAuth_iOS.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = TDOAuth/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MODULE_NAME = ExampleApp;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.TDOAuth-iOS";
+				PRODUCT_NAME = TDOAuth_iOS;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+			};
+			name = Debug;
+		};
+		607FACF11AFB9204008FA782 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F2EA75221BBDF7E5162DF034 /* Pods-TDOAuth_iOS.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = TDOAuth/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MODULE_NAME = ExampleApp;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.TDOAuth-iOS";
+				PRODUCT_NAME = TDOAuth_iOS;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+			};
+			name = Release;
+		};
+		607FACF31AFB9204008FA782 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = C3D5597E4B5E4F23317AF495 /* Pods-TDOAuth_Tests.debug.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = Tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Tests/TDOAuth_Tests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TDOAuth_iOS.app/TDOAuth_iOS";
+			};
+			name = Debug;
+		};
+		607FACF41AFB9204008FA782 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 230A0DC00434D5A541890603 /* Pods-TDOAuth_Tests.release.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = Tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Tests/TDOAuth_Tests-Bridging-Header.h";
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TDOAuth_iOS.app/TDOAuth_iOS";
+			};
+			name = Release;
+		};
+		FCC067D6241C1943004997C8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A367F5DBC617A3C7D264ADAC /* Pods-TDOAuth_tvOS.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = "TDOAuth-tvOS/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yahoo.TDOAuth-tvOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 11.0;
+			};
+			name = Debug;
+		};
+		FCC067D7241C1943004997C8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 76FBCD66A9A9A6BAB7A3D3B7 /* Pods-TDOAuth_tvOS.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = "TDOAuth-tvOS/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yahoo.TDOAuth-tvOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 11.0;
+			};
+			name = Release;
+		};
+		FCC0683A241C1ADE004997C8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = C0971118E9D1967697873653 /* Pods-TDOAuth_macOS.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "TDOAuth-macOS/TDOAuth_macOS.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = "TDOAuth-macOS/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yahoo.TDOAuth-macOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		FCC0683B241C1ADE004997C8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2D14F8A096135137C4E6DB73 /* Pods-TDOAuth_macOS.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "TDOAuth-macOS/TDOAuth_macOS.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = "TDOAuth-macOS/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yahoo.TDOAuth-macOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		FCC06866241C1CB1004997C8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = "TDOAuth-watchOS Extension/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.TDOAuth-iOS.watchkitapp.watchkitextension";
+				PRODUCT_NAME = "TDOAuth_watchOS Extension";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 6.0;
+			};
+			name = Debug;
+		};
+		FCC06867241C1CB1004997C8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = "TDOAuth-watchOS Extension/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.TDOAuth-iOS.watchkitapp.watchkitextension";
+				PRODUCT_NAME = "TDOAuth_watchOS Extension";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 6.0;
+			};
+			name = Release;
+		};
+		FCC0686A241C1CB1004997C8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5C79D9B98B30AD31A1D3EB38 /* Pods-TDOAuth_watchOS.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				IBSC_MODULE = TDOAuth_watchOS_Extension;
+				INFOPLIST_FILE = "TDOAuth-watchOS/Info.plist";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.TDOAuth-iOS.watchkitapp";
+				PRODUCT_NAME = TDOAuth_iOS;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 6.0;
+			};
+			name = Debug;
+		};
+		FCC0686B241C1CB1004997C8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5E231B87344C98E6B45CCC3E /* Pods-TDOAuth_watchOS.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				IBSC_MODULE = TDOAuth_watchOS_Extension;
+				INFOPLIST_FILE = "TDOAuth-watchOS/Info.plist";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.TDOAuth-iOS.watchkitapp";
+				PRODUCT_NAME = TDOAuth_iOS;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 6.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		607FACCB1AFB9204008FA782 /* Build configuration list for PBXProject "TDOAuth" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				607FACED1AFB9204008FA782 /* Debug */,
+				607FACEE1AFB9204008FA782 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		607FACEF1AFB9204008FA782 /* Build configuration list for PBXNativeTarget "TDOAuth_iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				607FACF01AFB9204008FA782 /* Debug */,
+				607FACF11AFB9204008FA782 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		607FACF21AFB9204008FA782 /* Build configuration list for PBXNativeTarget "TDOAuth_Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				607FACF31AFB9204008FA782 /* Debug */,
+				607FACF41AFB9204008FA782 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FCC067D5241C1943004997C8 /* Build configuration list for PBXNativeTarget "TDOAuth_tvOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FCC067D6241C1943004997C8 /* Debug */,
+				FCC067D7241C1943004997C8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FCC06839241C1ADE004997C8 /* Build configuration list for PBXNativeTarget "TDOAuth_macOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FCC0683A241C1ADE004997C8 /* Debug */,
+				FCC0683B241C1ADE004997C8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FCC06865241C1CB1004997C8 /* Build configuration list for PBXNativeTarget "TDOAuth_watchOS Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FCC06866241C1CB1004997C8 /* Debug */,
+				FCC06867241C1CB1004997C8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FCC06869241C1CB1004997C8 /* Build configuration list for PBXNativeTarget "TDOAuth_watchOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FCC0686A241C1CB1004997C8 /* Debug */,
+				FCC0686B241C1CB1004997C8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 607FACC81AFB9204008FA782 /* Project object */;
+}
