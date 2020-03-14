@@ -14,23 +14,23 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "FCC06849241C1CAD004997C8"
-               BuildableName = "TDOAuth-watchOS.app"
-               BlueprintName = "TDOAuth-watchOS"
+               BlueprintIdentifier = "607FACCF1AFB9204008FA782"
+               BuildableName = "TDOAuth_iOS.app"
+               BlueprintName = "TDOAuth_iOS"
                ReferencedContainer = "container:TDOAuth.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
             buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "607FACCF1AFB9204008FA782"
-               BuildableName = "TDOAuth-iOS.app"
-               BlueprintName = "TDOAuth-iOS"
+               BlueprintIdentifier = "607FACE41AFB9204008FA782"
+               BuildableName = "TDOAuth_Tests.xctest"
+               BlueprintName = "TDOAuth_Tests"
                ReferencedContainer = "container:TDOAuth.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -41,7 +41,26 @@
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "607FACCF1AFB9204008FA782"
+            BuildableName = "TDOAuth_iOS.app"
+            BlueprintName = "TDOAuth_iOS"
+            ReferencedContainer = "container:TDOAuth.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "607FACE41AFB9204008FA782"
+               BuildableName = "TDOAuth_Tests.xctest"
+               BlueprintName = "TDOAuth_Tests"
+               ReferencedContainer = "container:TDOAuth.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
@@ -54,18 +73,16 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <RemoteRunnable
-         runnableDebuggingMode = "2"
-         BundleIdentifier = "com.apple.Carousel"
-         RemotePath = "/TDOAuth-iOS">
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "FCC06849241C1CAD004997C8"
-            BuildableName = "TDOAuth-watchOS.app"
-            BlueprintName = "TDOAuth-watchOS"
+            BlueprintIdentifier = "607FACCF1AFB9204008FA782"
+            BuildableName = "TDOAuth_iOS.app"
+            BlueprintName = "TDOAuth_iOS"
             ReferencedContainer = "container:TDOAuth.xcodeproj">
          </BuildableReference>
-      </RemoteRunnable>
+      </BuildableProductRunnable>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -73,27 +90,16 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <RemoteRunnable
-         runnableDebuggingMode = "2"
-         BundleIdentifier = "com.apple.Carousel"
-         RemotePath = "/TDOAuth-iOS">
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "FCC06849241C1CAD004997C8"
-            BuildableName = "TDOAuth-watchOS.app"
-            BlueprintName = "TDOAuth-watchOS"
+            BlueprintIdentifier = "607FACCF1AFB9204008FA782"
+            BuildableName = "TDOAuth_iOS.app"
+            BlueprintName = "TDOAuth_iOS"
             ReferencedContainer = "container:TDOAuth.xcodeproj">
          </BuildableReference>
-      </RemoteRunnable>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "FCC06849241C1CAD004997C8"
-            BuildableName = "TDOAuth-watchOS.app"
-            BlueprintName = "TDOAuth-watchOS"
-            ReferencedContainer = "container:TDOAuth.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
+      </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

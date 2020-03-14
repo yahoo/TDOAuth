@@ -2,6 +2,7 @@
 // Licensed under the terms of the MIT license. See LICENSE file in https://github.com/yahoo/TDOAuth for terms.
 
 import UIKit
+import TDOAuth
 
 class ViewController: UIViewController {
 
