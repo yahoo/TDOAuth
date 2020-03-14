@@ -1,10 +1,5 @@
-//
-//  ViewController.swift
-//  TDOAuth-macOS
-//
-//  Created by Adam Kaplan on 3/13/20.
-//  Copyright © 2020 CocoaPods. All rights reserved.
-//
+// Copyright 2020, Verizon Media.
+// Licensed under the terms of the MIT license. See LICENSE file in https://github.com/yahoo/TDOAuth for terms.
 
 import Cocoa
 

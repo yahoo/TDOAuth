@@ -1,9 +1,5 @@
-//
-//  Compat.swift
-//  TDOAuth
-//
-//  Created by Adam Kaplan on 3/9/20.
-//
+// Copyright 2020, Verizon Media.
+// Licensed under the terms of the MIT license. See LICENSE file in https://github.com/yahoo/TDOAuth for terms.
 
 import Foundation
 

@@ -1,10 +1,5 @@
-//
-//  TDOAuthTest.m
-//  TDOAuthTest
-//
-//  Created by Bob Fitterman on 3/22/15.
-//
-//
+// Copyright 2020, Verizon Media.
+// Licensed under the terms of the MIT license. See LICENSE file in https://github.com/yahoo/TDOAuth for terms.
 
 #import <XCTest/XCTest.h>
 #import <TDOAuth/TDOAuth.h>

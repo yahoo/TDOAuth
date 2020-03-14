@@ -1,10 +1,5 @@
-//
-//  AppDelegate.swift
-//  TDOAuth
-//
-//  Created by Adam Kaplan on 01/05/2019.
-//  Copyright (c) 2019 Adam Kaplan. All rights reserved.
-//
+// Copyright 2020, Verizon Media.
+// Licensed under the terms of the MIT license. See LICENSE file in https://github.com/yahoo/TDOAuth for terms.
 
 import UIKit
 
