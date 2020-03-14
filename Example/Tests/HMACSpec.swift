@@ -9,7 +9,7 @@ class HMACSpec: XCTestCase {
 
     let rfcRequest = URLRequest(url: URL(string: "http://photos.example.net/photos?size=original&file=vacation.jpg")!)
 
-    let rfcMaterial: HMACSigner.KeyMaterial = (consumerSecret: "kd94hf93k423kf44", accessTokenSecret: "pfkkdhi9sl3r4s00")
+    let rfcMaterial: HMACSigner.KeyMaterial = SharedSecrets(consumerSecret: "kd94hf93k423kf44", accessTokenSecret: "pfkkdhi9sl3r4s00")
 
     func testSha224() {
         let signer = HMACSigner(algorithm: .sha224, material: rfcMaterial)

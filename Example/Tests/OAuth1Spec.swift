@@ -8,7 +8,7 @@ import XCTest
 class RFC5839Spec: XCTestCase {
     let rfcRequest = URLRequest(url: URL(string: "http://photos.example.net/photos?size=original&file=vacation.jpg")!)
 
-    let rfcMaterial: HMACSigner.KeyMaterial = (consumerSecret: "kd94hf93k423kf44", accessTokenSecret: "pfkkdhi9sl3r4s00")
+    let rfcMaterial: HMACSigner.KeyMaterial = SharedSecrets(consumerSecret: "kd94hf93k423kf44", accessTokenSecret: "pfkkdhi9sl3r4s00")
 
     var signer: HMACSigner! = nil
     var oauth1: TestOAuth1<HMACSigner>! = nil
@@ -44,7 +44,7 @@ class RFC5839Spec: XCTestCase {
         request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         request.httpBody = "c2&a3=2+q".data(using: .utf8)
 
-        let material: HMACSigner.KeyMaterial = (consumerSecret: "j49sk3j29djd", accessTokenSecret: "dh893hdasih9")
+        let material: HMACSigner.KeyMaterial = SharedSecrets(consumerSecret: "j49sk3j29djd", accessTokenSecret: "dh893hdasih9")
         let signer = HMACSigner(algorithm: .sha1, material: material)
         let oauth1 = TestOAuth1(withConsumerKey: "9djdj82h48djs9d2", accessToken: "kkk9d7dh3k39sjv7", signer: signer)
         oauth1.testNonce = "7d8f3e4a"
@@ -72,7 +72,7 @@ class RFC5839Spec: XCTestCase {
         //      oauth_callback="http%3A%2F%2Fprinter.example.com%2Fready",
         //      oauth_signature="74KNZJeDHnMBp0EMJ9ZHt%2FXKycU%3D"
 
-        let signer = HMACSigner(algorithm: .sha1, material: (consumerSecret: "kd94hf93k423kf44", accessTokenSecret: nil))
+        let signer = HMACSigner(algorithm: .sha1, material: SharedSecrets(consumerSecret: "kd94hf93k423kf44", accessTokenSecret: nil))
         let oauth1 = TestOAuth1(withConsumerKey: "dpf43f3p2l4k3l03", accessToken: nil, signer: signer)
         oauth1.testNonce = "wIjqoS"
         oauth1.testTimestamp = "137131200"
@@ -171,7 +171,7 @@ class RFC5839Spec: XCTestCase {
     }
 
     func testAccessToken_excludesAccessToken() {
-        let rfcMaterial: HMACSigner.KeyMaterial = (consumerSecret: "kd94hf93k423kf44", accessTokenSecret: nil)
+        let rfcMaterial: HMACSigner.KeyMaterial = SharedSecrets(consumerSecret: "kd94hf93k423kf44", accessTokenSecret: nil)
         signer = HMACSigner(algorithm: .sha1, material: rfcMaterial)
         oauth1 = TestOAuth1(withConsumerKey: "dpf43f3p2l4k3l03", accessToken: nil, signer: signer)
 

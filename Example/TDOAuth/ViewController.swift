@@ -20,7 +20,8 @@ class ViewController: UIViewController {
 
     /// Generate our OAuth1 signer
     lazy var oauth1: OAuth1<HMACSigner> = {
-        let sha1Signer = HMACSigner(algorithm: .sha1, material: (consumerSecret: consumerSecret, accessTokenSecret: accessTokenSecret))
+        let secrets = SharedSecrets(consumerSecret: consumerSecret, accessTokenSecret: accessTokenSecret)
+        let sha1Signer = HMACSigner(algorithm: .sha1, material: secrets)
         return OAuth1(withConsumerKey: consumerKey, accessToken: accessToken, signer: sha1Signer)
     }()
 

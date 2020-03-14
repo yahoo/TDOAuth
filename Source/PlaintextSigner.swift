@@ -2,7 +2,7 @@ import Foundation
 
 public class PlaintextSigner: OAuth1Signer {
 
-    public typealias KeyMaterial = (consumerSecret: String, accessTokenSecret: String?)
+    public typealias KeyMaterial = SharedSecrets
 
     public let signatureMethod = "PLAINTEXT"
 

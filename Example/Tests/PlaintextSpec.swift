@@ -10,7 +10,7 @@ class PlaintextSpec: XCTestCase {
     let rfcRequest = URLRequest(url: URL(string: "http://photos.example.net/photos?size=original&file=vacation.jpg")!)
 
     func testSignatureWithKeyAndSecret() {
-        let rfcMaterial: PlaintextSigner.KeyMaterial = (consumerSecret: "kd94hf93k423kf44", accessTokenSecret: "pfkkdhi9sl3r4s00")
+        let rfcMaterial: PlaintextSigner.KeyMaterial = SharedSecrets(consumerSecret: "kd94hf93k423kf44", accessTokenSecret: "pfkkdhi9sl3r4s00")
         let signer = PlaintextSigner(keyMaterial: rfcMaterial)
         let oauth1 = TestOAuth1(withConsumerKey: "dpf43f3p2l4k3l03", accessToken: "nnch734d00sl2jdk", signer: signer)
 
@@ -24,7 +24,7 @@ class PlaintextSpec: XCTestCase {
     }
 
     func testSignatureWithKeyOnly() {
-        let rfcMaterial: PlaintextSigner.KeyMaterial = (consumerSecret: "kd94hf93k423kf44", accessTokenSecret: nil)
+        let rfcMaterial: PlaintextSigner.KeyMaterial = SharedSecrets(consumerSecret: "kd94hf93k423kf44", accessTokenSecret: nil)
         let signer = PlaintextSigner(keyMaterial: rfcMaterial)
         let oauth1 = TestOAuth1(withConsumerKey: "dpf43f3p2l4k3l03", accessToken: "nnch734d00sl2jdk", signer: signer)
 

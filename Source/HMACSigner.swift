@@ -1,27 +1,12 @@
 import Foundation
 import CommonCrypto.CommonHMAC
 
-public enum OAuth1HmacAlgorithm: Int {
-    case sha1
-    case sha256
-    case sha384
-    case sha512
-    case sha224
-
-    var methodName: String {
-        switch self {
-        case .sha1:
-            return "HMAC-SHA1"
-        case .sha224:
-            return "HMAC-SHA224"
-        case .sha256:
-            return "HMAC-SHA256"
-        case .sha384:
-            return "HMAC-SHA384"
-        case .sha512:
-            return "HMAC-SHA512"
-        }
-    }
+public enum HmacAlgorithm: String {
+    case sha1 = "HMAC-SHA1"
+    case sha224 = "HMAC-SHA224"
+    case sha256 = "HMAC-SHA256"
+    case sha384 = "HMAC-SHA384"
+    case sha512 = "HMAC-SHA512"
 
     var commonCryptoAlgorithm: CCHmacAlgorithm {
         switch self {
@@ -56,19 +41,22 @@ public enum OAuth1HmacAlgorithm: Int {
 
 public class HMACSigner: OAuth1Signer {
 
-    public typealias KeyMaterial = (consumerSecret: String, accessTokenSecret: String?)
+    public typealias KeyMaterial = SharedSecrets
 
-    public var signatureMethod: String { return signatureAlgorithm.methodName }
+    /// The algorithm to use to generate the Authorization header signature
+    public var signatureMethod: String { return signatureAlgorithm.rawValue }
 
-    public let signatureAlgorithm: OAuth1HmacAlgorithm
+    /// The algorithm to use to generate the Authorization header signature
+    public let signatureAlgorithm: HmacAlgorithm
 
+    /// Immutable copy of the HMAC signing context, precomputed for performance
     private let hmacContext: CCHmacContext
 
     public required convenience init(keyMaterial: KeyMaterial) {
         self.init(algorithm: .sha384, material: keyMaterial)
     }
 
-    public required init(algorithm: OAuth1HmacAlgorithm, material: KeyMaterial) {
+    public required init(algorithm: HmacAlgorithm, material: KeyMaterial) {
         signatureAlgorithm = algorithm
 
         var context = CCHmacContext()

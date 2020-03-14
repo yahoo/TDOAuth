@@ -19,7 +19,7 @@ import Foundation
                                   signatureMethod: TDOAuthSignatureMethod) -> URLRequest? {
 
 
-        let hmacAlgo: OAuth1HmacAlgorithm
+        let hmacAlgo: HmacAlgorithm
         switch signatureMethod {
         case .hmacSha1:
             hmacAlgo = .sha1
@@ -29,7 +29,7 @@ import Foundation
             return nil
         }
 
-        let key: HMACSigner.KeyMaterial = (consumerSecret: consumerSecret, accessTokenSecret: tokenSecret)
+        let key = SharedSecrets(consumerSecret: consumerSecret, accessTokenSecret: tokenSecret)
         let signer = HMACSigner(algorithm: hmacAlgo, material: key)
         let oauth1 = OAuth1Type.init(withConsumerKey: consumerKey, accessToken: accessToken, signer: signer)
 

@@ -17,7 +17,21 @@ public protocol OAuth1Signer {
     func sign(_ value: String) -> String
 }
 
-public extension OAuth1Signer where KeyMaterial == (consumerSecret: String, accessTokenSecret: String?) {
+/// Shared secrets include the consumer/client secret and access token secrets
+/// used to generate HMAC and and Plaintext signatures. Other methods, such as
+/// RSA signatures would not use this struct.
+public struct SharedSecrets {
+    public let consumerSecret: String
+
+    public let accessTokenSecret: String?
+
+    public init(consumerSecret: String, accessTokenSecret: String?) {
+        self.consumerSecret = consumerSecret
+        self.accessTokenSecret = accessTokenSecret
+    }
+}
+
+public extension OAuth1Signer where KeyMaterial == SharedSecrets {
 
     // The signature secret is created by concatenating the consumer secret and access token
     static func generateSigningKey(material: KeyMaterial) -> String {
@@ -28,4 +42,3 @@ public extension OAuth1Signer where KeyMaterial == (consumerSecret: String, acce
         return generatedSecret
     }
 }
-
