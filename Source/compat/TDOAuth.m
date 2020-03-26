@@ -28,7 +28,11 @@
 */
 
 #import "TDOAuth.h"
+#if __has_include("TDOAuth-Swift.h")
+#import "TDOAuth-Swift.h"
+#else
 #import <TDOAuth/TDOAuth-Swift.h>
+#endif
 #import <OMGHTTPURLRQ/OMGUserAgent.h>
 
 #define TDPCEN(s) \
