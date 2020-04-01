@@ -218,7 +218,7 @@ class RFC5839Spec: XCTestCase {
         let signedRequest2 = oauth1.sign(request: uppercaseRequest)
         let gotAuthHeader = signedRequest2?.value(forHTTPHeaderField: "Authorization")
 
-        XCTAssertNotNil(signedRequest)
+        XCTAssertNotNil(signedRequest2)
         XCTAssertEqual(expectAuthHeader, gotAuthHeader)
     }
 
@@ -237,7 +237,23 @@ class RFC5839Spec: XCTestCase {
         let signedRequest2 = oauth1.sign(request: uppercaseRequest)
         let gotAuthHeader = signedRequest2?.value(forHTTPHeaderField: "Authorization")
 
-        XCTAssertNotNil(signedRequest)
+        XCTAssertNotNil(signedRequest2)
         XCTAssertEqual(expectAuthHeader, gotAuthHeader)
+    }
+
+    func testRespectsTrailingSlashesCase() {
+        oauth1 = TestOAuth1(withConsumerKey: "dpf43f3p2l4k3l03", accessToken: nil, signer: signer)
+
+        var components = URLComponents(url: rfcRequest.url!, resolvingAgainstBaseURL: false)
+        components?.path = "/a/b/c/"
+        var request = rfcRequest
+        request.url = components?.url!
+
+        let signedRequest = oauth1.sign(request: request)
+        let gotAuthHeader = signedRequest?.value(forHTTPHeaderField: "Authorization")
+
+        XCTAssertNotNil(signedRequest)
+        let expect = "OAuth oauth_nonce=\"kllo9940pd9333jh\", oauth_signature_method=\"HMAC-SHA1\", oauth_consumer_key=\"dpf43f3p2l4k3l03\", oauth_timestamp=\"1191242096\", oauth_version=\"1.0\", oauth_signature=\"ixhhhte3356BnKrwap0ZttXlIFg%3D\""
+        XCTAssertEqual(expect, gotAuthHeader)
     }
 }

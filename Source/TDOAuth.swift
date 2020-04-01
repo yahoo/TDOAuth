@@ -191,8 +191,14 @@ open class OAuth1<T: OAuth1Signer> {
         //
         // is represented by the base string URI:
         // "https://www.example.net:8080/".
-        let scheme = url.scheme?.lowercased() ?? "https"
-        let host = url.host?.lowercased() ?? ""
+
+        // Using URLComponents because it provides a more precise URL parser than
+        // properties of (NS)URL. For example, currently `URL.path` drops tailing slashes
+        // and does other interpretations on the path which cause it to differ from the
+        // value that would be transmitted in a URLRequest.
+        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else { return "" }
+        let scheme = components.scheme?.lowercased() ?? "https"
+        let host = components.host?.lowercased() ?? ""
         let port: String
         switch url.port {
         case .some(let p) where p == 80 && scheme == "http": // default port, elide
@@ -204,7 +210,7 @@ open class OAuth1<T: OAuth1Signer> {
         case .some(let p):
             port = ":\(p)"
         }
-        let path = url.path.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
+        let path = components.path.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
         let baseStringUri = "\(scheme)://\(host)\(port)\(path)"
         return baseStringUri
     }
