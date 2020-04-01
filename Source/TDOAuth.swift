@@ -18,7 +18,7 @@ open class OAuth1<T: OAuth1Signer> {
     /// Generate a new one-time nonce value in the form of a random UUID
     var nonce: String { return UUID().uuidString }
 
-    public required init(withConsumerKey consumerKey: String, accessToken: String?, signer: T) {
+    public required init(withConsumerKey consumerKey: String, accessToken: String? = nil, signer: T) {
         self.consumerKey = consumerKey
         self.accessToken = accessToken
         self.signer = signer

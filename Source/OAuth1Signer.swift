@@ -28,7 +28,7 @@ public struct SharedSecrets {
 
     public let accessTokenSecret: String?
 
-    public init(consumerSecret: String, accessTokenSecret: String?) {
+    public init(consumerSecret: String, accessTokenSecret: String? = nil) {
         self.consumerSecret = consumerSecret
         self.accessTokenSecret = accessTokenSecret
     }
