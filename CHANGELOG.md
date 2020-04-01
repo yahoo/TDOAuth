@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.2
+- Fix bug when URL path ends with a trailing slash
+- accessToken and accessSecret at optional in the HMAC initializer
+
 ## 1.4.1
 
 - Fix modular headers issue
