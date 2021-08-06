@@ -3,7 +3,7 @@
 
 import Foundation
 
-let urlSafeCharacters: CharacterSet = CharacterSet(charactersIn: "^!*'();:@&=+$,/?%#[]{}\"`<>\\| ").inverted
+let urlSafeCharacters: CharacterSet = CharacterSet(charactersIn: "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-._~")
 
 public extension String {
 
