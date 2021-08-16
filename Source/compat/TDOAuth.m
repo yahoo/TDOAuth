@@ -36,7 +36,7 @@
 #import <OMGHTTPURLRQ/OMGUserAgent.h>
 
 #define TDPCEN(s) \
-      ([[s description] stringByAddingPercentEncodingWithAllowedCharacters:[[NSCharacterSet characterSetWithCharactersInString:@"^!*'();:@&=+$,/?%#[]{}\"`<>\\| "] invertedSet]])
+      ([[s description] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:@"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-._~"]])
 
 #define TDChomp(s) { \
     const NSUInteger length = [s length]; \
