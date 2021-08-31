@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.4.3
+- Character escaping logic compliance with RFC 5849 [PR](https://github.com/yahoo/TDOAuth/pull/36)
+
 ## 1.4.2
 - Fix bug when URL path ends with a trailing slash
 - accessToken and accessSecret at optional in the HMAC initializer
