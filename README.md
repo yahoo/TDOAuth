@@ -141,7 +141,7 @@ NSURLRequest * request = [TDOAuth URLRequestForPath:@"/v1/service/name"
 
 ## Author
 
-Adam Kaplan, adamkaplan@verizonmedia.com
+Adam Kaplan, adamkaplan@yahooinc.com
 
 ## License
 
