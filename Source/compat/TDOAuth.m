@@ -30,10 +30,14 @@
 #import "TDOAuth.h"
 #if __has_include("TDOAuth-Swift.h")
 #import "TDOAuth-Swift.h"
-#else
+#elif __has_include(<TDOAuth/TDOAuth-Swift.h>)
 #import <TDOAuth/TDOAuth-Swift.h>
 #endif
+#if __has_include(<OMGHTTPURLRQ/OMGUserAgent.h>)
 #import <OMGHTTPURLRQ/OMGUserAgent.h>
+#else
+@import OMGHTTPURLRQ;
+#endif
 
 #define TDPCEN(s) \
       ([[s description] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:@"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-._~"]])
