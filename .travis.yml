@@ -1,8 +1,0 @@
-os: osx
-osx_image: xcode11.3
-#language: swift -- this is an alias to objective-c
-language: objective-c
-podfile: Example/Podfile
-xcode_workspace: Example/TDOAuth.xcworkspace
-xcode_scheme: TDOAuth_iOS
-xcode_destination: platform=iOS Simulator,OS=12.0,name=iPhone XS
