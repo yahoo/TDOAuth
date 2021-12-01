@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.5.0
+- Add support for Swift Package Manager (SPM)
+
 ## 1.4.3
 - Character escaping logic compliance with RFC 5849 [PR](https://github.com/yahoo/TDOAuth/pull/36)
 
