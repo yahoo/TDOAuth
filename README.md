@@ -35,7 +35,7 @@ Add `.package(url: "https://github.com/yahoo/TDOAuth.git", from: "1.5.0")` to yo
 
 The two legs of two-legged OAuth are the client and server. This method of authentication is suitable for verifying access from a blessed first-party. If you have only a consumer secret and consumer key, this the method you would use:
 
-```
+```swift
 let consumerSecret = "my-consumer-secret"
 let consumerKey = "my-consmer-key"
 
@@ -57,7 +57,7 @@ func signRequest(_ request: URLRequest) -> URLRequest? {
 
 Three-legged OAuth is a version suitable for authenticating a third-party to access a user's data. This method introduces a second set of key & secret for the third party:
 
-```
+```swift
 let consumerSecret = "my-consumer-secret"
 let consumerKey = "my-consmer-key"
 let accessToken: String? = "access-token"
@@ -89,7 +89,7 @@ Supported SHA-2 variants:
 - SHA-512
 
 Example for SHA-256
-```
+```swift
 let signer: OAuth1<HMACSigner> = HMACSigner(algorithm: .sha256, material: secrets)
 ```
 
@@ -98,14 +98,14 @@ let signer: OAuth1<HMACSigner> = HMACSigner(algorithm: .sha256, material: secret
 Plain text signing is useful mainly for debugging or use over strictly pinned SSL connections. The keys are not secured in any way, so it is very bad idea to use this strategy without pinned SSL.
 
 Example for PlainText signing
-```
+```swift
 let signer: OAuth1<PlaintextSigner> = PlaintextSigner(keyMaterial: secrets)
 ```
 
 #### Custom Signing
 
 To provide your own custom signing, implement the `OAuth1Signer` protocol:
-```
+```swift
 public protocol OAuth1Signer {
 
     associatedtype KeyMaterial
@@ -129,7 +129,7 @@ While the Swift API simply signs whatever `URLRequest` you provide it, the Objec
 **Use the Swift API!**
 
 Objective-C API Example
-```
+```objc
 #import <TDOAuth/TDOAuth.h>
 
 NSURLRequest * request = [TDOAuth URLRequestForPath:@"/v1/service/name"
