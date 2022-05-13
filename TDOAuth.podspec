@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'TDOAuth'
-  s.version          = '1.5.0'
+  s.version          = '2.0.0'
   s.summary          = 'Elegant, simple and compliant OAuth 1.x solution.'
 
   s.description      = <<-DESC
@@ -25,7 +25,7 @@ Pod::Spec.new do |s|
   s.watchos.deployment_target = '3.0'
   s.osx.deployment_target = '10.10'
 
-  s.swift_versions = [ '4.0', '4.2', '5.0' ]
+  s.swift_versions = [ '4.0', '4.2', '5.0', '5.1', '5.2', '5.3', '5.4', '5.5', '5.6' ]
 
   s.default_subspec = 'ObjC'
 
@@ -36,6 +36,6 @@ Pod::Spec.new do |s|
 
   s.subspec 'ObjC' do |ss|
     ss.dependency 'TDOAuth/Swift'
-    ss.source_files = 'Source/compat/*.{swift,h,m}'
+    ss.source_files = 'Source/compat/*.{swift}'
   end
 end

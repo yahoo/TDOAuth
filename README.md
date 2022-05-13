@@ -130,7 +130,7 @@ While the Swift API simply signs whatever `URLRequest` you provide it, the Objec
 
 Objective-C API Example
 ```objc
-#import <TDOAuth/TDOAuth.h>
+@import TDOAuth;
 
 NSURLRequest * request = [TDOAuth URLRequestForPath:@"/v1/service/name"
                          parameters:@{ "count": @10, "format": "json" }

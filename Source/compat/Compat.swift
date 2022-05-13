@@ -5,11 +5,11 @@ import Foundation
 
 #if SWIFT_PACKAGE
 import TDOAuthSwift
+#endif
 
 @objc public enum TDOAuthSignatureMethod: Int {
     case hmacSha1, hmacSha256
 }
-#endif
 
 @objc public class TDOAuthCompat: NSObject {
 

@@ -25,23 +25,9 @@ let package = Package(
         .target(
             name: "TDOAuth",
             dependencies: [
-                "TDOAuthCompat"
-            ],
-            path: "Source/compat",
-            exclude: [
-                "Compat.swift"
-            ],
-            publicHeadersPath: "."),
-        .target(
-            name: "TDOAuthCompat",
-            dependencies: [
                 "TDOAuthSwift"
             ],
-            path: "Source/compat",
-            exclude: [
-                "TDOAuth.h",
-                "TDOAuth.m"
-            ]),
+            path: "Source/compat"),
         .target(
             name: "TDOAuthSwift",
             dependencies: [
@@ -49,8 +35,7 @@ let package = Package(
             ],
             path: "Source",
             exclude: [
-                "compat/TDOAuth.h",
-                "compat/TDOAuth.m",
+                "compat/TDOAuth.swift",
                 "compat/Compat.swift"
             ]),
     ]
