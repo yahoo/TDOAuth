@@ -27,15 +27,11 @@ Pod::Spec.new do |s|
 
   s.swift_versions = [ '4.0', '4.2', '5.0', '5.1', '5.2', '5.3', '5.4', '5.5', '5.6' ]
 
-  s.default_subspec = 'ObjC'
+  s.default_subspec = 'Swift'
 
   s.subspec 'Swift' do |ss|
-    ss.source_files = 'Source/*.swift'
+    ss.source_files = 'Source/*.swift', 'Source/compat/*.{swift}'
     ss.dependency 'OMGHTTPURLRQ/UserAgent'
   end
 
-  s.subspec 'ObjC' do |ss|
-    ss.dependency 'TDOAuth/Swift'
-    ss.source_files = 'Source/compat/*.{swift}'
-  end
 end

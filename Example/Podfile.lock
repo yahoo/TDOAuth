@@ -1,9 +1,7 @@
 PODS:
   - OMGHTTPURLRQ/UserAgent (3.2.4)
   - TDOAuth (2.0.0):
-    - TDOAuth/ObjC (= 2.0.0)
-  - TDOAuth/ObjC (2.0.0):
-    - TDOAuth/Swift
+    - TDOAuth/Swift (= 2.0.0)
   - TDOAuth/Swift (2.0.0):
     - OMGHTTPURLRQ/UserAgent
 
@@ -20,7 +18,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   OMGHTTPURLRQ: 9ac96bdf5c90a33f75836630729ea1adc312a9ed
-  TDOAuth: 465654bbcc1abf1348aeac75804660f7a309120b
+  TDOAuth: 555a75ef033edd1c16ef2159361c85614a6a2528
 
 PODFILE CHECKSUM: 723c3a58be002020721462a9d5959c71505c58b8
 

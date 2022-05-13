@@ -14,9 +14,6 @@ let package = Package(
         .library(
             name: "TDOAuth",
             targets: ["TDOAuth"]),
-        .library(
-            name: "TDOAuthSwift",
-            targets: ["TDOAuthSwift"]),
     ],
     dependencies: [
         .package(url: "https://github.com/mxcl/OMGHTTPURLRQ.git", .upToNextMajor(from: "3.3.0"))
@@ -25,18 +22,8 @@ let package = Package(
         .target(
             name: "TDOAuth",
             dependencies: [
-                "TDOAuthSwift"
-            ],
-            path: "Source/compat"),
-        .target(
-            name: "TDOAuthSwift",
-            dependencies: [
                 "OMGHTTPURLRQ"
             ],
-            path: "Source",
-            exclude: [
-                "compat/TDOAuth.swift",
-                "compat/Compat.swift"
-            ]),
+            path: "Source"),
     ]
 )
