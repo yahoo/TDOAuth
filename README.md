@@ -27,7 +27,7 @@ pod 'TDOAuth'
 
 ### SwiftPM
 
-Add `.package(url: "https://github.com/yahoo/TDOAuth.git", from: "2.0.0")` to your `package.swift`
+Add `.package(url: "https://github.com/yahoo/TDOAuth.git", from: "1.6.0")` to your `package.swift`
 
 ## Usage (Swift)
 

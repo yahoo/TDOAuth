@@ -77,6 +77,7 @@ internal class TDOQueryItem : NSObject {
       Don't percent encode anything! This will submit via HTTP. If you need HTTPS refer
       to the next selector.
     */
+    @available(*, deprecated, message: "Please move your code to using the OAuth1<HMACSigner> APIs.  You can find more detail in the README of this SDK.  Those are the appropriate APIs moving forward.  This API will be removed in a future release.")
     @objc(URLRequestForPath:GETParameters:host:consumerKey:consumerSecret:accessToken:tokenSecret:)
     open class func urlRequest(forPath unencodedPath_WITHOUT_Query: String?,
                                getParameters unencodedParameters: [AnyHashable : Any]?,
@@ -84,7 +85,7 @@ internal class TDOQueryItem : NSObject {
                                consumerKey: String?,
                                consumerSecret: String?,
                                accessToken: String?,
-                               tokenSecret: String?) -> URLRequest? {
+                               tokenSecret: String?) -> URLRequest! {
         return TDOAuth.urlRequest(forPath: unencodedPath_WITHOUT_Query,
                                parameters:unencodedParameters,
                                      host:host,
@@ -103,6 +104,7 @@ internal class TDOQueryItem : NSObject {
       Some services insist on HTTPS. Or maybe you don't want the data to be sniffed.
       You can pass @"https" via the scheme parameter.
     */
+    @available(*, deprecated, message: "Please move your code to using the OAuth1<HMACSigner> APIs.  You can find more detail in the README of this SDK.  Those are the appropriate APIs moving forward.  This API will be removed in a future release.")
     @objc(URLRequestForPath:GETParameters:scheme:host:consumerKey:consumerSecret:accessToken:tokenSecret:)
     open class func urlRequest(forPath unencodedPath_WITHOUT_Query: String?,
                                getParameters unencodedParameters: [AnyHashable : Any]?,
@@ -111,7 +113,7 @@ internal class TDOQueryItem : NSObject {
                                consumerKey: String?,
                                consumerSecret: String?,
                                accessToken: String?,
-                               tokenSecret: String?) -> URLRequest? {
+                               tokenSecret: String?) -> URLRequest! {
         return TDOAuth.urlRequest( forPath:unencodedPath_WITHOUT_Query,
                                parameters:unencodedParameters,
                                      host:host,
@@ -132,6 +134,7 @@ internal class TDOQueryItem : NSObject {
       mangle POST requests and break them. We saw this in France for example.
       READ THE DOCUMENTATION FOR GET AS IT APPLIES HERE TOO!
     */
+    @available(*, deprecated, message: "Please move your code to using the OAuth1<HMACSigner> APIs.  You can find more detail in the README of this SDK.  Those are the appropriate APIs moving forward.  This API will be removed in a future release.")
     @objc(URLRequestForPath:POSTParameters:host:consumerKey:consumerSecret:accessToken:tokenSecret:)
     open class func urlRequest(forPath unencodedPath: String?,
                                postParameters unencodedParameters: [AnyHashable : Any]?,
@@ -139,7 +142,7 @@ internal class TDOQueryItem : NSObject {
                                consumerKey: String?,
                                consumerSecret: String?,
                                accessToken: String?,
-                               tokenSecret: String?) -> URLRequest? {
+                               tokenSecret: String?) -> URLRequest! {
         return TDOAuth.urlRequest(forPath:unencodedPath,
                                parameters:unencodedParameters,
                                      host:host,
@@ -157,12 +160,13 @@ internal class TDOQueryItem : NSObject {
     /**
       Allow to pass NSURLComponents. READ THE DOCUMENTATION IN PREVIOUS GET METHODS!
      */
+    @available(*, deprecated, message: "Please move your code to using the OAuth1<HMACSigner> APIs.  You can find more detail in the README of this SDK.  Those are the appropriate APIs moving forward.  This API will be removed in a future release.")
     @objc(URLRequestForGETURLComponents:consumerKey:consumerSecret:accessToken:tokenSecret:)
     open class func urlRequest(forGetUrlComponents urlComponents: URLComponents,
                                consumerKey: String?,
                                consumerSecret: String?,
                                accessToken: String?,
-                               tokenSecret: String?) -> URLRequest? {
+                               tokenSecret: String?) -> URLRequest! {
 
         var queryItems = [TDOQueryItem]()
         if let items = urlComponents.queryItems {
@@ -213,6 +217,7 @@ internal class TDOQueryItem : NSObject {
      TDOAuthSignatureMethodHmacSha256; this is not included in the RFC for OAuth 1.0a, so most servers
      will not support it.
     */
+    @available(*, deprecated, message: "Please move your code to using the OAuth1<HMACSigner> APIs.  You can find more detail in the README of this SDK.  Those are the appropriate APIs moving forward.  This API will be removed in a future release.")
     @objc(URLRequestForPath:parameters:host:consumerKey:consumerSecret:accessToken:tokenSecret:scheme:requestMethod:dataEncoding:headerValues:signatureMethod:)
     open class func urlRequest(forPath unencodedPathWithoutQuery: String?,
                                parameters unencodedParameters: [AnyHashable : Any]?,
@@ -225,7 +230,7 @@ internal class TDOQueryItem : NSObject {
                                requestMethod method: String?,
                                dataEncoding: TDOAuthContentType,
                                headerValues: [AnyHashable : Any]?,
-                               signatureMethod: TDOAuthSignatureMethod) -> URLRequest? {
+                               signatureMethod: TDOAuthSignatureMethod) -> URLRequest! {
         
         var queryItems = [TDOQueryItem]()
 
@@ -394,7 +399,7 @@ internal class TDOQueryItem : NSObject {
     }
 
     // METHOD ADAPTED FROM LEGACY OAUTH1 CLIENT
-    internal class func request(withHeaderValues headerValues:[AnyHashable:Any]?, url:URL?, method:String) -> Foundation.URLRequest? {
+    internal class func request(withHeaderValues headerValues:[AnyHashable:Any]?, url:URL?, method:String) -> Foundation.URLRequest! {
         var rq : URLRequest? = nil
         if let url = url {
             rq = Foundation.URLRequest(url: url, cachePolicy: .reloadIgnoringCacheData, timeoutInterval: TDOAuthURLRequestTimeout)

@@ -16,7 +16,7 @@ import Foundation
                                   consumerSecret: String,
                                   accessToken: String?,
                                   tokenSecret: String?,
-                                  signatureMethod: TDOAuthSignatureMethod) -> URLRequest? {
+                                  signatureMethod: TDOAuthSignatureMethod) -> URLRequest! {
 
 
         let hmacAlgo: HmacAlgorithm
