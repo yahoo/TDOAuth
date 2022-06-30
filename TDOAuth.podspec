@@ -30,7 +30,7 @@ Pod::Spec.new do |s|
   s.default_subspec = 'Swift'
 
   s.subspec 'Swift' do |ss|
-    ss.source_files = 'Source/*.swift', 'Source/compat/*.{swift}'
+    ss.source_files = 'Source/*.swift', 'Source/**/*.{swift}'
     ss.dependency 'OMGHTTPURLRQ/UserAgent'
   end
 
