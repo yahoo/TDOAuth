@@ -3,13 +3,9 @@
 
 import Foundation
 
-#if SWIFT_PACKAGE
-import TDOAuthSwift
-
 @objc public enum TDOAuthSignatureMethod: Int {
     case hmacSha1, hmacSha256
 }
-#endif
 
 @objc public class TDOAuthCompat: NSObject {
 
@@ -20,7 +16,7 @@ import TDOAuthSwift
                                   consumerSecret: String,
                                   accessToken: String?,
                                   tokenSecret: String?,
-                                  signatureMethod: TDOAuthSignatureMethod) -> URLRequest? {
+                                  signatureMethod: TDOAuthSignatureMethod) -> URLRequest! {
 
 
         let hmacAlgo: HmacAlgorithm

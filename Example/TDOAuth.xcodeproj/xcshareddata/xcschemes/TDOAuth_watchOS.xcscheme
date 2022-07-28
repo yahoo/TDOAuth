@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1130"
+   LastUpgradeVersion = "1330"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -57,7 +57,7 @@
       <RemoteRunnable
          runnableDebuggingMode = "2"
          BundleIdentifier = "com.apple.Carousel"
-         RemotePath = "/TDOAuth-iOS">
+         RemotePath = "/$(PRODUCT_NAME)">
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "FCC06849241C1CAD004997C8"
@@ -76,7 +76,7 @@
       <RemoteRunnable
          runnableDebuggingMode = "2"
          BundleIdentifier = "com.apple.Carousel"
-         RemotePath = "/TDOAuth-iOS">
+         RemotePath = "/$(PRODUCT_NAME)">
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "FCC06849241C1CAD004997C8"

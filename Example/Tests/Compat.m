@@ -2,7 +2,7 @@
 // Licensed under the terms of the MIT license. See LICENSE file in https://github.com/yahoo/TDOAuth for terms.
 
 #import <XCTest/XCTest.h>
-#import <TDOAuth/TDOAuth.h>
+@import TDOAuth;
 #import "TDOAuth_Tests-Swift.h"
 
 @interface ObjcCompatSpec : XCTestCase @end
@@ -216,7 +216,8 @@
     NSURLRequest *postRequest = [self.class makePostRequestWithDataEncoding:TDOAuthContentTypeUrlEncodedQuery];
 
     NSString *url = [[postRequest URL] absoluteString];
-    XCTAssert([url isEqualToString:@"http://api.example.com/service?foo=bar&baz=bonk"],
+    // In Swift, the order of the key:value pair is undetermined, so either result is correct.
+    XCTAssert([url isEqualToString:@"http://api.example.com/service?foo=bar&baz=bonk"] || [url isEqualToString:@"http://api.example.com/service?baz=bonk&foo=bar"],
               "url does not match expected value");
 
     NSString *contentType = [postRequest valueForHTTPHeaderField: @"Content-Type"];
@@ -246,9 +247,10 @@
     NSURLRequest *headRequest = [self.class makeGenericRequestWithHTTPMethod:@"HEAD"];
 
     NSString *url = [[headRequest URL] absoluteString];
-    XCTAssert([url isEqualToString:@"http://api.example.com/service?foo=bar&baz=bonk"],
+    // In Swift, the order of the key:value pair is undetermined, so either result is correct.
+    XCTAssert([url isEqualToString:@"http://api.example.com/service?foo=bar&baz=bonk"] || [url isEqualToString:@"http://api.example.com/service?baz=bonk&foo=bar"],
               "url does not match expected value");
-
+    
     NSString *contentType = [headRequest valueForHTTPHeaderField: @"Content-Type"];
     XCTAssertNil(contentType,
                  @"Content-Type was present when not expected)");
@@ -264,7 +266,9 @@
     NSURLRequest *deleteRequest = [self.class makeGenericRequestWithHTTPMethod:@"DELETE"];
 
     NSString *url = [[deleteRequest URL] absoluteString];
-    XCTAssertEqualObjects(url, @"http://api.example.com/service?foo=bar&baz=bonk",
+    // Swift does not guarantee order for keys in a dictionary.  Test both possibilities here.
+    XCTAssert([url isEqualToString:@"http://api.example.com/service?foo=bar&baz=bonk"] ||
+              [url isEqualToString:@"http://api.example.com/service?baz=bonk&foo=bar"],
               "url does not match expected value");
 
     NSString *contentType = [deleteRequest valueForHTTPHeaderField: @"Content-Type"];
@@ -388,7 +392,9 @@
 
     NSData *body = [genericRequest HTTPBody];
     NSString *bodyString = [[NSString alloc] initWithData:body encoding:NSUTF8StringEncoding];
-    XCTAssert([bodyString isEqualToString:@"{\"foo\":\"bar\",\"baz\":\"bonk\"}"],
+    // In Swift, you are not guaranteed key order, so we need to check both variants here.
+    XCTAssert([bodyString isEqualToString:@"{\"foo\":\"bar\",\"baz\":\"bonk\"}"] ||
+              [bodyString isEqualToString:@"{\"baz\":\"bonk\",\"foo\":\"bar\"}"],
               "body expected to be JSON object");
 
 }
@@ -586,8 +592,9 @@
                                               accessToken:@"ijkl"
                                               tokenSecret:@"mnop"];
     NSString *url = [[getRequest URL] absoluteString];
-    XCTAssertEqualObjects(url, @"http://api.example.com/service/%5CsubDirectoryWithBackslash?foo=bar&baz=bonk",
-              "url does not match expected value");
+    // In Swift, the order of the key:value pair is undetermined, so either result is correct.
+    XCTAssert([url isEqualToString:@"http://api.example.com/service/%5CsubDirectoryWithBackslash?foo=bar&baz=bonk"] || [url isEqualToString:@"http://api.example.com/service/%5CsubDirectoryWithBackslash?baz=bonk&foo=bar"],
+        "url does not match expected value");
 
     NSString *authHeader = [getRequest valueForHTTPHeaderField:@"Authorization"];
     NSString *expectedHeader = @"OAuth oauth_token=\"ijkl\", "\
