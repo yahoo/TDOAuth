@@ -155,12 +155,6 @@
     }];
     XCTAssertEqual(sortedArray.count, 3);
     
-//    NSURLQueryItem *item0 = sortedArray[0];
-//    NSString *string = item0.name;
-//    XCTAssert([item0.name isEqualToString: @"foo"]);
-//    XCTAssertEqual(item0.value, @"bar");
-    
-    
     XCTAssertEqualObjects(sortedArray[0].name, @"buzz");
     XCTAssertEqualObjects(sortedArray[0].value, @"1");
     
