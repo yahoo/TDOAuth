@@ -25,6 +25,33 @@
                           tokenSecret:@"mnop"];
 }
 
++ (NSURLRequest *)makeGetRequestWithValidAdditionalParameters
+{
+    return [TDOAuth URLRequestForPath:@"/service"
+                        GETParameters:@{@"foo": @"bar",
+                                        @"fizz" : @123,
+                                        @"buzz" : @YES}
+                                 host:@"api.example.com"
+                          consumerKey:@"abcd"
+                       consumerSecret:@"efgh"
+                          accessToken:@"ijkl"
+                          tokenSecret:@"mnop"];
+}
+
++ (NSURLRequest *)makeGetRequestWithInvalidAdditionalParameters
+{
+    return [TDOAuth URLRequestForPath:@"/service"
+                        GETParameters:@{@"foo": @"bar",
+                                        @"fizz" : @[@1,@2],
+                                        @"buzz" : @{@"bar": @"foo"}}
+                                 host:@"api.example.com"
+                          consumerKey:@"abcd"
+                       consumerSecret:@"efgh"
+                          accessToken:@"ijkl"
+                          tokenSecret:@"mnop"];
+}
+
+
 + (NSURLRequest *)makeGetComponentsRequest
 {
     NSURLComponents *components = [NSURLComponents new];
@@ -111,7 +138,55 @@
     NSString *contentLength = [getRequest valueForHTTPHeaderField: @"Content-Length"];
     XCTAssertNil(contentLength,
               @"Content-Length was set when not expected)");
+}
 
+-(void)testGetRequestWithValidAdditionalParameters
+{
+    NSURLRequest *getRequest = [self.class makeGetRequestWithValidAdditionalParameters];
+    NSString *url = [[getRequest URL] absoluteString];
+    
+    /// Parameters are not guaranteed to be added to the url in a specific order
+    /// so direct string comparison is not an option. Breaking the url
+    /// down to `NSURLComponents` would allow us to sort and test.
+    NSURLComponents *components = [NSURLComponents componentsWithString:url];
+    
+    NSArray <NSURLQueryItem *> *sortedArray = [components.queryItems sortedArrayUsingComparator:^NSComparisonResult(NSURLQueryItem  * _Nonnull obj1, NSURLQueryItem * _Nonnull obj2) {
+        return [obj1.name compare:obj2.name];
+    }];
+    XCTAssertEqual(sortedArray.count, 3);
+    
+    XCTAssertEqualObjects(sortedArray[0].name, @"buzz");
+    XCTAssertEqualObjects(sortedArray[0].value, @"1");
+    
+    XCTAssertEqualObjects(sortedArray[1].name, @"fizz");
+    XCTAssertEqualObjects(sortedArray[1].value, @"123");
+    
+    XCTAssertEqualObjects(sortedArray[2].name, @"foo");
+    XCTAssertEqualObjects(sortedArray[2].value, @"bar");
+
+    NSString *contentType = [getRequest valueForHTTPHeaderField: @"Content-Type"];
+    XCTAssertNil(contentType,
+              @"Content-Type was present when not expected)");
+
+    NSString *contentLength = [getRequest valueForHTTPHeaderField: @"Content-Length"];
+    XCTAssertNil(contentLength,
+              @"Content-Length was set when not expected)");
+}
+
+-(void)testGetRequestWithInvalidAdditionalParameters
+{
+    NSURLRequest *getRequest = [self.class makeGetRequestWithInvalidAdditionalParameters];
+    NSString *url = [[getRequest URL] absoluteString];
+    XCTAssert([url isEqualToString:@"http://api.example.com/service?foo=bar"],
+              "url does not match expected value");
+
+    NSString *contentType = [getRequest valueForHTTPHeaderField: @"Content-Type"];
+    XCTAssertNil(contentType,
+              @"Content-Type was present when not expected)");
+
+    NSString *contentLength = [getRequest valueForHTTPHeaderField: @"Content-Length"];
+    XCTAssertNil(contentLength,
+              @"Content-Length was set when not expected)");
 }
 
 #ifdef TEST_NSURLCOMPONENTS
