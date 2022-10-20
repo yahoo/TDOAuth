@@ -235,12 +235,22 @@ internal class TDOQueryItem : NSObject {
         var queryItems = [TDOQueryItem]()
 
         if let unencodedParameters = unencodedParameters {
-            for key in unencodedParameters.keys {
-                if let key = key as? String,
-                    let value = unencodedParameters[key] as? String {
-                    let queryItem = TDOQueryItem(name: key, value: value)
-                    queryItems.append(queryItem)
+            for (key, value) in unencodedParameters {
+                guard let key = key as? String else { continue }
+                let formattedValue: String
+                switch value {
+                case let stringValue as String:
+                    formattedValue = stringValue
+                case let intValue as Int:
+                    formattedValue = String(intValue)
+                case let boolValue as Bool:
+                    formattedValue = String(boolValue)
+                default:
+                    /// `value` is not a valid type - skipping
+                    continue
                 }
+                let queryItem = TDOQueryItem(name: key, value: formattedValue)
+                queryItems.append(queryItem)
             }
         }
 
