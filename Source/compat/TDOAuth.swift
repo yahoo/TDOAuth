@@ -101,7 +101,7 @@ internal class TDOQueryItem : NSObject {
                              headerValues:nil,
                           signatureMethod:.hmacSha1)
     }
-    
+
     /**
       Some services insist on HTTPS. Or maybe you don't want the data to be sniffed.
       You can pass @"https" via the scheme parameter.
@@ -193,11 +193,11 @@ internal class TDOQueryItem : NSObject {
                           headerValues:nil,
                        signatureMethod:.hmacSha1)
     }
-        
+
     /**
      This method allows the caller to specify particular values for many different parameters such
      as scheme, method, header values and alternate signature hash algorithms.
-    
+
      @p scheme may be any string value, generally "http" or "https".
      @p requestMethod may be any string value. There is no validation, so remember that all
      currently-defined HTTP methods are uppercase and the RFC specifies that the method
@@ -233,7 +233,7 @@ internal class TDOQueryItem : NSObject {
                                dataEncoding: TDOAuthContentType,
                                headerValues: [AnyHashable : Any]?,
                                signatureMethod: TDOAuthSignatureMethod) -> URLRequest! {
-        
+
         var queryItems = [TDOQueryItem]()
 
         if let unencodedParameters = unencodedParameters {
@@ -253,6 +253,7 @@ internal class TDOQueryItem : NSObject {
                     formattedValue = String(describing: dictionaryValue)
                 default:
                     /// `value` is not a valid type - skipping
+                    assertionFailure("TDOAuth: failed to casting the parameter: \(value) for the key: \(key)")
                     continue
                 }
                 let queryItem = TDOQueryItem(name: key, rawValue: value, stringValue: formattedValue)
@@ -319,7 +320,7 @@ internal class TDOQueryItem : NSObject {
         guard let host = host, let unencodedPathWithoutQuery = unencodedPathWithoutQuery, let scheme = scheme, let method = method else {
             return nil
         }
-        
+
         // We don't use pcen as we don't want to percent encode eg. /, this is perhaps
         // not the most all encompassing solution, but in practice it seems to work
         // everywhere and means that programmer error is *much* less likely.
@@ -385,11 +386,11 @@ internal class TDOQueryItem : NSObject {
             }
             else // invalid type
             {
-                return nil;
+                return nil
             }
         }
 
-        return rq;
+        return rq
     }
 
     // METHOD ADAPTED FROM LEGACY OAUTH1 CLIENT
@@ -411,7 +412,7 @@ internal class TDOQueryItem : NSObject {
                 queryString.append(envalue)
             }
         }
-        return queryString;
+        return queryString
     }
 
     // METHOD ADAPTED FROM LEGACY OAUTH1 CLIENT
@@ -439,7 +440,7 @@ internal class TDOQueryItem : NSObject {
     }
 
     /**
-    
+
      OAuth requires the UTC timestamp we send to be accurate. The user's device
      may not be, and often isn't. To work around this you should set this to the
      UTC timestamp that you get back in HTTP headers from OAuth servers.
