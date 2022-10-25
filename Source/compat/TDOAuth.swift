@@ -361,9 +361,9 @@ internal class TDOQueryItem : NSObject {
             else if (dataEncoding == .jsonObject)
             {
                 // This falls back to dictionary as not sure what's the proper action here.
-                var unencodedParameters = [String:String]()
+                var unencodedParameters = [String: Any]()
                 for queryItem in queryItems {
-                    unencodedParameters[queryItem.name] = queryItem.value;
+                    unencodedParameters[queryItem.name] = queryItem.rawValue ?? queryItem.stringValue
                 }
                 do {
                     let postbody = try JSONSerialization.data(withJSONObject: unencodedParameters)
