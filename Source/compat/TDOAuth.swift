@@ -52,12 +52,14 @@ let TDOAuthURLRequestTimeout = 30.0
 // MARK: -
 
 internal class TDOQueryItem : NSObject {
-    var name : String
-    var value: String
-    
-    init(name: String, value: String) {
+    var name: String
+    var rawValue: Any?
+    var stringValue: String
+
+    init(name: String, rawValue: Any? = nil, stringValue: String) {
         self.name = name
-        self.value = value
+        self.rawValue = rawValue
+        self.stringValue = stringValue
     }
 }
 
@@ -171,8 +173,8 @@ internal class TDOQueryItem : NSObject {
         var queryItems = [TDOQueryItem]()
         if let items = urlComponents.queryItems {
             items.forEach { item in
-                if let value = item.value {
-                    let queryItem = TDOQueryItem(name: item.name, value: value)
+                if let stringValue = item.value {
+                    let queryItem = TDOQueryItem(name: item.name, stringValue: stringValue)
                     queryItems.append(queryItem)
                 }
             }
@@ -249,7 +251,7 @@ internal class TDOQueryItem : NSObject {
                     /// `value` is not a valid type - skipping
                     continue
                 }
-                let queryItem = TDOQueryItem(name: key, value: formattedValue)
+                let queryItem = TDOQueryItem(name: key, rawValue: value, stringValue: formattedValue)
                 queryItems.append(queryItem)
             }
         }
@@ -394,12 +396,12 @@ internal class TDOQueryItem : NSObject {
         var encodedParameters = [TDOQueryItem]()
         for queryItem in unencodedParameters {
             let enkey = TDPCEN(queryItem.name)
-            let envalue = TDPCEN(queryItem.value)
+            let envalue = TDPCEN(queryItem.stringValue)
             if let enkey = enkey, let envalue = envalue {
                 if queryString.count > 0 {
                     queryString.append("&")
                 }
-                encodedParameters.append(TDOQueryItem(name: enkey, value: envalue))
+                encodedParameters.append(TDOQueryItem(name: enkey, stringValue: envalue))
                 queryString.append(enkey)
                 queryString.append("=")
                 queryString.append(envalue)
