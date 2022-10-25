@@ -61,6 +61,36 @@ internal class TDOQueryItem : NSObject {
         self.rawValue = rawValue
         self.stringValue = stringValue
     }
+
+    class func getItems(from dictionary: [AnyHashable: Any]?) -> [TDOQueryItem]? {
+        guard let dic = dictionary else { return nil }
+        var queryItems = [TDOQueryItem]()
+
+        for (key, value) in dic {
+            guard let key = key as? String else { continue }
+            let formattedValue: String
+            switch value {
+            case let stringValue as String:
+                formattedValue = stringValue
+            case let numberValue as NSNumber:
+                formattedValue = numberValue.stringValue
+            case let boolValue as Bool:
+                formattedValue = String(boolValue)
+            case let arrayValue as NSArray:
+                formattedValue = String(describing: arrayValue)
+            case let dictionaryValue as NSDictionary:
+                formattedValue = String(describing: dictionaryValue)
+            default:
+                /// `value` is not a valid type - skipping
+                assertionFailure("TDOAuth: failed to casting the parameter: \(value) for the key: \(key)")
+                continue
+            }
+            let queryItem = TDOQueryItem(name: key, rawValue: value, stringValue: formattedValue)
+            queryItems.append(queryItem)
+        }
+
+        return queryItems
+    }
 }
 
 // MARK: -
@@ -234,35 +264,8 @@ internal class TDOQueryItem : NSObject {
                                headerValues: [AnyHashable : Any]?,
                                signatureMethod: TDOAuthSignatureMethod) -> URLRequest! {
 
-        var queryItems = [TDOQueryItem]()
-
-        if let unencodedParameters = unencodedParameters {
-            for (key, value) in unencodedParameters {
-                guard let key = key as? String else { continue }
-                let formattedValue: String
-                switch value {
-                case let stringValue as String:
-                    formattedValue = stringValue
-                case let numberValue as NSNumber:
-                    formattedValue = numberValue.stringValue
-                case let boolValue as Bool:
-                    formattedValue = String(boolValue)
-                case let arrayValue as NSArray:
-                    formattedValue = String(describing: arrayValue)
-                case let dictionaryValue as NSDictionary:
-                    formattedValue = String(describing: dictionaryValue)
-                default:
-                    /// `value` is not a valid type - skipping
-                    assertionFailure("TDOAuth: failed to casting the parameter: \(value) for the key: \(key)")
-                    continue
-                }
-                let queryItem = TDOQueryItem(name: key, rawValue: value, stringValue: formattedValue)
-                queryItems.append(queryItem)
-            }
-        }
-
         return self.urlRequest(forPath: unencodedPathWithoutQuery,
-                               queryItems: queryItems,
+                               queryItems: TDOQueryItem.getItems(from: unencodedParameters) ?? [],
                                host: host,
                                consumerKey: consumerKey,
                                consumerSecret: consumerSecret,

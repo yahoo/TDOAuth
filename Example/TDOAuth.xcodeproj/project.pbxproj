@@ -18,6 +18,7 @@
 		607FACEC1AFB9204008FA782 /* OAuth1Spec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* OAuth1Spec.swift */; };
 		9810E2CF42C71CB54FC9817B /* Pods_TDOAuth_watchOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9AE6DB313043BFD421E116D /* Pods_TDOAuth_watchOS.framework */; };
 		ED3586181D3AC6A5F479F62A /* Pods_TDOAuth_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1468F75DCB0D1331A62E245C /* Pods_TDOAuth_iOS.framework */; };
+		F2E921622907D5640093DBB4 /* TestTDOQueryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E921612907D5640093DBB4 /* TestTDOQueryItem.swift */; };
 		FC71E7F42416E7A200CCC34C /* Compat.m in Sources */ = {isa = PBXBuildFile; fileRef = FC71E7F32416E7A200CCC34C /* Compat.m */; };
 		FCC067C9241C1940004997C8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC067C8241C1940004997C8 /* AppDelegate.swift */; };
 		FCC067CB241C1940004997C8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC067CA241C1940004997C8 /* ViewController.swift */; };
@@ -134,6 +135,7 @@
 		E5897B5C42516E19A5C8C497 /* Pods_TDOAuth_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TDOAuth_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E6AC1FB932F461059AB20B60 /* Pods-TDOAuth_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TDOAuth_Example.release.xcconfig"; path = "Target Support Files/Pods-TDOAuth_Example/Pods-TDOAuth_Example.release.xcconfig"; sourceTree = "<group>"; };
 		ECC894BE67C3786829385505 /* Pods-TDOAuth-TDOAuth-iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TDOAuth-TDOAuth-iOS.release.xcconfig"; path = "Target Support Files/Pods-TDOAuth-TDOAuth-iOS/Pods-TDOAuth-TDOAuth-iOS.release.xcconfig"; sourceTree = "<group>"; };
+		F2E921612907D5640093DBB4 /* TestTDOQueryItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTDOQueryItem.swift; sourceTree = "<group>"; };
 		F2EA75221BBDF7E5162DF034 /* Pods-TDOAuth_iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TDOAuth_iOS.release.xcconfig"; path = "Target Support Files/Pods-TDOAuth_iOS/Pods-TDOAuth_iOS.release.xcconfig"; sourceTree = "<group>"; };
 		FC71E7F22416E7A100CCC34C /* TDOAuth_Tests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TDOAuth_Tests-Bridging-Header.h"; sourceTree = "<group>"; };
 		FC71E7F32416E7A200CCC34C /* Compat.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Compat.m; sourceTree = "<group>"; };
@@ -310,6 +312,7 @@
 				FCCE3C4421FAE14200522CBD /* HMACSpec.swift */,
 				FCCE3C4621FAE1E000522CBD /* PlaintextSpec.swift */,
 				FCCE3C4821FAE23F00522CBD /* Utils.swift */,
+				F2E921612907D5640093DBB4 /* TestTDOQueryItem.swift */,
 				FC71E7F32416E7A200CCC34C /* Compat.m */,
 				FC71E7F22416E7A100CCC34C /* TDOAuth_Tests-Bridging-Header.h */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
@@ -820,6 +823,7 @@
 				607FACEC1AFB9204008FA782 /* OAuth1Spec.swift in Sources */,
 				FCCE3C4921FAE23F00522CBD /* Utils.swift in Sources */,
 				FC71E7F42416E7A200CCC34C /* Compat.m in Sources */,
+				F2E921622907D5640093DBB4 /* TestTDOQueryItem.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
