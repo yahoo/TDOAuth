@@ -243,10 +243,14 @@ internal class TDOQueryItem : NSObject {
                 switch value {
                 case let stringValue as String:
                     formattedValue = stringValue
-                case let intValue as Int:
-                    formattedValue = String(intValue)
+                case let numberValue as NSNumber:
+                    formattedValue = numberValue.stringValue
                 case let boolValue as Bool:
                     formattedValue = String(boolValue)
+                case let arrayValue as NSArray:
+                    formattedValue = String(describing: arrayValue)
+                case let dictionaryValue as NSDictionary:
+                    formattedValue = String(describing: dictionaryValue)
                 default:
                     /// `value` is not a valid type - skipping
                     continue
