@@ -53,13 +53,33 @@ let TDOAuthURLRequestTimeout = 30.0
 
 internal class TDOQueryItem : NSObject {
     var name: String
-    var rawValue: Any?
-    var stringValue: String
+    var rawValue: Any
+    var stringValue: String?
 
-    init(name: String, rawValue: Any? = nil, stringValue: String) {
+    init(name: String, rawValue: Any) {
         self.name = name
         self.rawValue = rawValue
-        self.stringValue = stringValue
+        self.stringValue = Self.getStringValue(by: rawValue)
+    }
+
+    private class func getStringValue(by rawValue: Any) -> String? {
+        var formattedValue: String?
+        switch rawValue {
+        case let stringValue as String:
+            formattedValue = stringValue
+        case let numberValue as NSNumber:
+            formattedValue = numberValue.stringValue
+        case let boolValue as Bool:
+            formattedValue = String(boolValue)
+        case let arrayValue as NSArray:
+            formattedValue = String(describing: arrayValue)
+        case let dictionaryValue as NSDictionary:
+            formattedValue = String(describing: dictionaryValue)
+        default:
+            /// `value` is not a valid type - skipping
+            assertionFailure("TDOAuth: failed to casting the parameter: \(rawValue)")
+        }
+        return formattedValue
     }
 
     class func getItems(from dictionary: [AnyHashable: Any]?) -> [TDOQueryItem]? {
@@ -68,24 +88,12 @@ internal class TDOQueryItem : NSObject {
 
         for (key, value) in dic {
             guard let key = key as? String else { continue }
-            let formattedValue: String
-            switch value {
-            case let stringValue as String:
-                formattedValue = stringValue
-            case let numberValue as NSNumber:
-                formattedValue = numberValue.stringValue
-            case let boolValue as Bool:
-                formattedValue = String(boolValue)
-            case let arrayValue as NSArray:
-                formattedValue = String(describing: arrayValue)
-            case let dictionaryValue as NSDictionary:
-                formattedValue = String(describing: dictionaryValue)
-            default:
+            if Self.getStringValue(by: value) == nil {
                 /// `value` is not a valid type - skipping
                 assertionFailure("TDOAuth: failed to casting the parameter: \(value) for the key: \(key)")
                 continue
             }
-            let queryItem = TDOQueryItem(name: key, rawValue: value, stringValue: formattedValue)
+            let queryItem = TDOQueryItem(name: key, rawValue: value)
             queryItems.append(queryItem)
         }
 
@@ -203,8 +211,8 @@ internal class TDOQueryItem : NSObject {
         var queryItems = [TDOQueryItem]()
         if let items = urlComponents.queryItems {
             items.forEach { item in
-                if let stringValue = item.value {
-                    let queryItem = TDOQueryItem(name: item.name, stringValue: stringValue)
+                if let value = item.value {
+                    let queryItem = TDOQueryItem(name: item.name, rawValue: value)
                     queryItems.append(queryItem)
                 }
             }
@@ -371,7 +379,7 @@ internal class TDOQueryItem : NSObject {
                 // This falls back to dictionary as not sure what's the proper action here.
                 var unencodedParameters = [String: Any]()
                 for queryItem in queryItems {
-                    unencodedParameters[queryItem.name] = queryItem.rawValue ?? queryItem.stringValue
+                    unencodedParameters[queryItem.name] = queryItem.rawValue
                 }
                 do {
                     let postbody = try JSONSerialization.data(withJSONObject: unencodedParameters)
@@ -403,13 +411,13 @@ internal class TDOQueryItem : NSObject {
         var queryString = String("")
         var encodedParameters = [TDOQueryItem]()
         for queryItem in unencodedParameters {
-            let enkey = TDPCEN(queryItem.name)
-            let envalue = TDPCEN(queryItem.stringValue)
-            if let enkey = enkey, let envalue = envalue {
+            if let enkey = TDPCEN(queryItem.name),
+                let stringValue = queryItem.stringValue,
+                let envalue = TDPCEN(stringValue) {
                 if queryString.count > 0 {
                     queryString.append("&")
                 }
-                encodedParameters.append(TDOQueryItem(name: enkey, stringValue: envalue))
+                encodedParameters.append(TDOQueryItem(name: enkey, rawValue: envalue))
                 queryString.append(enkey)
                 queryString.append("=")
                 queryString.append(envalue)
