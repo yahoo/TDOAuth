@@ -65,6 +65,8 @@ internal class TDOQueryItem : NSObject {
     private class func getStringValue(by rawValue: Any) -> String? {
         var formattedValue: String?
         switch rawValue {
+        case let losslessString as LosslessStringConvertible:
+            formattedValue = losslessString.description
         case let stringValue as String:
             formattedValue = stringValue
         case let numberValue as NSNumber:

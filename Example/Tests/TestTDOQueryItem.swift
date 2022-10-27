@@ -51,14 +51,14 @@ class TestTDOQueryItem: XCTestCase {
         }
 
         if let doubleItem = queryItems.first(where: { $0.name == "key_double" }) {
-            XCTAssert(doubleItem.stringValue == NSNumber(value: Double(3.141592653589793)).stringValue)
+            XCTAssert(doubleItem.stringValue == "3.141592653589793")
             XCTAssert(doubleItem.rawValue as? Double == Double(3.141592653589793))
         } else {
             assertionFailure("TDOQueryItem: parse double item failed.")
         }
 
         if let floatItem = queryItems.first(where: { $0.name == "key_float" }) {
-            XCTAssert(floatItem.stringValue == NSNumber(value: Float(3.1415925)).stringValue)
+            XCTAssert(floatItem.stringValue == "3.1415925")
             XCTAssert(floatItem.rawValue as? Float == Float(3.1415925))
         } else {
             assertionFailure("TDOQueryItem: parse float item failed.")
@@ -82,7 +82,7 @@ class TestTDOQueryItem: XCTestCase {
         }
 
         if let boolItem = queryItems.first(where: { $0.name == "key_bool" }) {
-            XCTAssert(boolItem.stringValue == "1")
+            XCTAssert(boolItem.stringValue == "true")
             XCTAssert(boolItem.rawValue as? Bool == true)
         } else {
             assertionFailure("TDOQueryItem: parse bool item failed.")
