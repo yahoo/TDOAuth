@@ -65,7 +65,7 @@ class TestTDOQueryItem: XCTestCase {
         }
 
         if let dictionaryItem = queryItems.first(where: { $0.name == "key_dictionary" }) {
-            XCTAssert(dictionaryItem.stringValue == "[\"dic_string\": \"dictionary\", \"dic_number\": 761]")
+            XCTAssert(dictionaryItem.stringValue == "[\"dic_string\": \"dictionary\", \"dic_number\": 761]" || dictionaryItem.stringValue == "[\"dic_number\": 761, \"dic_string\": \"dictionary\"]")
             XCTAssert((dictionaryItem.rawValue as? Dictionary<String, Any>)?["dic_string"] as? String == "dictionary")
             XCTAssert((dictionaryItem.rawValue as? Dictionary<String, Any>)?["dic_number"] as? Int == 761)
         } else {
