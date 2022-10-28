@@ -65,7 +65,7 @@ class TestTDOQueryItem: XCTestCase {
         }
 
         if let dictionaryItem = queryItems.first(where: { $0.name == "key_dictionary" }) {
-            XCTAssert(dictionaryItem.stringValue == "{\n    \"dic_number\" = 761;\n    \"dic_string\" = dictionary;\n}")
+            XCTAssert(dictionaryItem.stringValue == "[\"dic_string\": \"dictionary\", \"dic_number\": 761]")
             XCTAssert((dictionaryItem.rawValue as? Dictionary<String, Any>)?["dic_string"] as? String == "dictionary")
             XCTAssert((dictionaryItem.rawValue as? Dictionary<String, Any>)?["dic_number"] as? Int == 761)
         } else {
@@ -73,7 +73,7 @@ class TestTDOQueryItem: XCTestCase {
         }
 
         if let arrayItem = queryItems.first(where: { $0.name == "key_array" }) {
-            XCTAssert(arrayItem.stringValue == "(\n    array1,\n    array2,\n    array3\n)")
+            XCTAssert(arrayItem.stringValue == "[\"array1\", \"array2\", \"array3\"]")
             XCTAssert((arrayItem.rawValue as? Array)?[0] == "array1")
             XCTAssert((arrayItem.rawValue as? Array)?[1] == "array2")
             XCTAssert((arrayItem.rawValue as? Array)?[2] == "array3")

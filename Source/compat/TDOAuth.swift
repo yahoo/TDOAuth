@@ -65,17 +65,15 @@ internal class TDOQueryItem : NSObject {
     private class func getStringValue(by rawValue: Any) -> String? {
         var formattedValue: String?
         switch rawValue {
-        case let losslessString as LosslessStringConvertible:
+        case let losslessString as CustomStringConvertible:
             formattedValue = losslessString.description
-        case let stringValue as String:
-            formattedValue = stringValue
-        case let numberValue as NSNumber:
-            formattedValue = numberValue.stringValue
-        case let boolValue as Bool:
-            formattedValue = String(boolValue)
-        case let arrayValue as NSArray:
+        case let nsObject as NSObjectProtocol:
+            formattedValue = nsObject.description
+        case let arrayValue as Array<CustomStringConvertible>:
             formattedValue = String(describing: arrayValue)
-        case let dictionaryValue as NSDictionary:
+        case let arrayValue as Array<NSObjectProtocol>:
+            formattedValue = String(describing: arrayValue)
+        case let dictionaryValue as Dictionary<AnyHashable, Any>:
             formattedValue = String(describing: dictionaryValue)
         default:
             /// `value` is not a valid type - skipping
