@@ -52,12 +52,58 @@ let TDOAuthURLRequestTimeout = 30.0
 // MARK: -
 
 internal class TDOQueryItem : NSObject {
-    var name : String
-    var value: String
-    
-    init(name: String, value: String) {
+    var name: String
+    var rawValue: Any
+    var stringValue: String?
+
+    init(name: String, rawValue: Any) {
         self.name = name
-        self.value = value
+        self.rawValue = rawValue
+        self.stringValue = Self.getStringValue(by: rawValue)
+    }
+
+    private class func getStringValue(by rawValue: Any, isCollectionValuesSupported: Bool = true) -> String? {
+        if !isCollectionValuesSupported,
+            (rawValue is Array<Any> || rawValue is Dictionary<AnyHashable, Any>) {
+            return nil
+        }
+        var formattedValue: String?
+        switch rawValue {
+        case let losslessString as CustomStringConvertible:
+            formattedValue = losslessString.description
+        case let nsObject as NSObjectProtocol:
+            formattedValue = nsObject.description
+        case let arrayValue as Array<CustomStringConvertible>:
+            formattedValue = String(describing: arrayValue)
+        case let arrayValue as Array<NSObjectProtocol>:
+            formattedValue = String(describing: arrayValue)
+        case let dictionaryValue as Dictionary<AnyHashable, Any>:
+            formattedValue = String(describing: dictionaryValue)
+        default:
+            /// `value` is not a valid type - skipping
+            assertionFailure("TDOAuth: failed to casting the parameter: \(rawValue)")
+        }
+        return formattedValue
+    }
+
+    class func getItems(from dictionary: [AnyHashable: Any]?, isCollectionValuesSupported: Bool = true) -> [TDOQueryItem]? {
+        guard let dic = dictionary else { return nil }
+        var queryItems = [TDOQueryItem]()
+
+        for (key, value) in dic {
+            guard let key = key as? String else { continue }
+            if Self.getStringValue(by: value, isCollectionValuesSupported: isCollectionValuesSupported) == nil {
+                if isCollectionValuesSupported {
+                    /// `value` is not a valid type - skipping
+                    assertionFailure("TDOAuth: failed to casting the parameter: \(value) for the key: \(key)")
+                }
+                continue
+            }
+            let queryItem = TDOQueryItem(name: key, rawValue: value)
+            queryItems.append(queryItem)
+        }
+
+        return queryItems
     }
 }
 
@@ -99,7 +145,7 @@ internal class TDOQueryItem : NSObject {
                              headerValues:nil,
                           signatureMethod:.hmacSha1)
     }
-    
+
     /**
       Some services insist on HTTPS. Or maybe you don't want the data to be sniffed.
       You can pass @"https" via the scheme parameter.
@@ -172,7 +218,7 @@ internal class TDOQueryItem : NSObject {
         if let items = urlComponents.queryItems {
             items.forEach { item in
                 if let value = item.value {
-                    let queryItem = TDOQueryItem(name: item.name, value: value)
+                    let queryItem = TDOQueryItem(name: item.name, rawValue: value)
                     queryItems.append(queryItem)
                 }
             }
@@ -191,11 +237,11 @@ internal class TDOQueryItem : NSObject {
                           headerValues:nil,
                        signatureMethod:.hmacSha1)
     }
-        
+
     /**
      This method allows the caller to specify particular values for many different parameters such
      as scheme, method, header values and alternate signature hash algorithms.
-    
+
      @p scheme may be any string value, generally "http" or "https".
      @p requestMethod may be any string value. There is no validation, so remember that all
      currently-defined HTTP methods are uppercase and the RFC specifies that the method
@@ -231,31 +277,9 @@ internal class TDOQueryItem : NSObject {
                                dataEncoding: TDOAuthContentType,
                                headerValues: [AnyHashable : Any]?,
                                signatureMethod: TDOAuthSignatureMethod) -> URLRequest! {
-        
-        var queryItems = [TDOQueryItem]()
-
-        if let unencodedParameters = unencodedParameters {
-            for (key, value) in unencodedParameters {
-                guard let key = key as? String else { continue }
-                let formattedValue: String
-                switch value {
-                case let stringValue as String:
-                    formattedValue = stringValue
-                case let intValue as Int:
-                    formattedValue = String(intValue)
-                case let boolValue as Bool:
-                    formattedValue = String(boolValue)
-                default:
-                    /// `value` is not a valid type - skipping
-                    continue
-                }
-                let queryItem = TDOQueryItem(name: key, value: formattedValue)
-                queryItems.append(queryItem)
-            }
-        }
 
         return self.urlRequest(forPath: unencodedPathWithoutQuery,
-                               queryItems: queryItems,
+                               queryItems: TDOQueryItem.getItems(from: unencodedParameters, isCollectionValuesSupported: method == "POST") ?? [],
                                host: host,
                                consumerKey: consumerKey,
                                consumerSecret: consumerSecret,
@@ -313,7 +337,7 @@ internal class TDOQueryItem : NSObject {
         guard let host = host, let unencodedPathWithoutQuery = unencodedPathWithoutQuery, let scheme = scheme, let method = method else {
             return nil
         }
-        
+
         // We don't use pcen as we don't want to percent encode eg. /, this is perhaps
         // not the most all encompassing solution, but in practice it seems to work
         // everywhere and means that programmer error is *much* less likely.
@@ -359,9 +383,9 @@ internal class TDOQueryItem : NSObject {
             else if (dataEncoding == .jsonObject)
             {
                 // This falls back to dictionary as not sure what's the proper action here.
-                var unencodedParameters = [String:String]()
+                var unencodedParameters = [String: Any]()
                 for queryItem in queryItems {
-                    unencodedParameters[queryItem.name] = queryItem.value;
+                    unencodedParameters[queryItem.name] = queryItem.rawValue
                 }
                 do {
                     let postbody = try JSONSerialization.data(withJSONObject: unencodedParameters)
@@ -379,11 +403,11 @@ internal class TDOQueryItem : NSObject {
             }
             else // invalid type
             {
-                return nil;
+                return nil
             }
         }
 
-        return rq;
+        return rq
     }
 
     // METHOD ADAPTED FROM LEGACY OAUTH1 CLIENT
@@ -393,19 +417,19 @@ internal class TDOQueryItem : NSObject {
         var queryString = String("")
         var encodedParameters = [TDOQueryItem]()
         for queryItem in unencodedParameters {
-            let enkey = TDPCEN(queryItem.name)
-            let envalue = TDPCEN(queryItem.value)
-            if let enkey = enkey, let envalue = envalue {
+            if let enkey = TDPCEN(queryItem.name),
+                let stringValue = queryItem.stringValue,
+                let envalue = TDPCEN(stringValue) {
                 if queryString.count > 0 {
                     queryString.append("&")
                 }
-                encodedParameters.append(TDOQueryItem(name: enkey, value: envalue))
+                encodedParameters.append(TDOQueryItem(name: enkey, rawValue: envalue))
                 queryString.append(enkey)
                 queryString.append("=")
                 queryString.append(envalue)
             }
         }
-        return queryString;
+        return queryString
     }
 
     // METHOD ADAPTED FROM LEGACY OAUTH1 CLIENT
@@ -433,7 +457,7 @@ internal class TDOQueryItem : NSObject {
     }
 
     /**
-    
+
      OAuth requires the UTC timestamp we send to be accurate. The user's device
      may not be, and often isn't. To work around this you should set this to the
      UTC timestamp that you get back in HTTP headers from OAuth servers.
