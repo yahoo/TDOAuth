@@ -23,7 +23,7 @@ class TestTDOQueryItem: XCTestCase {
     }
 
     func testStringParam() {
-        guard let queryItems = TDOQueryItem.getItems(from: Self.paramDictionary) else {
+        guard let queryItems = TDOQueryItem.getItems(from: Self.paramDictionary, isCollectionValuesSupported: true) else {
             assertionFailure("TDOQueryItem: parse parameters failed.")
             return
         }

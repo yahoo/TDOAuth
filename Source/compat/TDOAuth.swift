@@ -62,7 +62,11 @@ internal class TDOQueryItem : NSObject {
         self.stringValue = Self.getStringValue(by: rawValue)
     }
 
-    private class func getStringValue(by rawValue: Any) -> String? {
+    private class func getStringValue(by rawValue: Any, isCollectionValuesSupported: Bool = true) -> String? {
+        if !isCollectionValuesSupported,
+            (rawValue is Array<Any> || rawValue is Dictionary<AnyHashable, Any>) {
+            return nil
+        }
         var formattedValue: String?
         switch rawValue {
         case let losslessString as CustomStringConvertible:
@@ -82,15 +86,17 @@ internal class TDOQueryItem : NSObject {
         return formattedValue
     }
 
-    class func getItems(from dictionary: [AnyHashable: Any]?) -> [TDOQueryItem]? {
+    class func getItems(from dictionary: [AnyHashable: Any]?, isCollectionValuesSupported: Bool = true) -> [TDOQueryItem]? {
         guard let dic = dictionary else { return nil }
         var queryItems = [TDOQueryItem]()
 
         for (key, value) in dic {
             guard let key = key as? String else { continue }
-            if Self.getStringValue(by: value) == nil {
-                /// `value` is not a valid type - skipping
-                assertionFailure("TDOAuth: failed to casting the parameter: \(value) for the key: \(key)")
+            if Self.getStringValue(by: value, isCollectionValuesSupported: isCollectionValuesSupported) == nil {
+                if isCollectionValuesSupported {
+                    /// `value` is not a valid type - skipping
+                    assertionFailure("TDOAuth: failed to casting the parameter: \(value) for the key: \(key)")
+                }
                 continue
             }
             let queryItem = TDOQueryItem(name: key, rawValue: value)
@@ -273,7 +279,7 @@ internal class TDOQueryItem : NSObject {
                                signatureMethod: TDOAuthSignatureMethod) -> URLRequest! {
 
         return self.urlRequest(forPath: unencodedPathWithoutQuery,
-                               queryItems: TDOQueryItem.getItems(from: unencodedParameters) ?? [],
+                               queryItems: TDOQueryItem.getItems(from: unencodedParameters, isCollectionValuesSupported: method == "POST") ?? [],
                                host: host,
                                consumerKey: consumerKey,
                                consumerSecret: consumerSecret,
