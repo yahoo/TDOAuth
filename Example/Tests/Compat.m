@@ -177,8 +177,10 @@
 {
     NSURLRequest *getRequest = [self.class makeGetRequestWithInvalidAdditionalParameters];
     NSString *url = [[getRequest URL] absoluteString];
-    XCTAssert([url isEqualToString:@"http://api.example.com/service?foo=bar"],
-              "url does not match expected value");
+    XCTAssert([url containsString: @"http://api.example.com/service?"], @"url does not match expected value");
+    XCTAssert([url containsString: @"foo=bar"], @"url does not match expected value");
+    XCTAssert([url containsString: @"fizz=%28%0A%20%20%20%201%2C%0A%20%20%20%202%0A%29"], @"url does not match expected value");
+    XCTAssert([url containsString: @"buzz=%7B%0A%20%20%20%20bar%20%3D%20foo%3B%0A%7D"], @"url does not match expected value");
 
     NSString *contentType = [getRequest valueForHTTPHeaderField: @"Content-Type"];
     XCTAssertNil(contentType,
