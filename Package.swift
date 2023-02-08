@@ -22,7 +22,6 @@ let package = Package(
         .target(
             name: "TDOAuth",
             dependencies: [
-                .product(name: "OMGHTTPURLRQ", package: "OMGHTTPURLRQ"),
                 .product(name: "OMGHTTPURLRQUserAgent", package: "OMGHTTPURLRQ")
             ],
             path: "Source"),
