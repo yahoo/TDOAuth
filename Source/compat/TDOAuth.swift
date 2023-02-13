@@ -28,7 +28,11 @@
 */
 
 import Foundation
-import OMGHTTPURLRQ
+#if canImport(OMGHTTPURLRQUserAgent)
+import OMGHTTPURLRQUserAgent /// SPM
+#else
+import OMGHTTPURLRQ /// Cococapods
+#endif
 
 // MARK: From TDOAuth.h
 
